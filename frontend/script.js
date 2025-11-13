@@ -1,49 +1,142 @@
 const apiUrl = "http://localhost:8080/api/tareas";
 
 async function listarTareas() {
+  try {
     const res = await fetch(apiUrl);
     const tareas = await res.json();
-    const ul = document.getElementById("listaTareas");
-    ul.innerHTML = "";
-    tareas.forEach(t => {
-        const li = document.createElement("li");
-        li.textContent = t.descripcion;
-        if(t.completada) li.classList.add("completed");
+    renderList(tareas);
+  } catch (err) {
+    alert("Error al obtener tareas: " + err);
+  }
+}
 
-        const btnToggle = document.createElement("button");
-        btnToggle.textContent = t.completada ? "Pendiente" : "Completada";
-        btnToggle.onclick = async () => {
-            await fetch(`${apiUrl}/${t.id}`, {
-                method: "POST",
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ completada: !t.completada })
-            });
-            listarTareas();
-        }
+function renderList(tareas) {
+  const ul = document.getElementById("listaTareas");
+  ul.innerHTML = "";
 
-        const btnDelete = document.createElement("button");
-        btnDelete.textContent = "Eliminar";
-        btnDelete.onclick = async () => {
-            await fetch(`${apiUrl}/${t.id}`, { method: "DELETE" });
-            listarTareas();
-        }
+  let total = tareas.length;
+  let pendientes = tareas.filter(t => !t.completada).length;
+  document.getElementById("total").textContent = `Total: ${total}`;
+  document.getElementById("pendientes").textContent = `Pendientes: ${pendientes}`;
 
-        li.appendChild(btnToggle);
-        li.appendChild(btnDelete);
-        ul.appendChild(li);
+  tareas.forEach(t => {
+    const li = document.createElement("li");
+    li.className = t.completada ? "completed" : "";
+
+    const left = document.createElement("div");
+    left.className = "left";
+
+    const desc = document.createElement("div");
+    desc.className = "descripcion";
+    desc.textContent = t.descripcion;
+
+    const label = document.createElement("span");
+    label.className = "priority-label " + priorityClass(t.prioridad);
+    label.textContent = t.prioridad || "Media";
+
+    left.appendChild(desc);
+    left.appendChild(label);
+
+    const controls = document.createElement("div");
+    controls.className = "controls";
+
+    // Toggle completed
+    const btnToggle = document.createElement("button");
+    btnToggle.className = "small toggle";
+    btnToggle.textContent = t.completada ? "Marcar Pendiente" : "Marcar Completada";
+    btnToggle.onclick = async () => {
+      await updateTarea(t.id, { completada: !t.completada });
+      listarTareas();
+    };
+
+    // Priority inline select
+    const select = document.createElement("select");
+    select.className = "inline-select";
+    ["Alta","Media","Baja"].forEach(p => {
+      const opt = document.createElement("option");
+      opt.value = p;
+      opt.textContent = p;
+      if (t.prioridad === p) opt.selected = true;
+      select.appendChild(opt);
     });
+    select.onchange = async (e) => {
+      const nueva = e.target.value;
+      await updateTarea(t.id, { prioridad: nueva });
+      listarTareas();
+    };
+
+    // Delete
+    const btnDelete = document.createElement("button");
+    btnDelete.className = "small delete";
+    btnDelete.textContent = "Eliminar";
+    btnDelete.onclick = async () => {
+      if (!confirm("¿Eliminar esta tarea?")) return;
+      await fetch(`${apiUrl}/${t.id}`, { method: "DELETE" });
+      listarTareas();
+    };
+
+    controls.appendChild(btnToggle);
+    controls.appendChild(select);
+    controls.appendChild(btnDelete);
+
+    li.appendChild(left);
+    li.appendChild(controls);
+    ul.appendChild(li);
+  });
+}
+
+function priorityClass(pr) {
+  if (!pr) return "priority-media";
+  if (pr.toLowerCase() === "alta") return "priority-alta";
+  if (pr.toLowerCase() === "baja") return "priority-baja";
+  return "priority-media";
+}
+
+async function updateTarea(id, body) {
+  try {
+    const res = await fetch(`${apiUrl}/${id}`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(body)
+    });
+    if (!res.ok) {
+      const err = await res.json();
+      alert("Error al actualizar: " + (err.error || res.statusText));
+    }
+  } catch (err) {
+    alert("Error en la petición: " + err);
+  }
 }
 
 document.getElementById("formTarea").onsubmit = async (e) => {
-    e.preventDefault();
-    const descripcion = document.getElementById("descripcion").value;
-    await fetch(apiUrl, {
-        method: "POST",
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ descripcion })
+  e.preventDefault();
+  const descripcion = document.getElementById("descripcion").value.trim();
+  const prioridad = document.getElementById("prioridad").value;
+
+  if (!descripcion) {
+    alert("La descripción es obligatoria.");
+    return;
+  }
+
+  try {
+    const res = await fetch(apiUrl, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ descripcion, prioridad })
     });
+
+    if (!res.ok) {
+      const err = await res.json();
+      alert("Error al crear: " + (err.error || res.statusText));
+      return;
+    }
+
     document.getElementById("descripcion").value = "";
+    document.getElementById("prioridad").value = "Media";
     listarTareas();
-}
+  } catch (err) {
+    alert("Error al crear tarea: " + err);
+  }
+};
 
 listarTareas();

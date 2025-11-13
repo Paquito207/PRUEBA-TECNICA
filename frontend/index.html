@@ -1,19 +1,30 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <title>To-Do List</title>
 <link rel="stylesheet" href="style.css">
 </head>
 <body>
-<h1>To-Do List</h1>
-<form id="formTarea">
-<input type="text" id="descripcion" placeholder="Nueva tarea" required>
-<button type="submit">Agregar</button>
-</form>
-<ul id="listaTareas"></ul>
+  <h1>To-Do List</h1>
 
-<script src="script.js"></script>
+  <form id="formTarea">
+    <input type="text" id="descripcion" placeholder="Nueva tarea" required />
+    <select id="prioridad">
+      <option value="Media" selected>Media</option>
+      <option value="Alta">Alta</option>
+      <option value="Baja">Baja</option>
+    </select>
+    <button type="submit">Agregar</button>
+  </form>
+
+  <div id="contadores">
+    <span id="total">Total: 0</span> · <span id="pendientes">Pendientes: 0</span>
+  </div>
+
+  <ul id="listaTareas"></ul>
+
+  <script src="script.js"></script>
 </body>
 </html>
