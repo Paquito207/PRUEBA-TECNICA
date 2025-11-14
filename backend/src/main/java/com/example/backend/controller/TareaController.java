@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.URI;
 import java.nio.file.*;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -123,8 +124,8 @@ public class TareaController {
 
     // Listar con orden opcional (sort, order)
     @GetMapping
-    public List<Tarea> getAll(@RequestParam(required = false) String sort,
-                              @RequestParam(required = false, defaultValue = "asc") String order) {
+    public ResponseEntity<?> getAll(@RequestParam(required = false) String sort,
+                                    @RequestParam(required = false, defaultValue = "asc") String order) {
         List<Tarea> copy;
         lock.lock();
         try {
@@ -135,14 +136,27 @@ public class TareaController {
         if (sort != null && !sort.isBlank()) {
             applySort(copy, sort, order);
         }
-        return copy;
+        return ResponseEntity.ok(Map.of("message", "Lista de tareas obtenida", "tareas", copy));
     }
 
-    // Crear
+    // Crear (201 Created + body con mensaje)
     @PostMapping
     public ResponseEntity<?> create(@RequestBody Tarea tarea) {
         if (tarea.getDescripcion() == null || tarea.getDescripcion().trim().isEmpty()) {
             return ResponseEntity.badRequest().body(Map.of("error", "La descripción es obligatoria"));
+        }
+
+        // validar duplicado por descripción (case-insensitive)
+        String nuevaDesc = tarea.getDescripcion().trim().toLowerCase();
+        lock.lock();
+        try {
+            boolean exists = tareas.stream()
+                    .anyMatch(t -> t.getDescripcion() != null && t.getDescripcion().trim().toLowerCase().equals(nuevaDesc));
+            if (exists) {
+                return ResponseEntity.status(400).body(Map.of("error", "Tarea duplicada"));
+            }
+        } finally {
+            lock.unlock();
         }
 
         String pr = tarea.getPrioridad();
@@ -160,7 +174,9 @@ public class TareaController {
         } finally {
             lock.unlock();
         }
-        return ResponseEntity.ok(tarea);
+
+        URI location = URI.create("/api/tareas/" + tarea.getId());
+        return ResponseEntity.created(location).body(Map.of("message", "Tarea creada", "tarea", tarea));
     }
 
     // Actualización parcial (completada/prioridad/descripcion)
@@ -187,7 +203,7 @@ public class TareaController {
             }
 
             guardarTareas();
-            return ResponseEntity.ok(tarea);
+            return ResponseEntity.ok(Map.of("message", "Tarea actualizada", "tarea", tarea));
         } finally {
             lock.unlock();
         }
@@ -208,7 +224,7 @@ public class TareaController {
             Tarea tarea = tareaOpt.get();
             tarea.setDescripcion(desc.trim());
             guardarTareas();
-            return ResponseEntity.ok(tarea);
+            return ResponseEntity.ok(Map.of("message", "Descripción editada", "tarea", tarea));
         } finally {
             lock.unlock();
         }
@@ -222,7 +238,7 @@ public class TareaController {
             boolean removed = tareas.removeIf(t -> t.getId().equals(id));
             if (removed) {
                 guardarTareas();
-                return ResponseEntity.noContent().build();
+                return ResponseEntity.ok(Map.of("message", "Tarea eliminada", "id", id));
             } else {
                 return ResponseEntity.status(404).body(Map.of("error", "Tarea no encontrada"));
             }
@@ -253,8 +269,8 @@ public class TareaController {
                     updated.add(t.getId());
                 }
             }
-            guardarTareas();
-            return ResponseEntity.ok(Map.of("updated", updated));
+            if (!updated.isEmpty()) guardarTareas();
+            return ResponseEntity.ok(Map.of("message", "Batch actualizado", "updated", updated));
         } finally {
             lock.unlock();
         }
@@ -273,9 +289,17 @@ public class TareaController {
 
         lock.lock();
         try {
-            boolean changed = tareas.removeIf(t -> ids.contains(t.getId()));
-            if (changed) guardarTareas();
-            return ResponseEntity.ok(Map.of("deleted", ids));
+            List<Long> deleted = new ArrayList<>();
+            Iterator<Tarea> it = tareas.iterator();
+            while (it.hasNext()) {
+                Tarea t = it.next();
+                if (ids.contains(t.getId())) {
+                    deleted.add(t.getId());
+                    it.remove();
+                }
+            }
+            if (!deleted.isEmpty()) guardarTareas();
+            return ResponseEntity.ok(Map.of("message", "Tareas eliminadas", "deleted", deleted));
         } finally {
             lock.unlock();
         }
@@ -310,7 +334,7 @@ public class TareaController {
                 }
             }
             if (!updated.isEmpty()) guardarTareas();
-            return ResponseEntity.ok(Map.of("updated", updated));
+            return ResponseEntity.ok(Map.of("message", "Prioridad actualizada en lote", "updated", updated));
         } finally {
             lock.unlock();
         }

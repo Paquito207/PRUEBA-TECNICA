@@ -4,6 +4,7 @@ let currentSort = "fecha";
 let currentOrder = "asc";
 let currentSearch = "";
 const selectedIds = new Set();
+let cachedTareas = []; // cache local para validaciones y evitar fetchs extra
 
 document.addEventListener('DOMContentLoaded', () => {
   document.getElementById("btnOrdenar").onclick = (e) => {
@@ -22,7 +23,17 @@ document.addEventListener('DOMContentLoaded', () => {
     e.preventDefault();
     const descripcion = document.getElementById("descripcion").value.trim();
     const prioridad = document.getElementById("prioridad").value;
-    if (!descripcion) return alert("La descripción es obligatoria.");
+    if (!descripcion) {
+      showNotification("La descripción es obligatoria.", "error");
+      return;
+    }
+
+    // validación duplicado local (case-insensitive)
+    const existe = cachedTareas.some(t => (t.descripcion || "").trim().toLowerCase() === descripcion.toLowerCase());
+    if (existe) {
+      showNotification("Ya existe una tarea con esa descripción.", "error");
+      return;
+    }
 
     try {
       const res = await fetch(apiUrl, {
@@ -30,40 +41,41 @@ document.addEventListener('DOMContentLoaded', () => {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ descripcion, prioridad })
       });
+
+      const body = await safeJson(res);
       if (!res.ok) {
-        const err = await res.json();
-        return alert("Error al crear: " + (err.error || res.statusText));
+        showNotification(body?.error || "Error al crear tarea", "error");
+        return;
       }
+
+      showNotification(body?.message || "Tarea creada", "success");
       document.getElementById("descripcion").value = "";
       document.getElementById("prioridad").value = "Media";
       listarTareas();
     } catch (err) {
-      alert("Error al crear tarea: " + err);
+      showNotification("Error al crear tarea: " + err, "error");
     }
   };
 
-  // Marcar seleccionadas como completadas
   document.getElementById("btnMarcarSeleccionadas").onclick = async (e) => {
     e.preventDefault();
-    if (selectedIds.size === 0) return alert("No hay tareas seleccionadas.");
+    if (selectedIds.size === 0) { showNotification("No hay tareas seleccionadas.", "info"); return; }
     if (!confirm("Marcar las tareas seleccionadas como completadas?")) return;
     await markSelectedCompleted(true);
     listarTareas();
   };
 
-  // NUEVO: Marcar seleccionadas como pendientes
   document.getElementById("btnMarcarPendientes").onclick = async (e) => {
     e.preventDefault();
-    if (selectedIds.size === 0) return alert("No hay tareas seleccionadas.");
+    if (selectedIds.size === 0) { showNotification("No hay tareas seleccionadas.", "info"); return; }
     if (!confirm("Marcar las tareas seleccionadas como pendientes?")) return;
     await markSelectedCompleted(false);
     listarTareas();
   };
 
-  // Eliminar seleccionadas
   document.getElementById("btnEliminarSeleccionadas").onclick = async (e) => {
     e.preventDefault();
-    if (selectedIds.size === 0) return alert("No hay tareas seleccionadas.");
+    if (selectedIds.size === 0) { showNotification("No hay tareas seleccionadas.", "info"); return; }
     if (!confirm("Eliminar las tareas seleccionadas?")) return;
 
     const ids = Array.from(selectedIds);
@@ -73,26 +85,25 @@ document.addEventListener('DOMContentLoaded', () => {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ ids })
       });
-
+      const body = await safeJson(res);
       if (!res.ok) {
-        const err = await res.json();
-        return alert("Error al eliminar: " + (err.error || res.statusText));
+        showNotification(body?.error || "Error al eliminar", "error");
+        return;
       }
-
+      showNotification(body?.message || "Tareas eliminadas", "success");
       selectedIds.clear();
       document.getElementById('selectAll').checked = false;
       listarTareas();
     } catch (err) {
-      alert("Error al eliminar seleccionadas: " + err);
+      showNotification("Error al eliminar seleccionadas: " + err, "error");
     }
   };
 
-  // Aplicar prioridad en lote
   document.getElementById("btnAplicarPrioridad").onclick = async (e) => {
     e.preventDefault();
     const prioridad = document.getElementById("selCambiarPrioridad").value;
-    if (!prioridad) return alert("Seleccione una prioridad.");
-    if (selectedIds.size === 0) return alert("No hay tareas seleccionadas.");
+    if (!prioridad) { showNotification("Seleccione una prioridad.", "info"); return; }
+    if (selectedIds.size === 0) { showNotification("No hay tareas seleccionadas.", "info"); return; }
     if (!confirm(`Cambiar prioridad de las seleccionadas a "${prioridad}"?`)) return;
 
     const ids = Array.from(selectedIds);
@@ -102,30 +113,23 @@ document.addEventListener('DOMContentLoaded', () => {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ ids, prioridad })
       });
-
+      const body = await safeJson(res);
       if (!res.ok) {
-        const err = await res.json();
-        return alert("Error al cambiar prioridad: " + (err.error || res.statusText));
+        showNotification(body?.error || "Error al cambiar prioridad", "error");
+        return;
       }
-
+      showNotification(body?.message || "Prioridad cambiada", "success");
       selectedIds.clear();
       document.getElementById('selectAll').checked = false;
       document.getElementById("selCambiarPrioridad").value = "";
       listarTareas();
     } catch (err) {
-      alert("Error al cambiar prioridad: " + err);
+      showNotification("Error al cambiar prioridad: " + err, "error");
     }
   };
 
-  document.getElementById("btnExportCSV").onclick = (e) => {
-    e.preventDefault();
-    exportData('csv');
-  };
-
-  document.getElementById("btnExportJSON").onclick = (e) => {
-    e.preventDefault();
-    exportData('json');
-  };
+  document.getElementById("btnExportCSV").onclick = (e) => { e.preventDefault(); exportData('csv'); };
+  document.getElementById("btnExportJSON").onclick = (e) => { e.preventDefault(); exportData('json'); };
 
   document.getElementById("selectAll").addEventListener('change', (e) => {
     const checked = e.target.checked;
@@ -140,21 +144,50 @@ document.addEventListener('DOMContentLoaded', () => {
   listarTareas();
 });
 
+// safe parse JSON helper
+async function safeJson(res) {
+  try {
+    return await res.json();
+  } catch (e) {
+    return null;
+  }
+}
+
+// mostrar notificación simple (toast)
+function showNotification(message, type = "info", ttl = 4000) {
+  const container = document.getElementById('notif-container');
+  if (!container) return alert(message);
+  const el = document.createElement('div');
+  el.className = `notif ${type === 'error' ? 'error' : type === 'success' ? 'success' : 'info'}`;
+  el.textContent = message;
+  container.appendChild(el);
+  setTimeout(() => {
+    el.style.opacity = '0';
+    setTimeout(() => { el.remove(); }, 300);
+  }, ttl);
+}
+
 // Listar tareas con parámetros de orden
 async function listarTareas() {
   try {
     const res = await fetch(`${apiUrl}?sort=${currentSort}&order=${currentOrder}`);
-    let tareas = await res.json();
-
+    const body = await safeJson(res);
+    if (!res.ok) {
+      showNotification(body?.error || "Error al obtener tareas", "error");
+      return;
+    }
+    // backend returns { message, tareas }
+    const tareas = body?.tareas ?? [];
+    cachedTareas = tareas; // actualizar cache local
     // Filtrar por búsqueda (cliente)
+    let filtered = tareas;
     if ((currentSearch || "").trim() !== "") {
       const q = currentSearch.toLowerCase();
-      tareas = tareas.filter(t => (t.descripcion || "").toLowerCase().includes(q));
+      filtered = tareas.filter(t => (t.descripcion || "").toLowerCase().includes(q));
     }
-
-    renderList(tareas);
+    renderList(filtered);
   } catch (err) {
-    alert("Error al obtener tareas: " + err);
+    showNotification("Error al obtener tareas: " + err, "error");
   }
 }
 
@@ -214,7 +247,12 @@ function renderList(tareas) {
       const nuevo = prompt("Editar descripción:", t.descripcion);
       if (nuevo === null) return; // cancel
       const texto = nuevo.trim();
-      if (!texto) return alert("La descripción no puede estar vacía.");
+      if (!texto) { showNotification("La descripción no puede estar vacía.", "error"); return; }
+
+      // validar duplicado local (evitar colisiones)
+      const exists = cachedTareas.some(other => other.id !== t.id && (other.descripcion || "").trim().toLowerCase() === texto.toLowerCase());
+      if (exists) { showNotification("Otra tarea ya tiene esa descripción.", "error"); return; }
+
       await editDescripcion(t.id, texto);
       listarTareas();
     };
@@ -248,8 +286,18 @@ function renderList(tareas) {
     btnDelete.textContent = "Eliminar";
     btnDelete.onclick = async () => {
       if (!confirm("¿Eliminar esta tarea?")) return;
-      await fetch(`${apiUrl}/${t.id}`, { method: "DELETE" });
-      listarTareas();
+      try {
+        const res = await fetch(`${apiUrl}/${t.id}`, { method: "DELETE" });
+        const body = await safeJson(res);
+        if (!res.ok) {
+          showNotification(body?.error || "Error al eliminar", "error");
+          return;
+        }
+        showNotification(body?.message || "Tarea eliminada", "success");
+        listarTareas();
+      } catch (err) {
+        showNotification("Error al eliminar: " + err, "error");
+      }
     };
 
     controls.appendChild(btnEdit);
@@ -286,12 +334,14 @@ async function updateTarea(id, body) {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(body)
     });
+    const b = await safeJson(res);
     if (!res.ok) {
-      const err = await res.json();
-      alert("Error al actualizar: " + (err.error || res.statusText));
+      showNotification(b?.error || "Error al actualizar", "error");
+    } else {
+      showNotification(b?.message || "Tarea actualizada", "success");
     }
   } catch (err) {
-    alert("Error en la petición: " + err);
+    showNotification("Error en la petición: " + err, "error");
   }
 }
 
@@ -302,12 +352,14 @@ async function editDescripcion(id, descripcion) {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ descripcion })
     });
+    const b = await safeJson(res);
     if (!res.ok) {
-      const err = await res.json();
-      alert("Error al editar: " + (err.error || res.statusText));
+      showNotification(b?.error || "Error al editar", "error");
+    } else {
+      showNotification(b?.message || "Descripción editada", "success");
     }
   } catch (err) {
-    alert("Error en la petición: " + err);
+    showNotification("Error en la petición: " + err, "error");
   }
 }
 
@@ -319,15 +371,16 @@ async function markSelectedCompleted(completed) {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ ids, completed })
     });
+    const b = await safeJson(res);
     if (!res.ok) {
-      const err = await res.json();
-      alert("Error al marcar seleccionadas: " + (err.error || res.statusText));
+      showNotification(b?.error || "Error al marcar seleccionadas", "error");
     } else {
+      showNotification(b?.message || "Batch aplicado", "success");
       selectedIds.clear();
       document.getElementById('selectAll').checked = false;
     }
   } catch (err) {
-    alert("Error en la petición: " + err);
+    showNotification("Error en la petición: " + err, "error");
   }
 }
 
@@ -336,7 +389,7 @@ async function exportData(format) {
     const res = await fetch(`${apiUrl}/export?format=${format}`);
     if (!res.ok) {
       const text = await res.text();
-      return alert("Error al exportar: " + text);
+      return showNotification("Error al exportar: " + text, "error");
     }
     const blob = await res.blob();
     const url = window.URL.createObjectURL(blob);
@@ -348,7 +401,8 @@ async function exportData(format) {
     a.click();
     a.remove();
     window.URL.revokeObjectURL(url);
+    showNotification("Exportado correctamente", "success");
   } catch (err) {
-    alert("Error al exportar: " + err);
+    showNotification("Error al exportar: " + err, "error");
   }
 }
