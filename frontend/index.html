@@ -18,27 +18,51 @@
     </select>
     <button type="submit">Agregar</button>
   </form>
-<!-- Controles de ordenamiento -->
-<div id="ordenamiento">
-  Ordenar por:
-  <select id="sortSelect">
-    <option value="fecha">Fecha</option>
-    <option value="prioridad">Prioridad</option>
-    <option value="descripcion">Descripción</option>
-  </select>
-  <select id="orderSelect">
-    <option value="asc">Ascendente</option>
-    <option value="desc">Descendente</option>
-  </select>
-  <button id="btnOrdenar">Aplicar</button>
-</div>
+
+  <!-- Ordenamiento -->
+  <div id="ordenamiento">
+    Ordenar por:
+    <select id="sortSelect">
+      <option value="fecha">Fecha</option>
+      <option value="prioridad">Prioridad</option>
+      <option value="descripcion">Descripción</option>
+    </select>
+    <select id="orderSelect">
+      <option value="asc">Ascendente</option>
+      <option value="desc">Descendente</option>
+    </select>
+    <button id="btnOrdenar">Aplicar</button>
+  </div>
+
+  <!-- Búsqueda -->
+  <div id="busqueda" style="margin-top:8px;">
+    <input type="text" id="searchInput" placeholder="Buscar por descripción..." />
+  </div>
+
+  <!-- Controles de gestión avanzada -->
+  <div id="gestion-avanzada" style="margin:10px 0;">
+    <label><input type="checkbox" id="selectAll"> Seleccionar todo</label>
+
+    <button id="btnMarcarSeleccionadas">Marcar seleccionadas como completadas</button>
+    <button id="btnMarcarPendientes">Marcar seleccionadas como pendientes</button>
+
+    <button id="btnEliminarSeleccionadas">Eliminar seleccionadas</button>
+
+    <select id="selCambiarPrioridad" style="margin-left:8px;">
+      <option value="">-- Cambiar prioridad --</option>
+      <option value="Alta">Alta</option>
+      <option value="Media">Media</option>
+      <option value="Baja">Baja</option>
+    </select>
+    <button id="btnAplicarPrioridad">Aplicar</button>
+
+    <button id="btnExportCSV">Exportar CSV</button>
+    <button id="btnExportJSON">Exportar JSON</button>
+  </div>
+
   <div id="contadores">
     <span id="total">Total: 0</span> · <span id="pendientes">Pendientes: 0</span>
   </div>
-<!-- Barra de búsqueda -->
-<div id="busqueda">
-  <input type="text" id="searchInput" placeholder="Buscar por descripción..." />
-</div>
 
   <ul id="listaTareas"></ul>
 

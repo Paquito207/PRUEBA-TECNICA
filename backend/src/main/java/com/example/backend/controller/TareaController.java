@@ -5,6 +5,8 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -15,6 +17,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.concurrent.locks.ReentrantLock;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/tareas")
@@ -24,15 +27,12 @@ public class TareaController {
     private List<Tarea> tareas = new ArrayList<>();
     private Long idCounter = 1L;
     private static final Set<String> PRIORIDADES = Set.of("Alta", "Media", "Baja");
-    // Archivo en la raíz del directorio de ejecución
     private static final Path DATA_PATH = Paths.get(System.getProperty("user.dir"), "tareas.json");
 
-    // Jackson configurado para Java Time
     private final ObjectMapper mapper = new ObjectMapper()
             .registerModule(new JavaTimeModule())
             .disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
 
-    // Lock para proteger lecturas/escrituras concurrentes
     private final ReentrantLock lock = new ReentrantLock();
 
     public TareaController() {
@@ -46,11 +46,9 @@ public class TareaController {
         try {
             File f = DATA_PATH.toFile();
             if (!f.exists()) {
-                // crear archivo y escribir array vacío
                 Files.createDirectories(DATA_PATH.getParent() == null ? Paths.get(".") : DATA_PATH.getParent());
                 mapper.writerWithDefaultPrettyPrinter().writeValue(f, new ArrayList<Tarea>());
             } else {
-                // si el archivo existe pero está vacío, inicializar con []
                 if (Files.size(DATA_PATH) == 0) {
                     mapper.writerWithDefaultPrettyPrinter().writeValue(DATA_PATH.toFile(), new ArrayList<Tarea>());
                 }
@@ -68,22 +66,18 @@ public class TareaController {
                 idCounter = 1L;
                 return;
             }
-
-            // leer contenido y parsear
             try {
-                // Si el archivo está vacío devolvemos lista vacía (ya asegurado en ensureFileExists)
                 tareas = mapper.readValue(DATA_PATH.toFile(), new TypeReference<List<Tarea>>() {});
                 idCounter = tareas.stream()
                         .filter(Objects::nonNull)
                         .mapToLong(t -> t.getId() == null ? 0L : t.getId())
                         .max().orElse(0L) + 1;
             } catch (Exception ex) {
-                // Si falla la lectura (JSON corrupto), hacer backup y reiniciar archivo
                 System.err.println("Error al leer tareas.json — realizando backup y reinicializando. Error: " + ex.getMessage());
                 backupCorruptFile();
                 tareas = new ArrayList<>();
                 idCounter = 1L;
-                guardarTareas(); // crear archivo válido
+                guardarTareas();
             }
         } finally {
             lock.unlock();
@@ -104,20 +98,16 @@ public class TareaController {
     private void guardarTareas() {
         lock.lock();
         try {
-            // escribir en archivo temporal en la misma carpeta
             Path dir = DATA_PATH.getParent() == null ? Paths.get(".") : DATA_PATH.getParent();
             Path tempFile = Files.createTempFile(dir, "tareas", ".tmp");
             try {
                 mapper.writerWithDefaultPrettyPrinter().writeValue(tempFile.toFile(), tareas);
-                // mover de forma atómica cuando sea posible
                 try {
                     Files.move(tempFile, DATA_PATH, StandardCopyOption.REPLACE_EXISTING, StandardCopyOption.ATOMIC_MOVE);
                 } catch (AtomicMoveNotSupportedException amnse) {
-                    // fallback si el FS no soporta ATOMIC_MOVE
                     Files.move(tempFile, DATA_PATH, StandardCopyOption.REPLACE_EXISTING);
                 }
             } finally {
-                // asegurar que el temp no quede
                 if (Files.exists(tempFile)) {
                     try { Files.deleteIfExists(tempFile); } catch (IOException ignored) {}
                 }
@@ -131,10 +121,10 @@ public class TareaController {
 
     /* ---------- Endpoints ---------- */
 
+    // Listar con orden opcional (sort, order)
     @GetMapping
     public List<Tarea> getAll(@RequestParam(required = false) String sort,
                               @RequestParam(required = false, defaultValue = "asc") String order) {
-        // devolver copia para evitar que el cliente modifique la lista interna
         List<Tarea> copy;
         lock.lock();
         try {
@@ -142,13 +132,13 @@ public class TareaController {
         } finally {
             lock.unlock();
         }
-        // si se piden parámetros de ordenamiento, aplicar aquí (backend)
         if (sort != null && !sort.isBlank()) {
             applySort(copy, sort, order);
         }
         return copy;
     }
 
+    // Crear
     @PostMapping
     public ResponseEntity<?> create(@RequestBody Tarea tarea) {
         if (tarea.getDescripcion() == null || tarea.getDescripcion().trim().isEmpty()) {
@@ -156,9 +146,7 @@ public class TareaController {
         }
 
         String pr = tarea.getPrioridad();
-        if (pr == null || !PRIORIDADES.contains(pr)) {
-            pr = "Media";
-        }
+        if (pr == null || !PRIORIDADES.contains(pr)) pr = "Media";
 
         tarea.setId(nextId());
         tarea.setFechaCreacion(LocalDateTime.now());
@@ -175,20 +163,17 @@ public class TareaController {
         return ResponseEntity.ok(tarea);
     }
 
+    // Actualización parcial (completada/prioridad/descripcion)
     @PostMapping("/{id}")
-    public ResponseEntity<?> update(@PathVariable Long id, @RequestBody Tarea updatedTarea) {
+    public ResponseEntity<?> updatePartial(@PathVariable Long id, @RequestBody Tarea updatedTarea) {
         lock.lock();
         try {
             Optional<Tarea> tareaOpt = tareas.stream().filter(t -> t.getId().equals(id)).findFirst();
-            if (tareaOpt.isEmpty()) {
-                return ResponseEntity.status(404).body(Map.of("error", "Tarea no encontrada"));
-            }
+            if (tareaOpt.isEmpty()) return ResponseEntity.status(404).body(Map.of("error", "Tarea no encontrada"));
 
             Tarea tarea = tareaOpt.get();
 
-            if (updatedTarea.getCompletada() != null) {
-                tarea.setCompletada(updatedTarea.getCompletada());
-            }
+            if (updatedTarea.getCompletada() != null) tarea.setCompletada(updatedTarea.getCompletada());
 
             if (updatedTarea.getPrioridad() != null) {
                 if (!PRIORIDADES.contains(updatedTarea.getPrioridad())) {
@@ -208,6 +193,28 @@ public class TareaController {
         }
     }
 
+    // PUT para editar descripción (gestión avanzada)
+    @PutMapping("/{id}")
+    public ResponseEntity<?> editDescripcion(@PathVariable Long id, @RequestBody Map<String,String> body) {
+        String desc = body.get("descripcion");
+        if (desc == null || desc.trim().isEmpty()) {
+            return ResponseEntity.badRequest().body(Map.of("error", "La descripción es obligatoria"));
+        }
+        lock.lock();
+        try {
+            Optional<Tarea> tareaOpt = tareas.stream().filter(t -> t.getId().equals(id)).findFirst();
+            if (tareaOpt.isEmpty()) return ResponseEntity.status(404).body(Map.of("error", "Tarea no encontrada"));
+
+            Tarea tarea = tareaOpt.get();
+            tarea.setDescripcion(desc.trim());
+            guardarTareas();
+            return ResponseEntity.ok(tarea);
+        } finally {
+            lock.unlock();
+        }
+    }
+
+    // Eliminar individual
     @DeleteMapping("/{id}")
     public ResponseEntity<?> delete(@PathVariable Long id) {
         lock.lock();
@@ -224,10 +231,129 @@ public class TareaController {
         }
     }
 
+    // Endpoint batch: marcar varias tareas como completadas/pendientes
+    @PostMapping("/batch/complete")
+    public ResponseEntity<?> batchComplete(@RequestBody Map<String, Object> payload) {
+        Object idsObj = payload.get("ids");
+        Object completedObj = payload.get("completed");
+        if (idsObj == null || !(idsObj instanceof List) || completedObj == null) {
+            return ResponseEntity.badRequest().body(Map.of("error", "Payload inválido. Use { ids: [1,2], completed: true }"));
+        }
+        @SuppressWarnings("unchecked")
+        List<Number> idsNum = (List<Number>) idsObj;
+        boolean completed = Boolean.parseBoolean(String.valueOf(completedObj));
+
+        lock.lock();
+        try {
+            List<Long> updated = new ArrayList<>();
+            Set<Long> idSet = idsNum.stream().map(Number::longValue).collect(Collectors.toSet());
+            for (Tarea t : tareas) {
+                if (idSet.contains(t.getId())) {
+                    t.setCompletada(completed);
+                    updated.add(t.getId());
+                }
+            }
+            guardarTareas();
+            return ResponseEntity.ok(Map.of("updated", updated));
+        } finally {
+            lock.unlock();
+        }
+    }
+
+    // Nuevo: eliminar múltiples
+    @DeleteMapping("/batch/delete")
+    public ResponseEntity<?> batchDelete(@RequestBody Map<String, Object> payload) {
+        Object idsObj = payload.get("ids");
+        if (idsObj == null || !(idsObj instanceof List)) {
+            return ResponseEntity.badRequest().body(Map.of("error", "Payload inválido. Use { ids:[1,2,3] }"));
+        }
+        @SuppressWarnings("unchecked")
+        List<Number> idsNum = (List<Number>) idsObj;
+        Set<Long> ids = idsNum.stream().map(Number::longValue).collect(Collectors.toSet());
+
+        lock.lock();
+        try {
+            boolean changed = tareas.removeIf(t -> ids.contains(t.getId()));
+            if (changed) guardarTareas();
+            return ResponseEntity.ok(Map.of("deleted", ids));
+        } finally {
+            lock.unlock();
+        }
+    }
+
+    // Nuevo: cambiar prioridad en lote
+    @PostMapping("/batch/prioridad")
+    public ResponseEntity<?> batchPrioridad(@RequestBody Map<String, Object> payload) {
+        Object idsObj = payload.get("ids");
+        Object prObj = payload.get("prioridad");
+
+        if (idsObj == null || !(idsObj instanceof List) || prObj == null) {
+            return ResponseEntity.badRequest().body(Map.of("error","Payload inválido. Use { ids:[1,2], prioridad:'Alta' }"));
+        }
+
+        String nuevaPr = String.valueOf(prObj);
+        if (!PRIORIDADES.contains(nuevaPr)) {
+            return ResponseEntity.badRequest().body(Map.of("error","Prioridad inválida. Use Alta, Media o Baja"));
+        }
+
+        @SuppressWarnings("unchecked")
+        List<Number> idsNum = (List<Number>) idsObj;
+        Set<Long> ids = idsNum.stream().map(Number::longValue).collect(Collectors.toSet());
+
+        lock.lock();
+        try {
+            List<Long> updated = new ArrayList<>();
+            for (Tarea t : tareas) {
+                if (ids.contains(t.getId())) {
+                    t.setPrioridad(nuevaPr);
+                    updated.add(t.getId());
+                }
+            }
+            if (!updated.isEmpty()) guardarTareas();
+            return ResponseEntity.ok(Map.of("updated", updated));
+        } finally {
+            lock.unlock();
+        }
+    }
+
+    // Exportar tareas: ?format=csv|json
+    @GetMapping("/export")
+    public ResponseEntity<byte[]> export(@RequestParam(required = false, defaultValue = "json") String format) {
+        lock.lock();
+        try {
+            if ("csv".equalsIgnoreCase(format)) {
+                StringBuilder sb = new StringBuilder();
+                sb.append("id,descripcion,completada,fechaCreacion,prioridad\n");
+                for (Tarea t : tareas) {
+                    String desc = t.getDescripcion() == null ? "" : t.getDescripcion().replace("\"","\"\"");
+                    sb.append(t.getId()).append(",\"").append(desc).append("\",")
+                      .append(t.getCompletada() == null ? false : t.getCompletada()).append(",")
+                      .append(t.getFechaCreacion() == null ? "" : t.getFechaCreacion().toString()).append(",")
+                      .append(t.getPrioridad() == null ? "" : t.getPrioridad()).append("\n");
+                }
+                byte[] bytes = sb.toString().getBytes();
+                HttpHeaders headers = new HttpHeaders();
+                headers.set(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=tareas.csv");
+                headers.setContentType(MediaType.parseMediaType("text/csv; charset=utf-8"));
+                return ResponseEntity.ok().headers(headers).body(bytes);
+            } else {
+                byte[] bytes = mapper.writerWithDefaultPrettyPrinter().writeValueAsBytes(tareas);
+                HttpHeaders headers = new HttpHeaders();
+                headers.set(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=tareas.json");
+                headers.setContentType(MediaType.APPLICATION_JSON);
+                return ResponseEntity.ok().headers(headers).body(bytes);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+            return ResponseEntity.status(500).body(("Error al exportar: "+e.getMessage()).getBytes());
+        } finally {
+            lock.unlock();
+        }
+    }
+
     /* ---------- Helpers ---------- */
 
     private long nextId() {
-        // simple pero seguro gracias al lock alrededor de llamadas que mutan la lista
         return idCounter++;
     }
 
@@ -237,7 +363,6 @@ public class TareaController {
 
         switch (sort.toLowerCase()) {
             case "prioridad":
-                // definir prioridad: Alta > Media > Baja
                 Map<String, Integer> rank = Map.of("Alta", 3, "Media", 2, "Baja", 1);
                 comparator = Comparator.comparingInt(t -> rank.getOrDefault(
                         Optional.ofNullable(t.getPrioridad()).orElse("Media"), 2));
@@ -250,12 +375,10 @@ public class TareaController {
                 comparator = Comparator.comparing(Tarea::getDescripcion, Comparator.nullsLast(String::compareToIgnoreCase));
                 break;
             default:
-                return; // no aplica
+                return;
         }
 
-        if ("desc".equals(ord)) {
-            comparator = comparator.reversed();
-        }
+        if ("desc".equals(ord)) comparator = comparator.reversed();
         lista.sort(comparator);
     }
 }
