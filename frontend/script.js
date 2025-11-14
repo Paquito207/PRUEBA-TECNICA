@@ -5,6 +5,28 @@ let currentOrder = "asc";
 let currentSearch = "";
 const selectedIds = new Set();
 let cachedTareas = []; // cache local para validaciones y evitar fetchs extra
+let currentView = "lista"; // lista | mini
+
+document.getElementById("btnVistaLista").onclick = () => {
+  currentView = "lista";
+  aplicarVista();
+};
+
+document.getElementById("btnVistaMini").onclick = () => {
+  currentView = "mini";
+  aplicarVista();
+};
+
+function aplicarVista() {
+  const ul = document.getElementById("listaTareas");
+  if (!ul) return;
+
+  ul.classList.remove("lista", "mini");
+  ul.classList.add(currentView);
+
+  document.getElementById("btnVistaLista").classList.toggle("view-btn-active", currentView === "lista");
+  document.getElementById("btnVistaMini").classList.toggle("view-btn-active", currentView === "mini");
+}
 
 document.addEventListener('DOMContentLoaded', () => {
   document.getElementById("btnOrdenar").onclick = (e) => {
@@ -142,7 +164,24 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   listarTareas();
+    aplicarVista();
 });
+
+function crearVerMas(descEl, texto) {
+  const limite = 120; // caracteres aproximados antes de mostrar botón
+  if (texto.length <= limite) return;
+
+  const btn = document.createElement("button");
+  btn.className = "ver-mas-btn";
+  btn.textContent = "Ver más";
+
+  btn.onclick = () => {
+    const expanded = descEl.classList.toggle("expanded");
+    btn.textContent = expanded ? "Ver menos" : "Ver más";
+  };
+
+  return btn;
+}
 
 // safe parse JSON helper
 async function safeJson(res) {
@@ -198,6 +237,9 @@ function renderList(tareas) {
   document.getElementById("total").textContent = `Total: ${tareas.length}`;
   document.getElementById("pendientes").textContent = `Pendientes: ${tareas.filter(t => !t.completada).length}`;
 
+  document.getElementById("emptyState").style.display =
+  tareas.length === 0 ? "block" : "none";
+
   tareas.forEach(t => {
     const li = document.createElement("li");
     li.className = t.completada ? "completed" : "";
@@ -226,8 +268,12 @@ function renderList(tareas) {
     left.appendChild(sel);
 
     const desc = document.createElement("div");
-    desc.className = "descripcion";
-    desc.textContent = t.descripcion;
+desc.className = "descripcion";
+desc.textContent = t.descripcion;
+
+const verMas = crearVerMas(desc, t.descripcion);
+if (verMas) desc.appendChild(document.createElement("br")), desc.appendChild(verMas);
+
 
     const label = document.createElement("span");
     label.className = "priority-label " + priorityClass(t.prioridad);

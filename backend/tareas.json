@@ -3,7 +3,7 @@
   "descripcion" : "fazer um viajem pra o brasil amanha na manha",
   "completada" : false,
   "fechaCreacion" : "2025-11-13T18:57:59.2102211",
-  "prioridad" : "Media"
+  "prioridad" : "Baja"
 }, {
   "id" : 2,
   "descripcion" : "hacer la tarea",
@@ -13,9 +13,9 @@
 }, {
   "id" : 4,
   "descripcion" : "hacer la tarea jkj",
-  "completada" : false,
+  "completada" : true,
   "fechaCreacion" : "2025-11-13T20:26:51.6509921",
-  "prioridad" : "Media"
+  "prioridad" : "Baja"
 }, {
   "id" : 5,
   "descripcion" : "alskndlaks dasd kajs dkas kaj ssa",
@@ -27,11 +27,215 @@
   "descripcion" : "alskndlaks dasd kajs dkas kaj ssaa",
   "completada" : true,
   "fechaCreacion" : "2025-11-13T20:46:23.9252501",
-  "prioridad" : "Alta"
+  "prioridad" : "Baja"
 }, {
   "id" : 7,
   "descripcion" : "alskndlaks dasd kajs dkas kaj ssat",
-  "completada" : true,
+  "completada" : false,
   "fechaCreacion" : "2025-11-13T20:46:34.2116177",
+  "prioridad" : "Media"
+}, {
+  "id" : 8,
+  "descripcion" : "comprar ingredientes para la cena de hoy",
+  "completada" : false,
+  "fechaCreacion" : "2025-11-13T21:00:01.0000001",
+  "prioridad" : "Media"
+}, {
+  "id" : 9,
+  "descripcion" : "limpiar el escritorio",
+  "completada" : true,
+  "fechaCreacion" : "2025-11-13T21:00:05.0000001",
+  "prioridad" : "Baja"
+}, {
+  "id" : 10,
+  "descripcion" : "organizar archivos del proyecto",
+  "completada" : false,
+  "fechaCreacion" : "2025-11-13T21:00:09.0000001",
+  "prioridad" : "Alta"
+}, {
+  "id" : 11,
+  "descripcion" : "revisar correos pendientes",
+  "completada" : false,
+  "fechaCreacion" : "2025-11-13T21:00:12.0000001",
+  "prioridad" : "Media"
+}, {
+  "id" : 12,
+  "descripcion" : "actualizar el CV",
+  "completada" : true,
+  "fechaCreacion" : "2025-11-13T21:00:16.0000001",
+  "prioridad" : "Media"
+}, {
+  "id" : 13,
+  "descripcion" : "preparar presentación del viernes",
+  "completada" : false,
+  "fechaCreacion" : "2025-11-13T21:00:19.0000001",
+  "prioridad" : "Alta"
+}, {
+  "id" : 14,
+  "descripcion" : "instalar actualizaciones pendientes del sistema",
+  "completada" : false,
+  "fechaCreacion" : "2025-11-13T21:00:23.0000001",
+  "prioridad" : "Baja"
+}, {
+  "id" : 15,
+  "descripcion" : "agendar cita médica",
+  "completada" : true,
+  "fechaCreacion" : "2025-11-13T21:00:27.0000001",
+  "prioridad" : "Alta"
+}, {
+  "id" : 16,
+  "descripcion" : "lavar la ropa",
+  "completada" : false,
+  "fechaCreacion" : "2025-11-13T21:00:31.0000001",
+  "prioridad" : "Media"
+}, {
+  "id" : 17,
+  "descripcion" : "comprar regalo de cumpleaños",
+  "completada" : false,
+  "fechaCreacion" : "2025-11-13T21:00:34.0000001",
+  "prioridad" : "Alta"
+}, {
+  "id" : 18,
+  "descripcion" : "respaldar fotos del teléfono",
+  "completada" : true,
+  "fechaCreacion" : "2025-11-13T21:00:38.0000001",
+  "prioridad" : "Baja"
+}, {
+  "id" : 19,
+  "descripcion" : "estudiar 30 minutos",
+  "completada" : false,
+  "fechaCreacion" : "2025-11-13T21:00:41.0000001",
+  "prioridad" : "Alta"
+}, {
+  "id" : 20,
+  "descripcion" : "regarlas plantas",
+  "completada" : false,
+  "fechaCreacion" : "2025-11-13T21:00:45.0000001",
+  "prioridad" : "Baja"
+}, {
+  "id" : 21,
+  "descripcion" : "responder mensajes pendientes",
+  "completada" : true,
+  "fechaCreacion" : "2025-11-13T21:00:49.0000001",
+  "prioridad" : "Media"
+}, {
+  "id" : 22,
+  "descripcion" : "preparar lista de compras",
+  "completada" : false,
+  "fechaCreacion" : "2025-11-13T21:00:53.0000001",
+  "prioridad" : "Media"
+}, {
+  "id" : 23,
+  "descripcion" : "hacer mantenimiento al teclado hacer mantenimiento al tecladohacer mantenimiento al tecladohacer mantenimiento al tecladohacer mantenimiento al tecladohacer mantenimiento al tecladohacer mantenimiento al tecladohacer mantenimiento al teclado",
+  "completada" : false,
+  "fechaCreacion" : "2025-11-13T21:00:57.0000001",
+  "prioridad" : "Baja"
+}, {
+  "id" : 24,
+  "descripcion" : "planear viaje de fin de año",
+  "completada" : false,
+  "fechaCreacion" : "2025-11-13T21:01:01.0000001",
+  "prioridad" : "Alta"
+}, {
+  "id" : 25,
+  "descripcion" : "ordenar documentos",
+  "completada" : true,
+  "fechaCreacion" : "2025-11-13T21:01:04.0000001",
+  "prioridad" : "Media"
+}, {
+  "id" : 26,
+  "descripcion" : "revisar la cuenta bancaria",
+  "completada" : false,
+  "fechaCreacion" : "2025-11-13T21:01:08.0000001",
+  "prioridad" : "Alta"
+}, {
+  "id" : 27,
+  "descripcion" : "verificar pagos automáticos",
+  "completada" : false,
+  "fechaCreacion" : "2025-11-13T21:01:11.0000001",
+  "prioridad" : "Baja"
+}, {
+  "id" : 28,
+  "descripcion" : "crear recordatorio para limpieza mensual",
+  "completada" : true,
+  "fechaCreacion" : "2025-11-13T21:01:15.0000001",
+  "prioridad" : "Media"
+}, {
+  "id" : 29,
+  "descripcion" : "organizar carpetas del escritorio",
+  "completada" : false,
+  "fechaCreacion" : "2025-11-13T21:01:18.0000001",
+  "prioridad" : "Media"
+}, {
+  "id" : 30,
+  "descripcion" : "actualizar lista de contraseñas",
+  "completada" : false,
+  "fechaCreacion" : "2025-11-13T21:01:22.0000001",
+  "prioridad" : "Alta"
+}, {
+  "id" : 31,
+  "descripcion" : "cambiar sábanas",
+  "completada" : true,
+  "fechaCreacion" : "2025-11-13T21:01:25.0000001",
+  "prioridad" : "Baja"
+}, {
+  "id" : 32,
+  "descripcion" : "limpiar nevera",
+  "completada" : false,
+  "fechaCreacion" : "2025-11-13T21:01:29.0000001",
+  "prioridad" : "Alta"
+}, {
+  "id" : 33,
+  "descripcion" : "revisar listas del proyecto",
+  "completada" : false,
+  "fechaCreacion" : "2025-11-13T21:01:33.0000001",
+  "prioridad" : "Media"
+}, {
+  "id" : 34,
+  "descripcion" : "ver tutoriales de programación",
+  "completada" : false,
+  "fechaCreacion" : "2025-11-13T21:01:37.0000001",
+  "prioridad" : "Baja"
+}, {
+  "id" : 35,
+  "descripcion" : "instalar app de productividad",
+  "completada" : false,
+  "fechaCreacion" : "2025-11-13T21:01:40.0000001",
+  "prioridad" : "Media"
+}, {
+  "id" : 36,
+  "descripcion" : "revisar la lista de pendientes semanal",
+  "completada" : false,
+  "fechaCreacion" : "2025-11-13T21:01:44.0000001",
+  "prioridad" : "Alta"
+}, {
+  "id" : 37,
+  "descripcion" : "limpiar historial del navegador",
+  "completada" : true,
+  "fechaCreacion" : "2025-11-13T21:01:47.0000001",
+  "prioridad" : "Media"
+}, {
+  "id" : 38,
+  "descripcion" : "ordenar herramientas",
+  "completada" : false,
+  "fechaCreacion" : "2025-11-13T21:01:51.0000001",
+  "prioridad" : "Baja"
+}, {
+  "id" : 39,
+  "descripcion" : "planear rutina de ejercicios",
+  "completada" : false,
+  "fechaCreacion" : "2025-11-13T21:01:54.0000001",
+  "prioridad" : "Alta"
+}, {
+  "id" : 40,
+  "descripcion" : "hacer limpieza rápida de la sala",
+  "completada" : true,
+  "fechaCreacion" : "2025-11-13T21:01:58.0000001",
+  "prioridad" : "Media"
+}, {
+  "id" : 41,
+  "descripcion" : "fazer um viajem pra o brasil fazer um viajem pra o brasilfazer um viajem pra o brasilfazer um viajem pra o brasilfazer um viajem pra o brasilfazer um viajem pra o brasilfazer um viajem pra o brasilfazer um viajem pra o brasilfazer um viajem pra o brasilfazer um viajem pra o brasil",
+  "completada" : true,
+  "fechaCreacion" : "2025-11-13T21:39:01.1557362",
   "prioridad" : "Media"
 } ]
