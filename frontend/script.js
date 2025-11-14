@@ -1,8 +1,12 @@
 const apiUrl = "http://localhost:8080/api/tareas";
 
+let currentSort = "fecha";
+let currentOrder = "asc";
+
+// Listar tareas con parámetros de orden
 async function listarTareas() {
   try {
-    const res = await fetch(apiUrl);
+    const res = await fetch(`${apiUrl}?sort=${currentSort}&order=${currentOrder}`);
     const tareas = await res.json();
     renderList(tareas);
   } catch (err) {
@@ -14,10 +18,8 @@ function renderList(tareas) {
   const ul = document.getElementById("listaTareas");
   ul.innerHTML = "";
 
-  let total = tareas.length;
-  let pendientes = tareas.filter(t => !t.completada).length;
-  document.getElementById("total").textContent = `Total: ${total}`;
-  document.getElementById("pendientes").textContent = `Pendientes: ${pendientes}`;
+  document.getElementById("total").textContent = `Total: ${tareas.length}`;
+  document.getElementById("pendientes").textContent = `Pendientes: ${tareas.filter(t => !t.completada).length}`;
 
   tareas.forEach(t => {
     const li = document.createElement("li");
@@ -40,7 +42,6 @@ function renderList(tareas) {
     const controls = document.createElement("div");
     controls.className = "controls";
 
-    // Toggle completed
     const btnToggle = document.createElement("button");
     btnToggle.className = "small toggle";
     btnToggle.textContent = t.completada ? "Marcar Pendiente" : "Marcar Completada";
@@ -49,7 +50,6 @@ function renderList(tareas) {
       listarTareas();
     };
 
-    // Priority inline select
     const select = document.createElement("select");
     select.className = "inline-select";
     ["Alta","Media","Baja"].forEach(p => {
@@ -60,12 +60,10 @@ function renderList(tareas) {
       select.appendChild(opt);
     });
     select.onchange = async (e) => {
-      const nueva = e.target.value;
-      await updateTarea(t.id, { prioridad: nueva });
+      await updateTarea(t.id, { prioridad: e.target.value });
       listarTareas();
     };
 
-    // Delete
     const btnDelete = document.createElement("button");
     btnDelete.className = "small delete";
     btnDelete.textContent = "Eliminar";
@@ -112,11 +110,7 @@ document.getElementById("formTarea").onsubmit = async (e) => {
   e.preventDefault();
   const descripcion = document.getElementById("descripcion").value.trim();
   const prioridad = document.getElementById("prioridad").value;
-
-  if (!descripcion) {
-    alert("La descripción es obligatoria.");
-    return;
-  }
+  if (!descripcion) return alert("La descripción es obligatoria.");
 
   try {
     const res = await fetch(apiUrl, {
@@ -124,19 +118,24 @@ document.getElementById("formTarea").onsubmit = async (e) => {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ descripcion, prioridad })
     });
-
     if (!res.ok) {
       const err = await res.json();
-      alert("Error al crear: " + (err.error || res.statusText));
-      return;
+      return alert("Error al crear: " + (err.error || res.statusText));
     }
-
     document.getElementById("descripcion").value = "";
     document.getElementById("prioridad").value = "Media";
     listarTareas();
   } catch (err) {
     alert("Error al crear tarea: " + err);
   }
+};
+
+// Ordenamiento dinámico
+document.getElementById("btnOrdenar").onclick = (e) => {
+  e.preventDefault();
+  currentSort = document.getElementById("sortSelect").value;
+  currentOrder = document.getElementById("orderSelect").value;
+  listarTareas();
 };
 
 listarTareas();

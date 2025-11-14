@@ -18,7 +18,20 @@
     </select>
     <button type="submit">Agregar</button>
   </form>
-
+<!-- Controles de ordenamiento -->
+<div id="ordenamiento">
+  Ordenar por:
+  <select id="sortSelect">
+    <option value="fecha">Fecha</option>
+    <option value="prioridad">Prioridad</option>
+    <option value="descripcion">Descripción</option>
+  </select>
+  <select id="orderSelect">
+    <option value="asc">Ascendente</option>
+    <option value="desc">Descendente</option>
+  </select>
+  <button id="btnOrdenar">Aplicar</button>
+</div>
   <div id="contadores">
     <span id="total">Total: 0</span> · <span id="pendientes">Pendientes: 0</span>
   </div>
