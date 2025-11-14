@@ -1,9 +1,16 @@
 package com.example.backend.controller;
 
 import com.example.backend.model.Tarea;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.File;
+import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.*;
 
@@ -15,6 +22,36 @@ public class TareaController {
     private List<Tarea> tareas = new ArrayList<>();
     private Long idCounter = 1L;
     private static final Set<String> PRIORIDADES = Set.of("Alta", "Media", "Baja");
+    private static final File DATA_FILE = new File("tareas.json");
+    private final ObjectMapper mapper = new ObjectMapper()
+        .registerModule(new JavaTimeModule())
+        .disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
+
+    public TareaController() {
+        cargarTareas();
+    }
+
+    // Cargar tareas desde archivo JSON
+    private void cargarTareas() {
+        if (DATA_FILE.exists()) {
+            try {
+                tareas = mapper.readValue(DATA_FILE, new TypeReference<List<Tarea>>() {});
+                // Ajustar idCounter
+                idCounter = tareas.stream().mapToLong(Tarea::getId).max().orElse(0L) + 1;
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    // Guardar tareas a archivo JSON
+    private void guardarTareas() {
+        try {
+            mapper.writerWithDefaultPrettyPrinter().writeValue(DATA_FILE, tareas);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 
     @GetMapping
     public List<Tarea> getAll() {
@@ -38,13 +75,10 @@ public class TareaController {
         tarea.setPrioridad(pr);
 
         tareas.add(tarea);
+        guardarTareas();
         return ResponseEntity.ok(tarea);
     }
 
-    /**
-     * Actualiza campos permitidos: completada (Boolean), prioridad (String), descripcion (String).
-     * Se permite body parcial.
-     */
     @PostMapping("/{id}")
     public ResponseEntity<?> update(@PathVariable Long id, @RequestBody Tarea updatedTarea) {
         Optional<Tarea> tareaOpt = tareas.stream().filter(t -> t.getId().equals(id)).findFirst();
@@ -69,6 +103,7 @@ public class TareaController {
             tarea.setDescripcion(updatedTarea.getDescripcion());
         }
 
+        guardarTareas();
         return ResponseEntity.ok(tarea);
     }
 
@@ -76,6 +111,7 @@ public class TareaController {
     public ResponseEntity<?> delete(@PathVariable Long id) {
         boolean removed = tareas.removeIf(t -> t.getId().equals(id));
         if (removed) {
+            guardarTareas();
             return ResponseEntity.noContent().build();
         } else {
             return ResponseEntity.status(404).body(Map.of("error", "Tarea no encontrada"));

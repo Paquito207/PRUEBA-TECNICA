@@ -1,0 +1,25 @@
+[ {
+  "id" : 1,
+  "descripcion" : "fazer um viajem pra o brasil",
+  "completada" : false,
+  "fechaCreacion" : "2025-11-13T18:57:59.2102211",
+  "prioridad" : "Media"
+}, {
+  "id" : 2,
+  "descripcion" : "hacer la tarea",
+  "completada" : false,
+  "fechaCreacion" : "2025-11-13T18:58:06.110076",
+  "prioridad" : "Alta"
+}, {
+  "id" : 3,
+  "descripcion" : "comprar doçes",
+  "completada" : false,
+  "fechaCreacion" : "2025-11-13T18:58:11.1000568",
+  "prioridad" : "Baja"
+}, {
+  "id" : 4,
+  "descripcion" : "eu quero dançar hoje",
+  "completada" : true,
+  "fechaCreacion" : "2025-11-13T19:00:17.7599189",
+  "prioridad" : "Alta"
+} ]
