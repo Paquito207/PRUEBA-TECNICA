@@ -2,12 +2,20 @@ const apiUrl = "http://localhost:8080/api/tareas";
 
 let currentSort = "fecha";
 let currentOrder = "asc";
+let currentSearch = "";
 
 // Listar tareas con parámetros de orden
 async function listarTareas() {
   try {
     const res = await fetch(`${apiUrl}?sort=${currentSort}&order=${currentOrder}`);
-    const tareas = await res.json();
+    let tareas = await res.json();
+
+    // Filtrar por búsqueda si hay texto
+    if (currentSearch.trim() !== "") {
+      const query = currentSearch.toLowerCase();
+      tareas = tareas.filter(t => t.descripcion.toLowerCase().includes(query));
+    }
+
     renderList(tareas);
   } catch (err) {
     alert("Error al obtener tareas: " + err);
@@ -82,6 +90,12 @@ function renderList(tareas) {
     ul.appendChild(li);
   });
 }
+
+// Búsqueda en tiempo real
+document.getElementById("searchInput").addEventListener("input", (e) => {
+  currentSearch = e.target.value;
+  listarTareas();
+});
 
 function priorityClass(pr) {
   if (!pr) return "priority-media";
