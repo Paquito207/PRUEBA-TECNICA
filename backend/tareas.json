@@ -1,241 +1,1207 @@
 [ {
   "id" : 1,
-  "descripcion" : "fazer um viajem pra o brasil amanha na manha",
+  "descripcion" : "Documentar API — módulo de autenticación",
   "completada" : false,
-  "fechaCreacion" : "2025-11-13T18:57:59.2102211",
+  "fechaCreacion" : "2025-11-13T16:00:00",
   "prioridad" : "Baja"
 }, {
   "id" : 2,
-  "descripcion" : "hacer la tarea",
-  "completada" : false,
-  "fechaCreacion" : "2025-11-13T18:58:06.110076",
-  "prioridad" : "Baja"
-}, {
-  "id" : 4,
-  "descripcion" : "hacer la tarea jkj",
+  "descripcion" : "Analizar métricas — reporte trimestral",
   "completada" : true,
-  "fechaCreacion" : "2025-11-13T20:26:51.6509921",
-  "prioridad" : "Baja"
-}, {
-  "id" : 5,
-  "descripcion" : "alskndlaks dasd kajs dkas kaj ssa",
-  "completada" : false,
-  "fechaCreacion" : "2025-11-13T20:46:16.6431681",
+  "fechaCreacion" : "2025-11-13T16:15:00",
   "prioridad" : "Alta"
 }, {
-  "id" : 6,
-  "descripcion" : "alskndlaks dasd kajs dkas kaj ssaa",
+  "id" : 3,
+  "descripcion" : "Configurar entorno de pruebas inicial",
+  "completada" : false,
+  "fechaCreacion" : "2025-11-03T10:00:00",
+  "prioridad" : "Alta"
+}, {
+  "id" : 4,
+  "descripcion" : "Revisar logs del servidor principal",
   "completada" : true,
-  "fechaCreacion" : "2025-11-13T20:46:23.9252501",
+  "fechaCreacion" : "2025-11-04T11:00:00",
+  "prioridad" : "Media"
+}, {
+  "id" : 5,
+  "descripcion" : "Optimizar consulta SQL de usuarios",
+  "completada" : false,
+  "fechaCreacion" : "2025-11-05T12:00:00",
   "prioridad" : "Baja"
 }, {
+  "id" : 6,
+  "descripcion" : "Auditar permisos del panel de administración",
+  "completada" : true,
+  "fechaCreacion" : "2025-11-06T13:00:00",
+  "prioridad" : "Alta"
+}, {
   "id" : 7,
-  "descripcion" : "alskndlaks dasd kajs dkas kaj ssat",
+  "descripcion" : "Crear mockups para el dashboard nuevo",
   "completada" : false,
-  "fechaCreacion" : "2025-11-13T20:46:34.2116177",
+  "fechaCreacion" : "2025-11-07T14:00:00",
   "prioridad" : "Media"
 }, {
   "id" : 8,
-  "descripcion" : "comprar ingredientes para la cena de hoy",
-  "completada" : false,
-  "fechaCreacion" : "2025-11-13T21:00:01.0000001",
-  "prioridad" : "Media"
-}, {
-  "id" : 9,
-  "descripcion" : "limpiar el escritorio",
+  "descripcion" : "Depurar errores en módulo de pagos",
   "completada" : true,
-  "fechaCreacion" : "2025-11-13T21:00:05.0000001",
+  "fechaCreacion" : "2025-11-08T15:00:00",
   "prioridad" : "Baja"
 }, {
-  "id" : 10,
-  "descripcion" : "organizar archivos del proyecto",
+  "id" : 9,
+  "descripcion" : "Implementar notificaciones push",
   "completada" : false,
-  "fechaCreacion" : "2025-11-13T21:00:09.0000001",
+  "fechaCreacion" : "2025-11-09T16:00:00",
   "prioridad" : "Alta"
+}, {
+  "id" : 10,
+  "descripcion" : "Actualizar dependencias del proyecto",
+  "completada" : true,
+  "fechaCreacion" : "2025-11-10T17:00:00",
+  "prioridad" : "Media"
 }, {
   "id" : 11,
-  "descripcion" : "revisar correos pendientes",
+  "descripcion" : "Crear reglas de validación del formulario",
   "completada" : false,
-  "fechaCreacion" : "2025-11-13T21:00:12.0000001",
-  "prioridad" : "Media"
+  "fechaCreacion" : "2025-11-11T08:00:00",
+  "prioridad" : "Baja"
 }, {
   "id" : 12,
-  "descripcion" : "actualizar el CV",
+  "descripcion" : "Revisar vulnerabilidades reportadas",
   "completada" : true,
-  "fechaCreacion" : "2025-11-13T21:00:16.0000001",
-  "prioridad" : "Media"
-}, {
-  "id" : 13,
-  "descripcion" : "preparar presentación del viernes",
-  "completada" : false,
-  "fechaCreacion" : "2025-11-13T21:00:19.0000001",
+  "fechaCreacion" : "2025-11-12T09:00:00",
   "prioridad" : "Alta"
 }, {
-  "id" : 14,
-  "descripcion" : "instalar actualizaciones pendientes del sistema",
+  "id" : 13,
+  "descripcion" : "Diseñar layout responsivo para mobile",
   "completada" : false,
-  "fechaCreacion" : "2025-11-13T21:00:23.0000001",
+  "fechaCreacion" : "2025-11-13T10:00:00",
+  "prioridad" : "Media"
+}, {
+  "id" : 14,
+  "descripcion" : "Clasificar incidencias pendientes",
+  "completada" : true,
+  "fechaCreacion" : "2025-11-14T11:00:00",
   "prioridad" : "Baja"
 }, {
   "id" : 15,
-  "descripcion" : "agendar cita médica",
-  "completada" : true,
-  "fechaCreacion" : "2025-11-13T21:00:27.0000001",
+  "descripcion" : "Evaluar rendimiento de microservicios",
+  "completada" : false,
+  "fechaCreacion" : "2025-11-15T12:00:00",
   "prioridad" : "Alta"
 }, {
   "id" : 16,
-  "descripcion" : "lavar la ropa",
-  "completada" : false,
-  "fechaCreacion" : "2025-11-13T21:00:31.0000001",
+  "descripcion" : "Generar backups completos",
+  "completada" : true,
+  "fechaCreacion" : "2025-11-01T13:00:00",
   "prioridad" : "Media"
 }, {
   "id" : 17,
-  "descripcion" : "comprar regalo de cumpleaños",
+  "descripcion" : "Configurar índices en base de datos",
   "completada" : false,
-  "fechaCreacion" : "2025-11-13T21:00:34.0000001",
-  "prioridad" : "Alta"
-}, {
-  "id" : 18,
-  "descripcion" : "respaldar fotos del teléfono",
-  "completada" : true,
-  "fechaCreacion" : "2025-11-13T21:00:38.0000001",
+  "fechaCreacion" : "2025-11-02T14:00:00",
   "prioridad" : "Baja"
 }, {
-  "id" : 19,
-  "descripcion" : "estudiar 30 minutos",
-  "completada" : false,
-  "fechaCreacion" : "2025-11-13T21:00:41.0000001",
+  "id" : 18,
+  "descripcion" : "Integrar servicio externo de correo",
+  "completada" : true,
+  "fechaCreacion" : "2025-11-03T15:00:00",
   "prioridad" : "Alta"
 }, {
-  "id" : 20,
-  "descripcion" : "regarlas plantas",
+  "id" : 19,
+  "descripcion" : "Crear script para limpieza automática",
   "completada" : false,
-  "fechaCreacion" : "2025-11-13T21:00:45.0000001",
+  "fechaCreacion" : "2025-11-04T16:00:00",
+  "prioridad" : "Media"
+}, {
+  "id" : 20,
+  "descripcion" : "Verificar integridad de archivos",
+  "completada" : true,
+  "fechaCreacion" : "2025-11-05T17:00:00",
   "prioridad" : "Baja"
 }, {
   "id" : 21,
-  "descripcion" : "responder mensajes pendientes",
-  "completada" : true,
-  "fechaCreacion" : "2025-11-13T21:00:49.0000001",
-  "prioridad" : "Media"
+  "descripcion" : "Ajustar tiempos de respuesta API",
+  "completada" : false,
+  "fechaCreacion" : "2025-11-06T08:00:00",
+  "prioridad" : "Alta"
 }, {
   "id" : 22,
-  "descripcion" : "preparar lista de compras",
-  "completada" : false,
-  "fechaCreacion" : "2025-11-13T21:00:53.0000001",
+  "descripcion" : "Reorganizar estructura del repositorio",
+  "completada" : true,
+  "fechaCreacion" : "2025-11-07T09:00:00",
   "prioridad" : "Media"
 }, {
   "id" : 23,
-  "descripcion" : "hacer mantenimiento al teclado hacer mantenimiento al tecladohacer mantenimiento al tecladohacer mantenimiento al tecladohacer mantenimiento al tecladohacer mantenimiento al tecladohacer mantenimiento al tecladohacer mantenimiento al teclado",
+  "descripcion" : "Migrar tabla histórica a nuevo esquema",
   "completada" : false,
-  "fechaCreacion" : "2025-11-13T21:00:57.0000001",
+  "fechaCreacion" : "2025-11-08T10:00:00",
   "prioridad" : "Baja"
 }, {
   "id" : 24,
-  "descripcion" : "planear viaje de fin de año",
-  "completada" : false,
-  "fechaCreacion" : "2025-11-13T21:01:01.0000001",
+  "descripcion" : "Actualizar plantillas de correo",
+  "completada" : true,
+  "fechaCreacion" : "2025-11-09T11:00:00",
   "prioridad" : "Alta"
 }, {
   "id" : 25,
-  "descripcion" : "ordenar documentos",
-  "completada" : true,
-  "fechaCreacion" : "2025-11-13T21:01:04.0000001",
+  "descripcion" : "Revisar documentación del backend",
+  "completada" : false,
+  "fechaCreacion" : "2025-11-10T12:00:00",
   "prioridad" : "Media"
 }, {
   "id" : 26,
-  "descripcion" : "revisar la cuenta bancaria",
-  "completada" : false,
-  "fechaCreacion" : "2025-11-13T21:01:08.0000001",
-  "prioridad" : "Alta"
-}, {
-  "id" : 27,
-  "descripcion" : "verificar pagos automáticos",
-  "completada" : false,
-  "fechaCreacion" : "2025-11-13T21:01:11.0000001",
+  "descripcion" : "Verificar rutas del router frontend",
+  "completada" : true,
+  "fechaCreacion" : "2025-11-11T13:00:00",
   "prioridad" : "Baja"
 }, {
+  "id" : 27,
+  "descripcion" : "Ajustar animaciones de UI",
+  "completada" : false,
+  "fechaCreacion" : "2025-11-12T14:00:00",
+  "prioridad" : "Alta"
+}, {
   "id" : 28,
-  "descripcion" : "crear recordatorio para limpieza mensual",
+  "descripcion" : "Crear pruebas unitarias básicas",
   "completada" : true,
-  "fechaCreacion" : "2025-11-13T21:01:15.0000001",
+  "fechaCreacion" : "2025-11-13T15:00:00",
   "prioridad" : "Media"
 }, {
   "id" : 29,
-  "descripcion" : "organizar carpetas del escritorio",
+  "descripcion" : "Mapear endpoints obsoletos",
   "completada" : false,
-  "fechaCreacion" : "2025-11-13T21:01:18.0000001",
-  "prioridad" : "Media"
+  "fechaCreacion" : "2025-11-14T16:00:00",
+  "prioridad" : "Baja"
 }, {
   "id" : 30,
-  "descripcion" : "actualizar lista de contraseñas",
-  "completada" : false,
-  "fechaCreacion" : "2025-11-13T21:01:22.0000001",
+  "descripcion" : "Optimizar carga de imágenes",
+  "completada" : true,
+  "fechaCreacion" : "2025-11-15T17:00:00",
   "prioridad" : "Alta"
 }, {
   "id" : 31,
-  "descripcion" : "cambiar sábanas",
-  "completada" : true,
-  "fechaCreacion" : "2025-11-13T21:01:25.0000001",
-  "prioridad" : "Baja"
-}, {
-  "id" : 32,
-  "descripcion" : "limpiar nevera",
+  "descripcion" : "Actualizar iconografía del sistema",
   "completada" : false,
-  "fechaCreacion" : "2025-11-13T21:01:29.0000001",
-  "prioridad" : "Alta"
-}, {
-  "id" : 33,
-  "descripcion" : "revisar listas del proyecto",
-  "completada" : false,
-  "fechaCreacion" : "2025-11-13T21:01:33.0000001",
+  "fechaCreacion" : "2025-11-01T08:00:00",
   "prioridad" : "Media"
 }, {
-  "id" : 34,
-  "descripcion" : "ver tutoriales de programación",
+  "id" : 32,
+  "descripcion" : "Registrar avance del día 1 del sprint",
   "completada" : false,
-  "fechaCreacion" : "2025-11-13T21:01:37.0000001",
+  "fechaCreacion" : "2025-11-14T21:10:26",
+  "prioridad" : "Media"
+}, {
+  "id" : 33,
+  "descripcion" : "Implementar handler global de errores",
+  "completada" : false,
+  "fechaCreacion" : "2025-11-02T09:00:00",
   "prioridad" : "Baja"
 }, {
-  "id" : 35,
-  "descripcion" : "instalar app de productividad",
+  "id" : 34,
+  "descripcion" : "Revisar compatibilidad con navegadores antiguos",
   "completada" : false,
-  "fechaCreacion" : "2025-11-13T21:01:40.0000001",
+  "fechaCreacion" : "2025-11-03T10:00:00",
+  "prioridad" : "Alta"
+}, {
+  "id" : 35,
+  "descripcion" : "Refactorizar funciones utilitarias",
+  "completada" : false,
+  "fechaCreacion" : "2025-11-04T11:00:00",
   "prioridad" : "Media"
 }, {
   "id" : 36,
-  "descripcion" : "revisar la lista de pendientes semanal",
+  "descripcion" : "Crear sistema de etiquetado para tareas",
   "completada" : false,
-  "fechaCreacion" : "2025-11-13T21:01:44.0000001",
-  "prioridad" : "Alta"
-}, {
-  "id" : 37,
-  "descripcion" : "limpiar historial del navegador",
-  "completada" : true,
-  "fechaCreacion" : "2025-11-13T21:01:47.0000001",
-  "prioridad" : "Media"
-}, {
-  "id" : 38,
-  "descripcion" : "ordenar herramientas",
-  "completada" : false,
-  "fechaCreacion" : "2025-11-13T21:01:51.0000001",
+  "fechaCreacion" : "2025-11-05T12:00:00",
   "prioridad" : "Baja"
 }, {
-  "id" : 39,
-  "descripcion" : "planear rutina de ejercicios",
-  "completada" : false,
-  "fechaCreacion" : "2025-11-13T21:01:54.0000001",
+  "id" : 37,
+  "descripcion" : "Configurar CI/CD en servidor remoto",
+  "completada" : true,
+  "fechaCreacion" : "2025-11-06T13:00:00",
   "prioridad" : "Alta"
 }, {
-  "id" : 40,
-  "descripcion" : "hacer limpieza rápida de la sala",
-  "completada" : true,
-  "fechaCreacion" : "2025-11-13T21:01:58.0000001",
+  "id" : 38,
+  "descripcion" : "Revisar tamaños de fuentes según accesibilidad",
+  "completada" : false,
+  "fechaCreacion" : "2025-11-07T14:00:00",
   "prioridad" : "Media"
 }, {
-  "id" : 41,
-  "descripcion" : "fazer um viajem pra o brasil fazer um viajem pra o brasilfazer um viajem pra o brasilfazer um viajem pra o brasilfazer um viajem pra o brasilfazer um viajem pra o brasilfazer um viajem pra o brasilfazer um viajem pra o brasilfazer um viajem pra o brasilfazer um viajem pra o brasil",
+  "id" : 39,
+  "descripcion" : "Crear dashboard de monitoreo básico",
   "completada" : true,
-  "fechaCreacion" : "2025-11-13T21:39:01.1557362",
+  "fechaCreacion" : "2025-11-08T15:00:00",
+  "prioridad" : "Baja"
+}, {
+  "id" : 40,
+  "descripcion" : "Restructurar árbol de componentes UI",
+  "completada" : false,
+  "fechaCreacion" : "2025-11-09T16:00:00",
+  "prioridad" : "Alta"
+}, {
+  "id" : 41,
+  "descripcion" : "Separar lógica de negocio en servicios",
+  "completada" : true,
+  "fechaCreacion" : "2025-11-10T17:00:00",
   "prioridad" : "Media"
+}, {
+  "id" : 42,
+  "descripcion" : "Crear sistema de favoritos",
+  "completada" : false,
+  "fechaCreacion" : "2025-11-11T08:00:00",
+  "prioridad" : "Baja"
+}, {
+  "id" : 43,
+  "descripcion" : "Configurar control de versiones de assets",
+  "completada" : true,
+  "fechaCreacion" : "2025-11-12T09:00:00",
+  "prioridad" : "Alta"
+}, {
+  "id" : 44,
+  "descripcion" : "Implementar modo oscuro",
+  "completada" : false,
+  "fechaCreacion" : "2025-11-13T10:00:00",
+  "prioridad" : "Media"
+}, {
+  "id" : 45,
+  "descripcion" : "Optimizar algoritmo de filtrado",
+  "completada" : true,
+  "fechaCreacion" : "2025-11-14T11:00:00",
+  "prioridad" : "Baja"
+}, {
+  "id" : 46,
+  "descripcion" : "Integrar paginación dinámica",
+  "completada" : false,
+  "fechaCreacion" : "2025-11-15T12:00:00",
+  "prioridad" : "Alta"
+}, {
+  "id" : 47,
+  "descripcion" : "Realizar pruebas de estrés",
+  "completada" : true,
+  "fechaCreacion" : "2025-11-01T13:00:00",
+  "prioridad" : "Media"
+}, {
+  "id" : 48,
+  "descripcion" : "Mapear flujos del usuario en Figma",
+  "completada" : false,
+  "fechaCreacion" : "2025-11-02T14:00:00",
+  "prioridad" : "Baja"
+}, {
+  "id" : 49,
+  "descripcion" : "Sincronizar tokens entre servicios",
+  "completada" : true,
+  "fechaCreacion" : "2025-11-03T15:00:00",
+  "prioridad" : "Alta"
+}, {
+  "id" : 50,
+  "descripcion" : "Aplicar lazy loading en secciones pesadas",
+  "completada" : false,
+  "fechaCreacion" : "2025-11-04T16:00:00",
+  "prioridad" : "Media"
+}, {
+  "id" : 51,
+  "descripcion" : "Crear historial de cambios del sistema",
+  "completada" : true,
+  "fechaCreacion" : "2025-11-05T17:00:00",
+  "prioridad" : "Baja"
+}, {
+  "id" : 52,
+  "descripcion" : "Implementar búsqueda avanzada",
+  "completada" : false,
+  "fechaCreacion" : "2025-11-06T08:00:00",
+  "prioridad" : "Alta"
+}, {
+  "id" : 53,
+  "descripcion" : "Revisar consumo de memoria",
+  "completada" : true,
+  "fechaCreacion" : "2025-11-07T09:00:00",
+  "prioridad" : "Media"
+}, {
+  "id" : 54,
+  "descripcion" : "Añadir configuración personalizable",
+  "completada" : false,
+  "fechaCreacion" : "2025-11-08T10:00:00",
+  "prioridad" : "Baja"
+}, {
+  "id" : 55,
+  "descripcion" : "Crear informes en PDF",
+  "completada" : true,
+  "fechaCreacion" : "2025-11-09T11:00:00",
+  "prioridad" : "Alta"
+}, {
+  "id" : 56,
+  "descripcion" : "Agregar drag and drop en panel",
+  "completada" : false,
+  "fechaCreacion" : "2025-11-10T12:00:00",
+  "prioridad" : "Media"
+}, {
+  "id" : 57,
+  "descripcion" : "Mejorar manejo de estados",
+  "completada" : true,
+  "fechaCreacion" : "2025-11-11T13:00:00",
+  "prioridad" : "Baja"
+}, {
+  "id" : 58,
+  "descripcion" : "Integrar mapa interactivo",
+  "completada" : false,
+  "fechaCreacion" : "2025-11-12T14:00:00",
+  "prioridad" : "Alta"
+}, {
+  "id" : 59,
+  "descripcion" : "Crear plantilla base para modales",
+  "completada" : true,
+  "fechaCreacion" : "2025-11-13T15:00:00",
+  "prioridad" : "Media"
+}, {
+  "id" : 60,
+  "descripcion" : "Agregar multilenguaje",
+  "completada" : false,
+  "fechaCreacion" : "2025-11-14T16:00:00",
+  "prioridad" : "Baja"
+}, {
+  "id" : 61,
+  "descripcion" : "Actualizar permisos de usuario",
+  "completada" : true,
+  "fechaCreacion" : "2025-11-15T17:00:00",
+  "prioridad" : "Alta"
+}, {
+  "id" : 62,
+  "descripcion" : "Definir workflow de despliegue",
+  "completada" : true,
+  "fechaCreacion" : "2025-11-01T08:00:00",
+  "prioridad" : "Media"
+}, {
+  "id" : 63,
+  "descripcion" : "Crear plantilla para exportación CSV",
+  "completada" : false,
+  "fechaCreacion" : "2025-11-02T09:00:00",
+  "prioridad" : "Baja"
+}, {
+  "id" : 64,
+  "descripcion" : "Implementar cola de tareas",
+  "completada" : false,
+  "fechaCreacion" : "2025-11-03T10:00:00",
+  "prioridad" : "Alta"
+}, {
+  "id" : 65,
+  "descripcion" : "Documentar microservicio de reportes",
+  "completada" : true,
+  "fechaCreacion" : "2025-11-04T11:00:00",
+  "prioridad" : "Media"
+}, {
+  "id" : 66,
+  "descripcion" : "Revisar manejo de errores en frontend",
+  "completada" : false,
+  "fechaCreacion" : "2025-11-05T12:00:00",
+  "prioridad" : "Baja"
+}, {
+  "id" : 67,
+  "descripcion" : "Crear API para sincronización externa",
+  "completada" : true,
+  "fechaCreacion" : "2025-11-06T13:00:00",
+  "prioridad" : "Alta"
+}, {
+  "id" : 68,
+  "descripcion" : "Implementar scroll infinito",
+  "completada" : false,
+  "fechaCreacion" : "2025-11-07T14:00:00",
+  "prioridad" : "Media"
+}, {
+  "id" : 69,
+  "descripcion" : "Optimizar carga del home",
+  "completada" : true,
+  "fechaCreacion" : "2025-11-08T15:00:00",
+  "prioridad" : "Baja"
+}, {
+  "id" : 70,
+  "descripcion" : "Crear sistema de sugerencias",
+  "completada" : false,
+  "fechaCreacion" : "2025-11-09T16:00:00",
+  "prioridad" : "Alta"
+}, {
+  "id" : 71,
+  "descripcion" : "Agregar historial de navegación",
+  "completada" : true,
+  "fechaCreacion" : "2025-11-10T17:00:00",
+  "prioridad" : "Media"
+}, {
+  "id" : 72,
+  "descripcion" : "Sincronizar datos en tiempo real",
+  "completada" : false,
+  "fechaCreacion" : "2025-11-11T08:00:00",
+  "prioridad" : "Baja"
+}, {
+  "id" : 73,
+  "descripcion" : "Analizar uso de memoria RAM",
+  "completada" : true,
+  "fechaCreacion" : "2025-11-12T09:00:00",
+  "prioridad" : "Alta"
+}, {
+  "id" : 74,
+  "descripcion" : "Crear administración de roles",
+  "completada" : false,
+  "fechaCreacion" : "2025-11-13T10:00:00",
+  "prioridad" : "Media"
+}, {
+  "id" : 75,
+  "descripcion" : "Simplificar flujo de inicio de sesión",
+  "completada" : true,
+  "fechaCreacion" : "2025-11-14T11:00:00",
+  "prioridad" : "Baja"
+}, {
+  "id" : 76,
+  "descripcion" : "Implementar banners dinámicos",
+  "completada" : false,
+  "fechaCreacion" : "2025-11-15T12:00:00",
+  "prioridad" : "Alta"
+}, {
+  "id" : 77,
+  "descripcion" : "Configurar workers para procesamiento",
+  "completada" : true,
+  "fechaCreacion" : "2025-11-01T13:00:00",
+  "prioridad" : "Media"
+}, {
+  "id" : 78,
+  "descripcion" : "Diseñar nuevo menú lateral",
+  "completada" : false,
+  "fechaCreacion" : "2025-11-02T14:00:00",
+  "prioridad" : "Baja"
+}, {
+  "id" : 79,
+  "descripcion" : "Optimizar generación de tokens",
+  "completada" : true,
+  "fechaCreacion" : "2025-11-03T15:00:00",
+  "prioridad" : "Alta"
+}, {
+  "id" : 80,
+  "descripcion" : "Integrar captcha inteligente",
+  "completada" : false,
+  "fechaCreacion" : "2025-11-04T16:00:00",
+  "prioridad" : "Media"
+}, {
+  "id" : 81,
+  "descripcion" : "Crear plantilla de login minimalista",
+  "completada" : true,
+  "fechaCreacion" : "2025-11-05T17:00:00",
+  "prioridad" : "Baja"
+}, {
+  "id" : 82,
+  "descripcion" : "Implementar logs de auditoría",
+  "completada" : false,
+  "fechaCreacion" : "2025-11-06T08:00:00",
+  "prioridad" : "Alta"
+}, {
+  "id" : 83,
+  "descripcion" : "Ajustar accesibilidad para teclado",
+  "completada" : true,
+  "fechaCreacion" : "2025-11-07T09:00:00",
+  "prioridad" : "Media"
+}, {
+  "id" : 84,
+  "descripcion" : "Añadir vista previa de archivos",
+  "completada" : false,
+  "fechaCreacion" : "2025-11-08T10:00:00",
+  "prioridad" : "Baja"
+}, {
+  "id" : 85,
+  "descripcion" : "Crear módulo de estadísticas",
+  "completada" : true,
+  "fechaCreacion" : "2025-11-09T11:00:00",
+  "prioridad" : "Alta"
+}, {
+  "id" : 86,
+  "descripcion" : "Agregar sistema de badges",
+  "completada" : false,
+  "fechaCreacion" : "2025-11-10T12:00:00",
+  "prioridad" : "Media"
+}, {
+  "id" : 87,
+  "descripcion" : "Mejorar estilo de tablas",
+  "completada" : true,
+  "fechaCreacion" : "2025-11-11T13:00:00",
+  "prioridad" : "Baja"
+}, {
+  "id" : 88,
+  "descripcion" : "Habilitar inicio de sesión social",
+  "completada" : false,
+  "fechaCreacion" : "2025-11-12T14:00:00",
+  "prioridad" : "Alta"
+}, {
+  "id" : 89,
+  "descripcion" : "Optimizar gráficos del dashboard",
+  "completada" : true,
+  "fechaCreacion" : "2025-11-13T15:00:00",
+  "prioridad" : "Media"
+}, {
+  "id" : 90,
+  "descripcion" : "Crear filtros personalizados",
+  "completada" : false,
+  "fechaCreacion" : "2025-11-14T16:00:00",
+  "prioridad" : "Baja"
+}, {
+  "id" : 91,
+  "descripcion" : "Actualizar estilos globales",
+  "completada" : true,
+  "fechaCreacion" : "2025-11-15T17:00:00",
+  "prioridad" : "Alta"
+}, {
+  "id" : 92,
+  "descripcion" : "Agregar recordatorios automáticos",
+  "completada" : true,
+  "fechaCreacion" : "2025-11-01T08:00:00",
+  "prioridad" : "Baja"
+}, {
+  "id" : 93,
+  "descripcion" : "Preparar plantillas HTML para correos",
+  "completada" : true,
+  "fechaCreacion" : "2025-11-02T09:00:00",
+  "prioridad" : "Baja"
+}, {
+  "id" : 94,
+  "descripcion" : "Diseñar sistema de insignias por logros",
+  "completada" : false,
+  "fechaCreacion" : "2025-11-03T10:00:00",
+  "prioridad" : "Alta"
+}, {
+  "id" : 95,
+  "descripcion" : "Revisar flujos de registro",
+  "completada" : true,
+  "fechaCreacion" : "2025-11-04T11:00:00",
+  "prioridad" : "Media"
+}, {
+  "id" : 96,
+  "descripcion" : "Crear analizador de texto interno",
+  "completada" : false,
+  "fechaCreacion" : "2025-11-05T12:00:00",
+  "prioridad" : "Baja"
+}, {
+  "id" : 97,
+  "descripcion" : "Optimizar consulta de historial",
+  "completada" : true,
+  "fechaCreacion" : "2025-11-06T13:00:00",
+  "prioridad" : "Alta"
+}, {
+  "id" : 98,
+  "descripcion" : "Agregar botón flotante de acciones",
+  "completada" : false,
+  "fechaCreacion" : "2025-11-07T14:00:00",
+  "prioridad" : "Media"
+}, {
+  "id" : 99,
+  "descripcion" : "Mejorar flujo de recuperación de cuenta",
+  "completada" : true,
+  "fechaCreacion" : "2025-11-08T15:00:00",
+  "prioridad" : "Baja"
+}, {
+  "id" : 100,
+  "descripcion" : "Añadir modo compacto en listas",
+  "completada" : false,
+  "fechaCreacion" : "2025-11-09T16:00:00",
+  "prioridad" : "Alta"
+}, {
+  "id" : 101,
+  "descripcion" : "Implementar compresión de respuestas API",
+  "completada" : false,
+  "fechaCreacion" : "2025-11-10T09:00:00",
+  "prioridad" : "Media"
+}, {
+  "id" : 102,
+  "descripcion" : "Crear sistema de auto-guardado en formularios",
+  "completada" : true,
+  "fechaCreacion" : "2025-11-11T10:00:00",
+  "prioridad" : "Alta"
+}, {
+  "id" : 103,
+  "descripcion" : "Optimizar carga de fuentes externas",
+  "completada" : false,
+  "fechaCreacion" : "2025-11-12T11:00:00",
+  "prioridad" : "Baja"
+}, {
+  "id" : 104,
+  "descripcion" : "Diseñar interfaz para reportes descargables",
+  "completada" : true,
+  "fechaCreacion" : "2025-11-13T12:00:00",
+  "prioridad" : "Media"
+}, {
+  "id" : 105,
+  "descripcion" : "Analizar consumo de CPU del backend",
+  "completada" : false,
+  "fechaCreacion" : "2025-11-14T13:00:00",
+  "prioridad" : "Alta"
+}, {
+  "id" : 106,
+  "descripcion" : "Implementar reconexión automática en websockets",
+  "completada" : true,
+  "fechaCreacion" : "2025-11-15T14:00:00",
+  "prioridad" : "Baja"
+}, {
+  "id" : 107,
+  "descripcion" : "Crear plantilla base para dashboards",
+  "completada" : false,
+  "fechaCreacion" : "2025-11-01T09:00:00",
+  "prioridad" : "Media"
+}, {
+  "id" : 108,
+  "descripcion" : "Ajustar espaciados globales del diseño",
+  "completada" : true,
+  "fechaCreacion" : "2025-11-02T10:00:00",
+  "prioridad" : "Alta"
+}, {
+  "id" : 109,
+  "descripcion" : "Configurar reglas de cacheo avanzado",
+  "completada" : false,
+  "fechaCreacion" : "2025-11-03T11:00:00",
+  "prioridad" : "Baja"
+}, {
+  "id" : 110,
+  "descripcion" : "Crear visor de actividad en tiempo real",
+  "completada" : true,
+  "fechaCreacion" : "2025-11-04T12:00:00",
+  "prioridad" : "Media"
+}, {
+  "id" : 111,
+  "descripcion" : "Mejorar indexación de búsqueda interna",
+  "completada" : false,
+  "fechaCreacion" : "2025-11-05T13:00:00",
+  "prioridad" : "Alta"
+}, {
+  "id" : 112,
+  "descripcion" : "Crear plantilla para onboarding de usuarios",
+  "completada" : true,
+  "fechaCreacion" : "2025-11-06T14:00:00",
+  "prioridad" : "Baja"
+}, {
+  "id" : 113,
+  "descripcion" : "Agregar selector de temas personalizados",
+  "completada" : false,
+  "fechaCreacion" : "2025-11-07T15:00:00",
+  "prioridad" : "Media"
+}, {
+  "id" : 114,
+  "descripcion" : "Refactorizar sistemas de rutas principales",
+  "completada" : true,
+  "fechaCreacion" : "2025-11-08T16:00:00",
+  "prioridad" : "Alta"
+}, {
+  "id" : 115,
+  "descripcion" : "Añadir vista de logs simplificada",
+  "completada" : false,
+  "fechaCreacion" : "2025-11-09T17:00:00",
+  "prioridad" : "Baja"
+}, {
+  "id" : 116,
+  "descripcion" : "Implementar módulo de firma digital",
+  "completada" : true,
+  "fechaCreacion" : "2025-11-10T18:00:00",
+  "prioridad" : "Media"
+}, {
+  "id" : 117,
+  "descripcion" : "Crear reportes de auditoría automáticos",
+  "completada" : false,
+  "fechaCreacion" : "2025-11-11T08:00:00",
+  "prioridad" : "Alta"
+}, {
+  "id" : 118,
+  "descripcion" : "Optimizar algoritmo de ordenamiento interno",
+  "completada" : true,
+  "fechaCreacion" : "2025-11-12T09:00:00",
+  "prioridad" : "Baja"
+}, {
+  "id" : 119,
+  "descripcion" : "Crear vista de métricas del servidor",
+  "completada" : false,
+  "fechaCreacion" : "2025-11-13T10:00:00",
+  "prioridad" : "Media"
+}, {
+  "id" : 120,
+  "descripcion" : "Mejorar diseño de menú contextual",
+  "completada" : true,
+  "fechaCreacion" : "2025-11-14T11:00:00",
+  "prioridad" : "Alta"
+}, {
+  "id" : 121,
+  "descripcion" : "Configurar sandbox de pruebas seguras",
+  "completada" : false,
+  "fechaCreacion" : "2025-11-15T12:00:00",
+  "prioridad" : "Baja"
+}, {
+  "id" : 122,
+  "descripcion" : "Crear sistema de alertas inteligentes",
+  "completada" : true,
+  "fechaCreacion" : "2025-11-01T13:00:00",
+  "prioridad" : "Media"
+}, {
+  "id" : 123,
+  "descripcion" : "Optimizar rendimiento de la pantalla principal",
+  "completada" : false,
+  "fechaCreacion" : "2025-11-02T14:00:00",
+  "prioridad" : "Alta"
+}, {
+  "id" : 124,
+  "descripcion" : "Reestructurar menú de configuraciones",
+  "completada" : true,
+  "fechaCreacion" : "2025-11-03T15:00:00",
+  "prioridad" : "Baja"
+}, {
+  "id" : 125,
+  "descripcion" : "Crear sistema de archivado de elementos",
+  "completada" : false,
+  "fechaCreacion" : "2025-11-04T16:00:00",
+  "prioridad" : "Media"
+}, {
+  "id" : 126,
+  "descripcion" : "Ajustar colores del modo oscuro",
+  "completada" : true,
+  "fechaCreacion" : "2025-11-05T17:00:00",
+  "prioridad" : "Alta"
+}, {
+  "id" : 127,
+  "descripcion" : "Crear módulo de descarga masiva",
+  "completada" : false,
+  "fechaCreacion" : "2025-11-06T08:00:00",
+  "prioridad" : "Baja"
+}, {
+  "id" : 128,
+  "descripcion" : "Revisar consumo de ancho de banda",
+  "completada" : true,
+  "fechaCreacion" : "2025-11-07T09:00:00",
+  "prioridad" : "Media"
+}, {
+  "id" : 129,
+  "descripcion" : "Añadir modo de mantenimiento",
+  "completada" : false,
+  "fechaCreacion" : "2025-11-08T10:00:00",
+  "prioridad" : "Alta"
+}, {
+  "id" : 130,
+  "descripcion" : "Crear herramienta interna para pruebas",
+  "completada" : true,
+  "fechaCreacion" : "2025-11-09T11:00:00",
+  "prioridad" : "Baja"
+}, {
+  "id" : 131,
+  "descripcion" : "Dividir componentes grandes en módulos",
+  "completada" : false,
+  "fechaCreacion" : "2025-11-10T12:00:00",
+  "prioridad" : "Media"
+}, {
+  "id" : 132,
+  "descripcion" : "Crear vista comparativa de datos",
+  "completada" : true,
+  "fechaCreacion" : "2025-11-11T13:00:00",
+  "prioridad" : "Alta"
+}, {
+  "id" : 133,
+  "descripcion" : "Optimizar animaciones globales",
+  "completada" : false,
+  "fechaCreacion" : "2025-11-12T14:00:00",
+  "prioridad" : "Baja"
+}, {
+  "id" : 134,
+  "descripcion" : "Agregar estadísticas de uso mensual",
+  "completada" : true,
+  "fechaCreacion" : "2025-11-13T15:00:00",
+  "prioridad" : "Media"
+}, {
+  "id" : 135,
+  "descripcion" : "Implementar conversión de formatos de archivo",
+  "completada" : false,
+  "fechaCreacion" : "2025-11-14T16:00:00",
+  "prioridad" : "Alta"
+}, {
+  "id" : 136,
+  "descripcion" : "Mejorar tiempos de carga inicial",
+  "completada" : true,
+  "fechaCreacion" : "2025-11-15T17:00:00",
+  "prioridad" : "Baja"
+}, {
+  "id" : 137,
+  "descripcion" : "Crear visor de novedades recientes",
+  "completada" : false,
+  "fechaCreacion" : "2025-11-01T08:00:00",
+  "prioridad" : "Baja"
+}, {
+  "id" : 138,
+  "descripcion" : "Integrar módulo de accesos rápidos",
+  "completada" : true,
+  "fechaCreacion" : "2025-11-02T09:00:00",
+  "prioridad" : "Alta"
+}, {
+  "id" : 139,
+  "descripcion" : "Crear buscador histórico global",
+  "completada" : false,
+  "fechaCreacion" : "2025-11-03T10:00:00",
+  "prioridad" : "Baja"
+}, {
+  "id" : 140,
+  "descripcion" : "Refinar estructura del DOM",
+  "completada" : true,
+  "fechaCreacion" : "2025-11-04T11:00:00",
+  "prioridad" : "Media"
+}, {
+  "id" : 141,
+  "descripcion" : "Crear monitor de sesiones activas",
+  "completada" : false,
+  "fechaCreacion" : "2025-11-05T12:00:00",
+  "prioridad" : "Alta"
+}, {
+  "id" : 142,
+  "descripcion" : "Mejorar layout de la pantalla de perfil",
+  "completada" : true,
+  "fechaCreacion" : "2025-11-06T13:00:00",
+  "prioridad" : "Baja"
+}, {
+  "id" : 143,
+  "descripcion" : "Implementar gestor de plantillas visuales",
+  "completada" : false,
+  "fechaCreacion" : "2025-11-07T14:00:00",
+  "prioridad" : "Media"
+}, {
+  "id" : 144,
+  "descripcion" : "Optimizar actualización en vivo de widgets",
+  "completada" : true,
+  "fechaCreacion" : "2025-11-08T15:00:00",
+  "prioridad" : "Alta"
+}, {
+  "id" : 145,
+  "descripcion" : "Crear reporte de antigüedad de datos",
+  "completada" : false,
+  "fechaCreacion" : "2025-11-09T16:00:00",
+  "prioridad" : "Baja"
+}, {
+  "id" : 146,
+  "descripcion" : "Ajustar vista de paginación avanzada",
+  "completada" : true,
+  "fechaCreacion" : "2025-11-10T17:00:00",
+  "prioridad" : "Media"
+}, {
+  "id" : 147,
+  "descripcion" : "Agregar sistema de marcadores rápidos",
+  "completada" : false,
+  "fechaCreacion" : "2025-11-11T08:00:00",
+  "prioridad" : "Alta"
+}, {
+  "id" : 148,
+  "descripcion" : "Configurar modo offline básico",
+  "completada" : true,
+  "fechaCreacion" : "2025-11-12T09:00:00",
+  "prioridad" : "Baja"
+}, {
+  "id" : 149,
+  "descripcion" : "Crear vista de elementos duplicados",
+  "completada" : false,
+  "fechaCreacion" : "2025-11-13T10:00:00",
+  "prioridad" : "Media"
+}, {
+  "id" : 150,
+  "descripcion" : "Mejorar estructura del caché local",
+  "completada" : true,
+  "fechaCreacion" : "2025-11-14T11:00:00",
+  "prioridad" : "Alta"
+}, {
+  "id" : 151,
+  "descripcion" : "Añadir sugerencias predictivas",
+  "completada" : false,
+  "fechaCreacion" : "2025-11-15T12:00:00",
+  "prioridad" : "Baja"
+}, {
+  "id" : 152,
+  "descripcion" : "Crear panel de comparador de versiones",
+  "completada" : true,
+  "fechaCreacion" : "2025-11-01T13:00:00",
+  "prioridad" : "Media"
+}, {
+  "id" : 153,
+  "descripcion" : "Agregar cifrado avanzado de datos",
+  "completada" : false,
+  "fechaCreacion" : "2025-11-02T14:00:00",
+  "prioridad" : "Alta"
+}, {
+  "id" : 154,
+  "descripcion" : "Optimizar creación de sesiones",
+  "completada" : true,
+  "fechaCreacion" : "2025-11-03T15:00:00",
+  "prioridad" : "Baja"
+}, {
+  "id" : 155,
+  "descripcion" : "Crear plantilla de vista rápida",
+  "completada" : false,
+  "fechaCreacion" : "2025-11-04T16:00:00",
+  "prioridad" : "Alta"
+}, {
+  "id" : 156,
+  "descripcion" : "Agregar gráficas comparativas visuales",
+  "completada" : true,
+  "fechaCreacion" : "2025-11-05T17:00:00",
+  "prioridad" : "Alta"
+}, {
+  "id" : 157,
+  "descripcion" : "Mejorar modo compacto global",
+  "completada" : false,
+  "fechaCreacion" : "2025-11-06T08:00:00",
+  "prioridad" : "Baja"
+}, {
+  "id" : 158,
+  "descripcion" : "Agregar sistema de preferencias rápidas",
+  "completada" : true,
+  "fechaCreacion" : "2025-11-07T09:00:00",
+  "prioridad" : "Media"
+}, {
+  "id" : 159,
+  "descripcion" : "Crear vista de actividad del usuario",
+  "completada" : false,
+  "fechaCreacion" : "2025-11-08T10:00:00",
+  "prioridad" : "Alta"
+}, {
+  "id" : 160,
+  "descripcion" : "Optimizar logs en tiempo real",
+  "completada" : true,
+  "fechaCreacion" : "2025-11-09T11:00:00",
+  "prioridad" : "Baja"
+}, {
+  "id" : 161,
+  "descripcion" : "Configurar exportación de datos avanzada",
+  "completada" : false,
+  "fechaCreacion" : "2025-11-10T12:00:00",
+  "prioridad" : "Media"
+}, {
+  "id" : 162,
+  "descripcion" : "Crear calculadora interna de métricas",
+  "completada" : true,
+  "fechaCreacion" : "2025-11-11T13:00:00",
+  "prioridad" : "Alta"
+}, {
+  "id" : 163,
+  "descripcion" : "Mejorar renderizado de íconos SVG",
+  "completada" : false,
+  "fechaCreacion" : "2025-11-12T14:00:00",
+  "prioridad" : "Baja"
+}, {
+  "id" : 164,
+  "descripcion" : "Agregar módulo de retroalimentación",
+  "completada" : true,
+  "fechaCreacion" : "2025-11-13T15:00:00",
+  "prioridad" : "Media"
+}, {
+  "id" : 165,
+  "descripcion" : "Crear sección de favoritos avanzados",
+  "completada" : false,
+  "fechaCreacion" : "2025-11-14T16:00:00",
+  "prioridad" : "Alta"
+}, {
+  "id" : 166,
+  "descripcion" : "Mejorar validaciones automáticas",
+  "completada" : false,
+  "fechaCreacion" : "2025-11-15T17:00:00",
+  "prioridad" : "Baja"
+}, {
+  "id" : 167,
+  "descripcion" : "Implementar recordatorios por correo",
+  "completada" : false,
+  "fechaCreacion" : "2025-11-01T08:00:00",
+  "prioridad" : "Media"
+}, {
+  "id" : 168,
+  "descripcion" : "Agregar pruebas visuales automatizadas",
+  "completada" : false,
+  "fechaCreacion" : "2025-11-02T09:00:00",
+  "prioridad" : "Alta"
+}, {
+  "id" : 169,
+  "descripcion" : "Crear visor de elementos archivados",
+  "completada" : false,
+  "fechaCreacion" : "2025-11-03T10:00:00",
+  "prioridad" : "Baja"
+}, {
+  "id" : 170,
+  "descripcion" : "Optimizar renderizado del dashboard",
+  "completada" : true,
+  "fechaCreacion" : "2025-11-04T11:00:00",
+  "prioridad" : "Media"
+}, {
+  "id" : 171,
+  "descripcion" : "Agregar métricas de interacción",
+  "completada" : false,
+  "fechaCreacion" : "2025-11-05T12:00:00",
+  "prioridad" : "Alta"
+}, {
+  "id" : 172,
+  "descripcion" : "Crear sistema de hints en pantalla",
+  "completada" : true,
+  "fechaCreacion" : "2025-11-06T13:00:00",
+  "prioridad" : "Baja"
+}, {
+  "id" : 173,
+  "descripcion" : "Actualizar sistema de rutas internas",
+  "completada" : false,
+  "fechaCreacion" : "2025-11-07T14:00:00",
+  "prioridad" : "Media"
+}, {
+  "id" : 174,
+  "descripcion" : "Agregar firma automática en reportes",
+  "completada" : true,
+  "fechaCreacion" : "2025-11-08T15:00:00",
+  "prioridad" : "Alta"
+}, {
+  "id" : 175,
+  "descripcion" : "Mejorar vista de notificaciones activas",
+  "completada" : false,
+  "fechaCreacion" : "2025-11-09T16:00:00",
+  "prioridad" : "Baja"
+}, {
+  "id" : 176,
+  "descripcion" : "Crear panel de depuración rápida",
+  "completada" : true,
+  "fechaCreacion" : "2025-11-10T17:00:00",
+  "prioridad" : "Media"
+}, {
+  "id" : 177,
+  "descripcion" : "Implementar filtros combinados",
+  "completada" : false,
+  "fechaCreacion" : "2025-11-11T08:00:00",
+  "prioridad" : "Alta"
+}, {
+  "id" : 178,
+  "descripcion" : "Añadir widget de clima para pruebas",
+  "completada" : true,
+  "fechaCreacion" : "2025-11-12T09:00:00",
+  "prioridad" : "Baja"
+}, {
+  "id" : 179,
+  "descripcion" : "Crear pasos guiados para configuración",
+  "completada" : false,
+  "fechaCreacion" : "2025-11-13T10:00:00",
+  "prioridad" : "Media"
+}, {
+  "id" : 180,
+  "descripcion" : "Optimizar reducción de carga de datos",
+  "completada" : true,
+  "fechaCreacion" : "2025-11-14T11:00:00",
+  "prioridad" : "Alta"
+}, {
+  "id" : 181,
+  "descripcion" : "Agregar mapa de rutas internas",
+  "completada" : false,
+  "fechaCreacion" : "2025-11-15T12:00:00",
+  "prioridad" : "Baja"
+}, {
+  "id" : 182,
+  "descripcion" : "Crear notificador de tareas críticas",
+  "completada" : true,
+  "fechaCreacion" : "2025-11-01T13:00:00",
+  "prioridad" : "Media"
+}, {
+  "id" : 183,
+  "descripcion" : "Implementar buscador por categorías",
+  "completada" : false,
+  "fechaCreacion" : "2025-11-02T14:00:00",
+  "prioridad" : "Alta"
+}, {
+  "id" : 184,
+  "descripcion" : "Agregar soporte para exportación XLSX",
+  "completada" : true,
+  "fechaCreacion" : "2025-11-03T15:00:00",
+  "prioridad" : "Baja"
+}, {
+  "id" : 185,
+  "descripcion" : "Crear modo avanzado de estadísticas",
+  "completada" : false,
+  "fechaCreacion" : "2025-11-04T16:00:00",
+  "prioridad" : "Media"
+}, {
+  "id" : 186,
+  "descripcion" : "Optimizar uso de cache distribuido",
+  "completada" : true,
+  "fechaCreacion" : "2025-11-05T17:00:00",
+  "prioridad" : "Alta"
+}, {
+  "id" : 187,
+  "descripcion" : "Añadir panel flotante de atajos",
+  "completada" : false,
+  "fechaCreacion" : "2025-11-06T08:00:00",
+  "prioridad" : "Baja"
+}, {
+  "id" : 188,
+  "descripcion" : "Crear herramienta de diagnóstico interno",
+  "completada" : true,
+  "fechaCreacion" : "2025-11-07T09:00:00",
+  "prioridad" : "Media"
+}, {
+  "id" : 189,
+  "descripcion" : "Implementar encuestas rápidas",
+  "completada" : false,
+  "fechaCreacion" : "2025-11-08T10:00:00",
+  "prioridad" : "Alta"
+}, {
+  "id" : 190,
+  "descripcion" : "Mejorar visibilidad de errores globales",
+  "completada" : true,
+  "fechaCreacion" : "2025-11-09T11:00:00",
+  "prioridad" : "Baja"
+}, {
+  "id" : 191,
+  "descripcion" : "Agregar visualización de dependencias",
+  "completada" : false,
+  "fechaCreacion" : "2025-11-10T12:00:00",
+  "prioridad" : "Media"
+}, {
+  "id" : 192,
+  "descripcion" : "Crear lector de actividad automática",
+  "completada" : true,
+  "fechaCreacion" : "2025-11-11T13:00:00",
+  "prioridad" : "Alta"
+}, {
+  "id" : 193,
+  "descripcion" : "Optimizar cron de mantenimiento",
+  "completada" : false,
+  "fechaCreacion" : "2025-11-12T14:00:00",
+  "prioridad" : "Baja"
+}, {
+  "id" : 194,
+  "descripcion" : "Agregar exportación a formato Markdown",
+  "completada" : true,
+  "fechaCreacion" : "2025-11-13T15:00:00",
+  "prioridad" : "Media"
+}, {
+  "id" : 195,
+  "descripcion" : "Crear sistema de métricas de sesión",
+  "completada" : false,
+  "fechaCreacion" : "2025-11-14T16:00:00",
+  "prioridad" : "Alta"
+}, {
+  "id" : 196,
+  "descripcion" : "Optimizar carga de módulos diferidos",
+  "completada" : true,
+  "fechaCreacion" : "2025-11-15T17:00:00",
+  "prioridad" : "Baja"
+}, {
+  "id" : 197,
+  "descripcion" : "Agregar modo de pruebas para admins",
+  "completada" : false,
+  "fechaCreacion" : "2025-11-01T08:00:00",
+  "prioridad" : "Media"
+}, {
+  "id" : 198,
+  "descripcion" : "Crear guía interactiva inicial",
+  "completada" : true,
+  "fechaCreacion" : "2025-11-02T09:00:00",
+  "prioridad" : "Alta"
+}, {
+  "id" : 199,
+  "descripcion" : "Añadir vista rápida de categorías",
+  "completada" : false,
+  "fechaCreacion" : "2025-11-03T10:00:00",
+  "prioridad" : "Baja"
+}, {
+  "id" : 200,
+  "descripcion" : "Optimizar estabilidad del sistema",
+  "completada" : true,
+  "fechaCreacion" : "2025-11-04T11:00:00",
+  "prioridad" : "Media"
+}, {
+  "id" : 201,
+  "descripcion" : "paquito tem que sair pra a loja",
+  "completada" : false,
+  "fechaCreacion" : "2025-11-15T11:42:19.3488282",
+  "prioridad" : "Alta"
 } ]

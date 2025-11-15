@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.io.File;
 import java.io.IOException;
-import java.net.URI;
 import java.nio.file.*;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -175,8 +174,8 @@ public class TareaController {
             lock.unlock();
         }
 
-        URI location = URI.create("/api/tareas/" + tarea.getId());
-        return ResponseEntity.created(location).body(Map.of("message", "Tarea creada", "tarea", tarea));
+        return ResponseEntity.ok(tarea);
+
     }
 
     // Actualización parcial (completada/prioridad/descripcion)

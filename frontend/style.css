@@ -1,118 +1,1741 @@
-/* Paleta: blanco / negro / grises + acentos sutiles para prioridad/completada */
-/* Tipografía y base */
-:root{
+:root {
+  /* Paleta base (colores modificables SOLO mediante variables) */
   --bg: #ffffff;
-  --text: #111111;
+  --surface: #ffffff;
+  --panel-bg: #fafafa;
   --muted: #6b6b6b;
-  --card-shadow: 0 6px 18px rgba(0,0,0,0.06);
+  --text: #111111;
+  --card-shadow: 0 6px 22px rgba(16, 24, 40, 0.06);
+  --card-shadow-hover: 0 10px 26px rgba(16, 24, 40, 0.12);
+  --header-shadow: 0 8px 30px rgba(15, 23, 42, 0.06);
   --accent: #111111;
+  --text-2: blue;
   --success: #2ecc71;
   --danger: #e74c3c;
   --alta: #e74c3c;
   --media: #333333;
   --baja: #888888;
   --completed-bg: #f5f6f7;
-  --animation-time: 260ms;
+
+  /* bordes / inputs / botones */
+  --border: #f4f4f4;
+  --panel-border: #f1f1f1;
+  --input-border: #e5e5e5;
+  --btn-bg: var(--surface);
+  --btn-border: #e6e6e6;
+  --badge-bg: #f2f2f2;
+  --badge-border: #e7e7e7;
+
+  /* scroll */
+  --scroll-thumb: #d0d0d0;
+  --scroll-thumb-hover: #bbbbbb;
+
+  /* header / layout */
+  --header-h: 72px;
+  --sidebar-w: 320px;
+  --gap: 18px;
+  --radius: 12px;
+  --animation-time: 220ms;
+
+  --task-pending-bg: #fbfbff;
+  --task-pending-border: rgba(15, 23, 42, 0.06);
+
+  --task-completed-bg: #eef7ec;
+  --task-completed-border: rgba(29, 78, 31, 0.08);
 }
 
-* { box-sizing: border-box; }
-html,body { height:100%; margin:0; background:var(--bg); color:var(--text); font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial; -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale; }
-.app { max-width:980px; margin:18px auto; padding:20px; }
+/* === MODO OSCURO === */
+:root.dark {
+  --bg: #06080d;
+  --surface: #0c1018;
+  --panel-bg: #111621;
+  --muted: #8fa3c0;
+  --text: #e6ecf7;
+
+  --accent: #0244c8;
+  --text-2: #3c7dff;
+
+  --success: #29d48a;
+  --danger: #ff5a5a;
+
+  --alta: #ff6f6f;
+  --media: #cdd6e5;
+  --baja: #7a8698;
+
+  --completed-bg: #0a0d13;
+
+  --card-shadow: 0 6px 22px rgba(0, 0, 0, 0.55);
+  --card-shadow-hover: 0 10px 26px rgba(0, 0, 0, 0.55);
+  --header-shadow: 0 8px 30px rgba(0, 0, 0, 0.55);
+
+  --border: #1f2633;
+  --panel-border: #191f2a;
+  --input-border: #1f2633;
+
+  --btn-bg: var(--surface);
+  --btn-border: #1f2633;
+
+  --badge-bg: #131823;
+  --badge-border: #1c2330;
+
+  --scroll-thumb: #2a3547;
+  --scroll-thumb-hover: #3a4862;
+
+  --task-pending-bg: #121316;
+  --task-pending-border: rgba(255, 255, 255, 0.04);
+
+  --task-completed-bg: #16321a;
+  --task-completed-border: rgba(16, 74, 27, 0.12);
+}
+
+/* Reset y estructura base */
+* {
+  box-sizing: border-box;
+}
+html,
+body {
+  height: 100%;
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI",
+    Roboto, "Helvetica Neue", Arial;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* App container */
+.app {
+  width: 100%;
+  max-width: none;
+  margin: 0;
+}
 
 /* Header */
-.header { display:flex; align-items:center; justify-content:space-between; gap:16px; margin-bottom:14px; }
-.title { margin:0; font-size:22px; font-weight:600; letter-spacing:0.2px; }
-.counters { display:flex; gap:10px; align-items:center; }
-.counter { font-size:13px; color:var(--muted); background:#fff; padding:6px 10px; border-radius:8px; border:1px solid #eee; box-shadow: var(--card-shadow); }
+.header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: var(--header-h);
+  background: var(--surface);
+  backdrop-filter: blur(4px);
+  padding: 14px 18px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  box-shadow: var(--header-shadow);
+  z-index: 50;
+  border-radius: 12px;
+}
 
-/* Form y controles */
-.controls-area .form { display:flex; gap:8px; align-items:center; margin-bottom:12px; }
-.form input[type="text"] { flex:1; padding:10px 12px; border-radius:10px; border:1px solid #e6e6e6; font-size:15px; background: #fff; }
-.form select { padding:10px; border-radius:10px; border:1px solid #e6e6e6; font-size:14px; min-width:120px; }
-.btn { padding:8px 12px; border-radius:8px; border:1px solid #ddd; background:#fff; cursor:pointer; font-size:14px; }
-.btn.primary { background:var(--accent); color:#fff; border: none; }
-.btn.danger { background:var(--danger); color:#fff; border: none; }
+/* Ajuste visual: si se desea efecto translúcido en light, se puede combinar con --surface */
+:root:not(.dark) .header {
+  background: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.9),
+    rgba(255, 255, 255, 0.85)
+  );
+}
+:root.dark .header {
+  background: linear-gradient(
+    180deg,
+    rgba(26, 26, 29, 0.9),
+    rgba(26, 26, 29, 0.92)
+  );
+}
 
-/* Bar (orden + search) */
-.bar { display:flex; gap:12px; align-items:center; justify-content:space-between; flex-wrap:wrap; margin-bottom:12px; }
-.ordering, .search { display:flex; gap:8px; align-items:center; }
-.small-label { font-size:13px; color:var(--muted); }
+.title {
+  margin: 0;
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--text);
+}
 
-/* Gestión avanzada */
-.gestion { display:flex; gap:12px; align-items:center; flex-wrap:wrap; margin-bottom:12px; }
-.select-all { font-size:14px; color:var(--muted); display:flex; gap:6px; align-items:center; }
-.group { display:flex; gap:8px; align-items:center; }
-
-/* Lista: grid responsivo de tarjetas */
-.list-wrap { margin-top:6px; }
-.task-grid { list-style:none; margin:0; padding:0; display:grid; grid-template-columns: repeat(2, 1fr); gap:12px; }
-@media (max-width:900px){ .task-grid { grid-template-columns: 1fr; } }
-
-/* Tarjeta / item */
-.task {
-  display:flex;
-  gap:12px;
-  align-items:flex-start;
-  background: #fff;
-  border-radius:12px;
-  padding:12px;
+/* Counters */
+.counters {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+.counter {
+  font-size: 13px;
+  color: var(--muted);
+  background: var(--panel-bg);
+  padding: 8px 12px;
+  border-radius: 10px;
+  border: 1px solid var(--panel-border);
   box-shadow: var(--card-shadow);
-  border:1px solid #f1f1f1;
-  transition: transform var(--animation-time) ease, box-shadow var(--animation-time) ease, background var(--animation-time);
-  overflow:hidden;
+  display: flex;
+  align-items: center;
+  gap: 8px;
 }
-.task-left { display:flex; gap:12px; align-items:flex-start; flex:1; }
-.task-right { display:flex; gap:8px; align-items:center; }
 
-/* checkbox + icon */
-.sel-checkbox { width:18px; height:18px; margin-top:2px; }
-
-/* prioridad: icono + etiqueta */
-.priority-icon {
-  width:10px; height:10px; border-radius:50%; display:inline-block; margin-right:8px; margin-top:3px;
+/* Layout */
+.app-body {
+  margin-top: calc(var(--header-h) + 14px);
+  display: grid;
+  grid-template-columns: var(--sidebar-w) 1fr;
+  gap: var(--gap);
+  align-items: start;
+  min-height: calc(100vh - var(--header-h) - 20px);
 }
-.priority-label { font-size:13px; padding:6px 8px; border-radius:999px; font-weight:600; color:#fff; display:inline-flex; align-items:center; gap:8px; }
 
-/* prioridad colores */
-.priority-alta { background:var(--alta); }
-.priority-media { background:var(--media); }
-.priority-baja { background:var(--baja); }
+/* Sidebar */
+.sidebar {
+  background: var(--surface);
+  border-radius: var(--radius);
+  padding: 18px 20px;
+  border: 1px solid var(--border);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.03), 0 1px 3px rgba(0, 0, 0, 0.04);
+  height: calc(100vh - var(--header-h) - 40px);
+  overflow: auto;
+  position: sticky;
+  top: calc(var(--header-h) + 18px);
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+}
 
-/* descripcion y meta */
-.descripcion { font-size:15px; color:var(--text); margin:0; }
-.meta { font-size:12px; color:var(--muted); margin-top:6px; }
+/* Grupo general */
+.controls-area {
+  display: flex;
+  flex-direction: column;
+  gap: 26px;
+}
 
-/* estado completado */
-.task.completed {
-  background: var(--completed-bg);
-  border-left:4px solid var(--success);
+/* FORMULARIO */
+.controls-area .form {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 16px;
+  background: var(--panel-bg);
+  border-radius: 14px;
+  border: 1px solid var(--panel-border);
+}
+
+.form input[type="text"],
+.form select {
+  padding: 12px 14px;
+  border-radius: 10px;
+  border: 1px solid var(--input-border);
+  font-size: 15px;
+  transition: var(--animation-time) ease;
+  background: var(--surface);
+  color: var(--text);
+}
+
+.form input[type="text"]:focus,
+.form select:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.04);
+  outline: none;
+}
+
+.form .btn.primary {
+  padding: 11px;
+  font-size: 15px;
+  border-radius: 10px;
+  font-weight: 600;
+  background: var(--accent);
+  color: var(--surface);
+  border: none;
+  transition: transform var(--animation-time);
+}
+
+.form .btn.primary:hover {
+  transform: translateY(-1px);
+  filter: brightness(1.08);
+}
+
+/* FILTROS Y ORDENES */
+.bar {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  padding: 16px;
+  background: var(--panel-bg);
+  border-radius: 14px;
+  border: 1px solid var(--panel-border);
+}
+
+.ordering {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.ordering select {
+  padding: 8px 10px;
+  border-radius: 10px;
+  border: 1px solid var(--input-border);
+  font-size: 14px;
+  background: var(--surface);
+  color: var(--text);
+}
+
+.ordering .btn {
+  padding: 8px 12px;
+  border-radius: 10px;
+  background: var(--btn-bg);
+  border: 1px solid var(--btn-border);
+  cursor: pointer;
+  transition: var(--animation-time);
+  color: var(--text);
+}
+
+.ordering .btn:hover {
+  background: var(--panel-bg);
+}
+/* === BARRA (search + ordering + view-switch) === */
+/* wrapper: restringe ancho para que no ocupe todo el content */
+.bar {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: nowrap;
+  width: 100%;
+  max-width: var(--max-bar-width);
+  margin-bottom: 12px;
+}
+/* Título alineado a la izquierda, no invade */
+.bar-title {
+  margin: 0;
+  font-size: 16px;
+  color: var(--text);
+  flex-shrink: 0;
+}
+
+/* Buscador a la izquierda */
+.search {
+  flex: 1;
+}
+
+.search input {
+  width: 100%;
+  padding: 10px 12px;
+  border-radius: 10px;
+  border: 1px solid var(--input-border);
+  font-size: 14px;
+  transition: var(--animation-time);
+  background: var(--surface);
+  color: var(--text);
+}
+
+.search input:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.04);
+  outline: none;
+}
+
+/* GESTIÓN MULTIPLE */
+.gestion {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 16px;
+  background: var(--panel-bg);
+  border-radius: 14px;
+  border: 1px solid var(--panel-border);
+}
+
+.select-all {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+  color: var(--muted);
+}
+
+.group {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.gestion .btn {
+  padding: 8px 12px;
+  border-radius: 10px;
+  background: var(--btn-bg);
+  border: 1px solid var(--btn-border);
+  cursor: pointer;
+  font-size: 14px;
+  transition: var(--animation-time);
+  color: var(--text);
+}
+
+.gestion .btn:hover {
+  background: var(--panel-bg);
+}
+
+.gestion .btn.danger {
+  background: var(--danger);
+  color: var(--surface);
+  border: none;
+}
+
+.gestion .btn.danger:hover {
+  filter: brightness(1.05);
+}
+
+.gestion select {
+  padding: 8px 10px;
+  border-radius: 10px;
+  border: 1px solid var(--input-border);
+  font-size: 14px;
+  background: var(--surface);
+  color: var(--text);
+}
+
+/* SCROLLBAR REFINADA */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--scroll-thumb);
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--scroll-thumb-hover);
+}
+
+/* RESPONSIVO */
+@media (max-width: 780px) {
+  .sidebar {
+    position: relative;
+    top: 0;
+    height: auto;
+    padding: 14px 16px;
+  }
+}
+
+/* Formulario ajustes repetidos (unificados con variables) */
+.controls-area .form {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 12px;
+}
+.form input[type="text"] {
+  padding: 10px 12px;
+  border-radius: 10px;
+  border: 1px solid var(--input-border);
+  font-size: 15px;
+  background: var(--surface);
+  color: var(--text);
+}
+.form select {
+  padding: 10px;
+  border-radius: 10px;
+  border: 1px solid var(--input-border);
+  background: var(--surface);
+  color: var(--text);
+}
+.form .btn.primary {
+  padding: 10px;
+  border-radius: 10px;
+  border: none;
+  background: var(--accent);
+  color: var(--surface);
+}
+
+/* Filtros */
+.ordering {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+.search input {
+  width: 100%;
+  padding: 8px 10px;
+  border-radius: 8px;
+  border: 1px solid var(--input-border);
+  background: var(--surface);
+  color: var(--text);
+}
+/* View switch botones */
+.view-switch {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  flex: 0 0 auto;
+}
+.view-switch .btn {
+  padding: 8px 10px;
+  border-radius: 8px;
+  border: 1px solid var(--btn-border);
+  background: var(--btn-bg);
+  cursor: pointer;
+}
+
+/* Small helpers so elements don't force line breaks */
+.bar > * {
+  white-space: nowrap;
+}
+
+/* Responsive: en pantallas pequeñas se apila */
+@media (max-width: 960px) {
+  .bar {
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+  .search {
+    flex: 1 1 100%;
+    order: 1;
+  }
+  .ordering {
+    order: 2;
+  }
+  .view-switch {
+    order: 3;
+  }
+}
+/* Gestión múltiple */
+.gestion {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.group {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+.group #btnAplicarPrioridad,
+#btnOrdenar {
+  background: var(--accent);
+  color: var(--surface);
+}
+.select-all {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--muted);
+}
+
+/* Checkbox */
+.sel-checkbox {
+  width: 18px;
+  height: 18px;
+  margin-top: 4px;
+}
+
+/* Texto */
+.descripcion {
+  margin: 0;
+  font-size: 15px;
+  line-height: 1.35;
+  color: var(--text);
+}
+
+/* Meta - badge */
+.meta {
+  font-size: 13px;
+  margin-top: 3px;
+  color: var(--muted);
+}
+.status-badge {
+  display: inline-block;
+  padding: 6px 8px;
+  border-radius: 8px;
+  font-weight: 600;
+  background: var(--badge-bg);
+  border: 1px solid var(--badge-border);
+  color: var(--text);
+}
+
+/* Botones */
+.controls {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+button.small {
+  padding: 7px 10px;
+  border-radius: 8px;
+  border: 1px solid var(--btn-border);
+  background: var(--btn-bg);
+  cursor: pointer;
+  font-size: 13px;
+  color: var(--text);
+}
+button.small.danger {
+  background: var(--danger);
+  color: var(--surface);
+  border: none;
+}
+
+/* Select inline */
+.priority-change,
+.inline-select {
+  padding: 7px;
+  border-radius: 8px;
+  border: 1px solid var(--btn-border);
+  background: var(--surface);
+  color: var(--text);
+}
+
+/* Notificaciones mejoradas */
+#notif-container,
+.notif-container {
+  position: fixed;
+  bottom: 18px;
+  right: 18px;
+  display: flex;
+  flex-direction: column-reverse; /* para que la nueva notificación aparezca abajo */
+  gap: 10px;
+  z-index: 9999;
+  pointer-events: none;
+}
+
+
+.notif {
+  pointer-events: auto;
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  min-width: 260px;
+  max-width: 380px;
+  padding: 12px 12px 10px 12px;
+  border-radius: 12px;
+  box-shadow: 0 10px 30px rgba(8, 12, 20, 0.08);
+  background: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.98),
+    rgba(255, 255, 255, 0.96)
+  );
+  color: var(--text);
+  border: 1px solid rgba(0, 0, 0, 0.04);
+  transform-origin: top right;
+  transition: transform 220ms cubic-bezier(0.2, 0.9, 0.25, 1),
+    opacity 220ms ease;
+  opacity: 1;
+  font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto,
+    "Helvetica Neue", Arial;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Dark mode adjustments */
+:root.dark .notif {
+  background: linear-gradient(
+    180deg,
+    rgba(12, 16, 22, 0.9),
+    rgba(12, 16, 22, 0.92)
+  );
+  border: 1px solid rgba(255, 255, 255, 0.03);
+  color: var(--text);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.55);
+}
+
+/* tipos */
+.notif.info {
+  border-left: 4px solid var(--text-2);
+}
+.notif.success {
+  border-left: 4px solid var(--success);
+}
+.notif.error {
+  border-left: 4px solid var(--danger);
+}
+
+/* icon + contenido */
+.notif .icon {
+  width: 28px;
+  height: 28px;
+  flex: 0 0 28px;
+  display: grid;
+  place-items: center;
+  margin-top: 2px;
+}
+.notif .content {
+  flex: 1 1 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  word-wrap: break-word;
+  font-size: 14px;
+  line-height: 1.3;
+}
+.notif .content .title {
+  font-weight: 700;
+  font-size: 13px;
+  color: inherit;
+}
+.notif .content .message {
+  font-size: 13px;
+  color: var(--muted);
+}
+
+/* close button */
+.notif .close-btn {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 6px;
+  border-radius: 8px;
+  flex: 0 0 auto;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--muted);
+}
+.notif .close-btn:hover {
+  background: rgba(0, 0, 0, 0.03);
+  color: var(--text);
+}
+
+/* progress bar (inferior) */
+.notif .progress {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  height: 4px;
+  width: 100%;
+  background: rgba(0, 0, 0, 0.04);
+}
+:root.dark .notif .progress {
+  background: rgba(255, 255, 255, 0.03);
+}
+
+.notif .progress > i {
+  display: block;
+  height: 100%;
+  width: 100%;
+  background: linear-gradient(
+    90deg,
+    rgba(255, 255, 255, 0.25),
+    rgba(0, 0, 0, 0.06)
+  );
+  border-top-right-radius: 6px;
+  border-bottom-right-radius: 6px;
+}
+
+/* type-specific progress tint */
+.notif.success .progress > i {
+  background: linear-gradient(
+    90deg,
+    rgba(46, 204, 113, 0.85),
+    rgba(46, 204, 113, 0.6)
+  );
+}
+.notif.error .progress > i {
+  background: linear-gradient(
+    90deg,
+    rgba(231, 76, 60, 0.9),
+    rgba(231, 76, 60, 0.65)
+  );
+}
+.notif.info .progress > i {
+  background: linear-gradient(
+    90deg,
+    rgba(60, 125, 255, 0.9),
+    rgba(60, 125, 255, 0.6)
+  );
+}
+
+/* entrada / salida */
+.notif.enter {
+  transform: translateY(-6px) scale(0.98);
+  opacity: 0;
+}
+.notif.enter.active {
+  transform: translateY(0) scale(1);
+  opacity: 1;
+}
+.notif.exit {
+  opacity: 0;
+  transform: translateY(-8px) scale(0.98);
+  transition: transform 180ms ease, opacity 180ms ease;
+}
+
+/* límite visual de notificaciones */
+#notif-container > .notif:nth-child(n + 5) {
+  transform: translateY(6px);
+  opacity: 0.92;
+}
+/* evita overflow en pantallas muy estrechas */
+@media (max-width: 480px) {
+  .notif {
+    min-width: 220px;
+    max-width: calc(100vw - 28px);
+    padding: 10px;
+    border-radius: 10px;
+  }
+  #notif-container {
+    right: 10px;
+    left: 10px;
+    top: 12px;
+  }
+}
+
+/* ==============================
+   TARJETAS PARA LA LISTA DE TAREAS
+   ============================== */
+.task-grid {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: grid;
+  gap: 14px;
+}
+
+/* Tarjeta general */
+.task-grid li {
+  border-radius: 14px;
+  padding: 16px;
+  box-shadow: var(--card-shadow);
+  border: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+  color: var(--text);
+}
+.task-grid.lista li .descripcion {
+  flex: 1 1 0;
+  min-width: 220px;
+  max-width: calc(100% - 120px);
+  padding-right: 8px;
+  overflow-wrap: break-word;
+}
+.task-grid li:hover {
   transform: translateY(-2px);
-}
-.task.completed .descripcion { text-decoration: line-through; color:#7a7a7a; }
-
-/* botones de control internos */
-.controls { display:flex; gap:8px; align-items:center; }
-button.small { padding:6px 8px; border-radius:8px; border:1px solid #ddd; background:#fff; cursor:pointer; }
-
-/* Animaciones */
-@keyframes pulseComplete {
-  0% { transform: scale(1); box-shadow: 0 0 0 rgba(0,0,0,0); }
-  50% { transform: scale(1.02); box-shadow: 0 8px 24px rgba(0,0,0,0.06); }
-  100% { transform: scale(1); box-shadow: 0 6px 18px rgba(0,0,0,0.06); }
-}
-.pulse { animation: pulseComplete 360ms ease; }
-
-.fade-out { animation: fadeOut .26s ease forwards; }
-@keyframes fadeOut {
-  to { opacity:0; transform: translateY(8px) scale(.99); height:0; margin:0; padding:0; }
+  box-shadow: var(--card-shadow-hover);
 }
 
-/* Notificaciones (toast) */
-.notif-container { position: fixed; top: 18px; right: 18px; display:flex; flex-direction:column; gap:10px; z-index:9999; }
-.notif { padding:10px 14px; border-radius:8px; color:#fff; font-size:14px; box-shadow: 0 8px 20px rgba(0,0,0,0.08); opacity:1; transition:opacity .3s; }
-.notif.success { background:var(--success); }
-.notif.error { background:var(--danger); }
-.notif.info { background:#333; }
+/* Header dentro de la tarjeta */
+.task-grid li .left {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+}
 
-/* accesibilidad y pequeños ajustes */
-.task .descripcion { word-break:break-word; }
+/* Descripción */
+.task-grid .descripcion {
+  font-size: 15px;
+  font-weight: 500;
+  max-height: 40.5px;
+  overflow: hidden;
+  position: relative;
+  line-height: 1.35;
+  padding-right: 55px;
+}
+
+.descripcion.expanded {
+  max-height: none;
+}
+
+/* Botón ver más */
+.ver-mas-btn {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  color: var(--text-2);
+  font-size: 12px;
+  padding: 0 4px;
+}
+
+/* Priorización */
+.priority-label {
+  padding: 4px 8px;
+  font-size: 12px;
+  border-radius: 8px;
+  background: var(--panel-bg);
+  border: 1px solid var(--panel-border);
+  color: var(--text);
+}
+
+.priority-alta {
+  color: var(--alta);
+  font-weight: 600;
+}
+.priority-media {
+  color: var(--media);
+  font-weight: 600;
+}
+.priority-baja {
+  color: var(--baja);
+  font-weight: 600;
+}
+
+/* Botones dentro de la tarjeta */
+.task-grid li .controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 8px;
+}
+
+.task-grid li .controls .small {
+  padding: 7px 10px;
+  border-radius: 8px;
+  border: 1px solid var(--btn-border);
+  background: var(--btn-bg);
+  cursor: pointer;
+  font-size: 13px;
+  color: var(--text);
+}
+
+.task-grid li .controls .delete {
+  background: var(--danger);
+  color: var(--surface);
+  border: none;
+}
+
+/* Select inline */
+.task-grid li .inline-select {
+  padding: 7px;
+  border-radius: 8px;
+  border: 1px solid var(--btn-border);
+  background: var(--surface);
+  color: var(--text);
+}
+
+/* Checkbox */
+.sel-checkbox {
+  width: 18px;
+  height: 18px;
+  flex-shrink: 0;
+  margin-top: 3px;
+}
+
+/* ==============================
+   VISTAS
+   ============================== */
+
+/* Vista lista */
+.task-grid.lista {
+  display: grid;
+  grid-template-columns: 1fr;
+}
+
+/* Vista lista: evitar superposición de botones */
+.task-grid.lista li {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.task-grid.lista .left {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.task-grid.lista .controls {
+  display: flex !important;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.task-grid.lista .descripcion {
+  max-width: 380px;
+  flex-shrink: 0;
+  white-space: normal;
+  overflow-wrap: break-word;
+}
+.task-grid.lista li .controls {
+  flex-shrink: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 4px;
+}
+/* ==============================
+   Vista miniaturas
+   ============================== */
+.task-grid.mini {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 10px;
+}
+
+.task-grid.mini li {
+  position: relative;
+  padding: 50px 10px 16px 10px;
+  box-sizing: border-box;
+  width: 250px;
+  min-height: 220px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  overflow: hidden;
+}
+
+.task-grid.mini .left {
+  flex-direction: column;
+  align-items: flex-start;
+  padding-top: 0;
+}
+
+.task-grid.mini .descripcion {
+  font-size: 14px;
+  font-weight: 600;
+  padding-right: 10px;
+  max-height: 72px;
+  overflow: hidden;
+  width: 100%;
+  text-overflow: ellipsis;
+  line-height: 1.35;
+}
+
+.task-grid.mini .descripcion.expanded {
+  max-height: none;
+}
+
+/* Badges y checkbox posición absoluta */
+.task-grid.mini .priority-label,
+.task-grid.mini .status-badge {
+  position: absolute;
+  top: 8px;
+  left: 8px;
+  z-index: 12;
+  white-space: nowrap;
+}
+
+.task-grid.mini .sel-checkbox {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  width: 18px;
+  height: 18px;
+  z-index: 12;
+}
+
+/* Botones en miniatura al borde inferior */
+.task-grid.mini .controls {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 6px;
+}
+.task-grid .descripcion .ver-mas-btn {
+  display: inline-block;
+  margin-left: 4px;
+  cursor: pointer;
+}
+
+.task-grid.mini .controls .ver-mas-btn {
+  flex-shrink: 0;
+}
+
+/* ==============================
+   ESTADOS Y BOTONES ACTIVOS
+   ============================== */
+.view-btn-active {
+  background: var(--accent) !important;
+  color: var(--surface) !important;
+}
+
+/* Botón de cambio de tema */
+.btn-theme {
+  background: var(--btn-bg);
+  border: 1px solid var(--btn-border);
+  border-radius: 50%;
+  width: 38px;
+  height: 38px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: 0.25s ease;
+  color: var(--text);
+}
+
+.btn-theme:hover {
+  background: var(--accent);
+  color: var(--surface);
+}
+
+:root.dark .btn-theme {
+  border-color: var(--btn-border);
+}
+
+:root.dark .btn-theme:hover {
+  background: var(--accent);
+  color: var(--surface);
+}
+
+.p {
+  font-size: 14px;
+  font-weight: 600;
+  margin: 0;
+  color: var(--text);
+}
+
+/* Aplicación a tarjetas */
+.task-grid li {
+  background: var(--task-pending-bg);
+  border: 1px solid var(--task-pending-border);
+  transition: background-color 220ms ease, border-color 220ms ease,
+    transform 150ms ease;
+}
+
+/* Tarjeta completada: color distinto y sutil contraste */
+.task-grid li.completed {
+  background: var(--task-completed-bg);
+  border-color: var(--task-completed-border);
+  box-shadow: 0 6px 18px rgba(20, 40, 20, 0.03);
+}
+
+/* Mini-cards también heredan los fondos definidos */
+.task-grid.mini li {
+  background: var(--task-pending-bg);
+  border: 1px solid var(--task-pending-border);
+}
+.task-grid.mini li.completed {
+  background: var(--task-completed-bg);
+  border-color: var(--task-completed-border);
+}
+
+/* Botón de cambio de tema */
+.btn-theme {
+  background: var(--btn-bg);
+  border: 1px solid var(--btn-border);
+  border-radius: 50%;
+  width: 38px;
+  height: 38px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: 0.25s ease;
+  color: var(--text);
+}
+
+.btn-theme:hover {
+  background: var(--accent);
+  color: var(--surface);
+}
+
+:root.dark .btn-theme {
+  border-color: var(--btn-border);
+}
+
+:root.dark .btn-theme:hover {
+  background: var(--accent);
+  color: var(--surface);
+}
+
+.p {
+  font-size: 14px;
+  font-weight: 600;
+  margin: 0;
+  color: var(--text);
+}
+
+/* Aplicación a tarjetas */
+.task-grid li {
+  background: var(--task-pending-bg);
+  border: 1px solid var(--task-pending-border);
+  transition: background-color 220ms ease, border-color 220ms ease,
+    transform 150ms ease;
+}
+
+/* Tarjeta completada: color distinto y sutil contraste */
+.task-grid li.completed {
+  background: var(--task-completed-bg);
+  border-color: var(--task-completed-border);
+  box-shadow: 0 6px 18px rgba(20, 40, 20, 0.03);
+}
+
+/* Mini-cards también heredan los fondos definidos */
+.task-grid.mini li {
+  background: var(--task-pending-bg);
+  border: 1px solid var(--task-pending-border);
+}
+.task-grid.mini li.completed {
+  background: var(--task-completed-bg);
+  border-color: var(--task-completed-border);
+}
+
+.pagination-wrapper {
+  display: flex;
+  justify-content: center;
+  margin: 16px 0;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* Contenedor combinado de botones + selector */
+.pagination-controls-wrapper {
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+/* Botones inline para scrollIntoView */
+.pagination-controls button {
+  flex: 0 0 auto;
+}
+
+/* En móviles, colocamos la agrupación en columna si el wrapper lo requiere,
+   pero preferimos permitir scroll horizontal para los botones */
+@media (max-width: 480px) {
+  .pagination-controls-wrapper {
+    /* mantiene select por debajo si es necesario, pero no fuerza wrapping de botones */
+    align-items: center;
+  }
+  .pagination-settings {
+    margin-top: 8px;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+  }
+}
+
+/* Botones de paginación */
+.pagination-controls button {
+  background-color: var(--surface);
+  color: var(--text);
+  border: 1px solid var(--muted);
+  padding: 6px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  font-size: 13px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+}
+
+.pagination-controls button:hover:not(:disabled) {
+  background-color: var(--primary);
+  color: var(--text);
+  transform: translateY(-1px);
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.15);
+}
+
+.pagination-controls button:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.pagination-controls button.active {
+  background-color: var(--primary);
+  color: var(--text);
+  border-color: var(--primary-dark);
+  font-weight: bold;
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.2);
+}
+
+/* Contenedor combinado de botones + selector */
+.pagination-controls-wrapper {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Selector de "Por página" */
+.pagination-settings {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  justify-content: center;
+  margin: 0;
+  width: auto;
+}
+
+/* Responsive: apilar en móviles y centrar select */
+@media (max-width: 480px) {
+  .pagination-controls-wrapper {
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+  }
+  .pagination-settings {
+    margin: 8px 0 0 0;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+  }
+}
+
+.pagination-settings select {
+  padding: 4px 10px;
+  border-radius: 6px;
+  border: 1px solid var(--muted);
+  background-color: var(--surface);
+  color: var(--text);
+  font-size: 13px;
+  cursor: pointer;
+  transition: all 0.25s ease;
+}
+
+.pagination-settings select:hover {
+  border-color: var(--primary);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+}
+
+/* Responsive: apilar en móviles */
+@media (max-width: 480px) {
+  .pagination-controls-wrapper {
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+  }
+  .pagination-settings {
+    margin-left: 0;
+    margin-top: 8px;
+  }
+}
+
+/* Estilo del botón de menú */
+.btn-menu {
+  display: none;
+  background: var(--btn-bg);
+  border: 1px solid var(--btn-border);
+  border-radius: 6px;
+  padding: 6px 10px;
+  cursor: pointer;
+  font-size: 18px;
+  color: var(--text);
+}
+
+/* Sidebar oculto por defecto en pantallas medianas */
+@media (max-width: 960px) {
+  .sidebar {
+    position: fixed;
+    left: -100%;
+    top: var(--header-h);
+    height: calc(100vh - var(--header-h));
+    width: var(--sidebar-w);
+    transition: left 0.3s ease;
+    z-index: 40;
+  }
+
+  .sidebar.active {
+    left: 0;
+  }
+
+  /* Mostrar botón de menú */
+  .btn-menu {
+    display: inline-flex;
+  }
+
+  /* Agregar un overlay para cerrar al tocar fuera */
+  .overlay {
+    position: fixed;
+    top: var(--header-h);
+    left: 0;
+    width: 100%;
+    height: calc(100vh - var(--header-h));
+    background: rgba(0, 0, 0, 0.4);
+    display: none;
+    z-index: 30;
+  }
+
+  .overlay.active {
+    display: block;
+  }
+
+  /* Ajustar app-body cuando sidebar está oculto */
+  .app-body {
+    grid-template-columns: 1fr;
+    gap: var(--gap);
+  }
+}
+
+/* Mostrar header counters siempre en pantallas >= 601px */
+.header .counters {
+  display: flex;
+}
+
+/* Sidebar counters en móviles solamente */
+@media (max-width: 600px) {
+  .header .counters {
+    display: none;
+  }
+  .sidebar-counters {
+    display: flex;
+  }
+}
+/* Por defecto, ocultar */
+.sidebar-counters {
+  display: none;
+}
+
+/* Solo mostrar en pantallas pequeñas (<=600px) */
+@media (max-width: 600px) {
+  .sidebar-counters {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    margin-bottom: 12px;
+  }
+}
+
+.header-search {
+  display: none;
+}
+
+/* Solo mostrar en móviles (≤600px) */
+@media (max-width: 600px) {
+  .header-search {
+    display: flex;
+    flex: 1;
+    margin: 0 8px;
+    justify-content: center;
+  }
+
+  .header-search input {
+    width: 100%;
+    max-width: 300px;
+    padding: 6px 8px;
+    font-size: 14px;
+    border-radius: 8px;
+    border: 1px solid var(--btn-border);
+    box-sizing: border-box;
+  }
+
+  /* Ocultar los counters en móviles */
+  .header .counters {
+    display: none;
+  }
+}
+
+/* En pantallas medianas y grandes, search permanece oculto */
+@media (min-width: 601px) {
+  .header-search {
+    display: none;
+  }
+}
+/* Ocultar search dentro de la barra en móviles */
+@media (max-width: 600px) {
+  .bar .search {
+    display: none !important;
+  }
+}
+
+/* Ocultar botones de cambio de vista en móviles (≤600px) */
+@media (max-width: 600px) {
+  .view-switch {
+    display: none !important;
+  }
+}
+
+/* ===== Responsive: pantallas medianas (tablets / small laptops) =====
+   rango: 768px — 1024px
+*/
+@media (min-width: 768px) and (max-width: 1024px) {
+  /* Paginación y barras: hacer más compactos en medium */
+  #paginationControls button {
+    padding: 6px 10px;
+    margin: 0 4px;
+    font-size: 13px;
+  }
+
+  /* Asegurar que estados móviles muy estrechos no se vean afectados */
+  .app {
+    padding-left: 16px;
+    padding-right: 16px;
+  }
+}
+
+/* ==============================
+   RESPONSIVIDAD MINIATURAS — PANTALLAS MEDIANAS
+   ============================== */
+@media screen and (max-width: 1024px) {
+  /* Miniaturas: columnas más estrechas y menor gap */
+  .task-grid.mini {
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 8px;
+  }
+
+  /* Tarjetas miniaturas: ancho completo y padding ajustado */
+  .task-grid.mini li {
+    width: 100%;
+    min-height: auto;
+    padding: 40px 8px 16px 8px;
+  }
+
+  /* Controles: evitar que se desborden */
+  .task-grid.mini .controls {
+    justify-content: flex-start;
+    flex-wrap: wrap;
+    gap: 4px;
+  }
+
+  /* Descripción: limitar altura para mantener consistencia */
+  .task-grid.mini .descripcion {
+    max-height: 60px;
+  }
+}
+
+/* ==============================
+   KEYFRAMES Y AJUSTES PARA VISTA LISTA (MEDIANAS)
+   ============================== */
+@media (min-width: 768px) and (max-width: 1024px) {
+  /* Aparición de la lista desde abajo con suavidad */
+  @keyframes listaFadeIn {
+    0% {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    50% {
+      opacity: 0.5;
+      transform: translateY(10px);
+    }
+    100% {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  /* Tarjeta individual al cargar o al cambiar vista */
+  @keyframes cardSlide {
+    0% {
+      opacity: 0;
+      transform: translateX(-20px);
+    }
+    50% {
+      opacity: 0.5;
+      transform: translateX(-10px);
+    }
+    100% {
+      opacity: 1;
+      transform: translateX(0);
+    }
+  }
+
+  /* Lista completa animada */
+  .task-grid.lista {
+    animation: listaFadeIn 0.4s ease forwards;
+  }
+
+  /* Tarjeta individual */
+  .task-grid.lista li {
+    animation: cardSlide 0.35s ease forwards;
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+
+  /* Contenedor izquierdo (checkbox + descripción + estado) */
+  .task-grid.lista li .left {
+    flex: 1 1 auto;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    min-width: 0;
+  }
+
+  /* Descripción ajustable */
+  .task-grid.lista li .descripcion {
+    flex: 1 1 auto;
+    min-width: 200px;
+    max-width: 100%;
+    font-size: 15px;
+    overflow-wrap: break-word;
+    line-height: 1.35;
+  }
+
+  /* Controles al lado derecho mientras haya espacio */
+  .task-grid.lista li .controls {
+    flex-shrink: 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+
+  /* Hover sin interferir con animación */
+  .task-grid.lista li:hover {
+    animation: none;
+    transform: translateY(-2px);
+    box-shadow: var(--card-shadow-hover);
+  }
+
+  /* Opcional: aumentar texto cuando controles bajan */
+  .task-grid.lista li:has(.controls) .descripcion {
+    font-size: 16px;
+  }
+}
+
+/* ==============================
+   VISTA LISTA — PANTALLAS PEQUEÑAS
+   ============================== */
+@media (max-width: 600px) {
+  /* Lista completa */
+  .task-grid.lista {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+
+  /* Tarjeta individual: columna, sin animación */
+  .task-grid.lista li {
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: flex-start;
+    gap: 10px;
+    animation: none !important;
+  }
+
+  /* Contenedor izquierdo: checkbox + descripción + badges */
+  .task-grid.lista li .left {
+    flex-direction: row;
+    align-items: center;
+    gap: 10px;
+    width: 100%;
+  }
+
+  /* Descripción ocupa todo el ancho disponible */
+  .task-grid.lista li .descripcion {
+    max-width: 100%;
+    min-width: 0;
+    padding-right: 0;
+    white-space: normal;
+    overflow-wrap: break-word;
+    font-size: 15px;
+    line-height: 1.35;
+  }
+
+  /* Controles principales: editar, pendiente, select + ver más */
+  .task-grid.lista li .controls {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    width: 100%;
+  }
+
+  /* Agrupar ver-mas con los otros controles principales en la primera fila */
+  .task-grid.lista li .controls .ver-mas-btn {
+    order: 1;
+  }
+
+  /* Botón eliminar en segunda fila */
+  .task-grid.lista li .controls .delete {
+    width: 100%;
+    order: 2;
+  }
+
+  /* Ajuste de otros botones */
+  .task-grid.lista li .controls .small,
+  .task-grid.lista li .controls .inline-select {
+    flex: 1 1 auto;
+    order: 1;
+  }
+}
+
+@media (max-width: 600px) {
+  section.content {
+    max-width: 100%;
+    margin: 0 auto;
+    box-sizing: border-box;
+  }
+}
+
+@media (max-width: 600px) {
+  /* Reducir ancho del header */
+  header.header {
+    max-width: 100%;
+    margin: 0 auto;
+    box-sizing: border-box;
+  }
+}
+
+@media (max-width: 600px) {
+  /* Contenedor del paginador */
+  #paginationControls.pagination-controls {
+    display: flex; 
+    flex-wrap: wrap; 
+    justify-content: center; 
+    gap: 4px; 
+    max-width: 95%;
+    margin: 10px auto 0 auto;
+    padding: 4px 6px;
+    box-sizing: border-box;
+    font-size: 13px; 
+  }
+
+  /* Limitar ancho de los botones */
+  #paginationControls.pagination-controls button {
+    flex: 1 1 auto; 
+    min-width: 36px; 
+    max-width: 48px; 
+    padding: 4px 6px;
+    white-space: nowrap; 
+    overflow: hidden;
+    text-overflow: ellipsis; 
+  }
+}
+
+/* Botón expand/collapse para sidebar */
+.btn-expand-sidebar {
+  position: relative; 
+  top: 0;
+  left: 0;
+  background: var(--btn-bg);
+  border: 1px solid var(--btn-border);
+  border-radius: 6px;
+  padding: 8px 10px; 
+  cursor: pointer;
+  z-index: 50;
+  display: none;
+  transition: all 0.3s ease;
+  font-size: 16px;
+}
+
+/* Mostrar solo en pantallas grandes */
+@media (min-width: 961px) {
+  .btn-expand-sidebar {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 12px; 
+  }
+}
+
+/* Sidebar colapsado */
+.sidebar.collapsed {
+  width: 80px; 
+  overflow: hidden;
+  transition: width 0.3s ease;
+}
+
+/* Ocultar elementos internos en colapsado */
+.sidebar.collapsed .controls-area,
+.sidebar.collapsed .form,
+.sidebar.collapsed .sidebar-counters {
+  display: none;
+}
+
+/* Adaptar contenedor principal al sidebar colapsado */
+.app-body {
+  display: grid;
+  grid-template-columns: var(--sidebar-w) 1fr; 
+  gap: var(--gap);
+  transition: grid-template-columns 0.3s ease;
+}
+
+/* Ajuste dinámico al colapsar/expandir (usar JS) */
+.sidebar.collapsed ~ .content {
+  grid-column: 2; 
+}
+
+/* Content card: ocupa todo el espacio disponible */
+.content-card {
+  background: var(--surface);
+  border-radius: var(--radius);
+  padding: 16px; 
+  border: 1px solid var(--border);
+  box-shadow: var(--card-shadow);
+  width: 100%;
+  transition: width 0.3s ease, padding 0.3s ease;
+}

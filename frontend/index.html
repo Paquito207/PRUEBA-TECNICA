@@ -1,860 +1,315 @@
 <!DOCTYPE html>
 <html lang="es">
-<head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>To-Do List — Sidebar y Header Fijo</title>
-<style>
-:root{
-  --bg: #ffffff;
-  --surface: #ffffff;
-  --muted: #6b6b6b;
-  --text: #111111;
-  --card-shadow: 0 6px 22px rgba(16,24,40,0.06);
-  --accent: #111111;
-  --text-2: blue;
-  --success: #2ecc71;
-  --danger: #e74c3c;
-  --alta: #e74c3c;
-  --media: #333333;
-  --baja: #888888;
-  --completed-bg: #f5f6f7;
-  --header-h: 72px;
-  --sidebar-w: 320px;
-  --gap: 18px;
-  --radius: 12px;
-  --animation-time: 220ms;
-}
-
-/* === MODO OSCURO === */
-:root.dark {
-  --bg: #0f0f11;
-  --surface: #1a1a1d;
-  --muted: #a8a8a8;
-  --text: #f5f5f5;
-  --accent: #4c8bff;
-  --text-2: #4c8bff;
-  --success: #2ecc71;
-  --danger: #ff5c5c;
-  --alta: #ff7070;
-  --media: #d0d0d0;
-  --baja: #888888;
-  --completed-bg: #1d1d1f;
-  --card-shadow: 0 6px 22px rgba(0,0,0,0.55);
-}
-
-*{box-sizing:border-box}
-html,body{
-  height:100%;
-  margin:0;
-  background:var(--bg);
-  color:var(--text);
-  font-family:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial;
-}
-
-/* App container */
-.app{
-  width:100%;
-  max-width:none;
-  margin:0;
-  padding:5px;
-}
-
-/* Header */
-.header{
-  position:fixed;
-  top:10px;
-  left:50%;
-  transform:translateX(-50%);
-  width:calc(100% - 36px);
-  height:var(--header-h);
-  background:linear-gradient(180deg, rgba(255,255,255,0.9), rgba(255,255,255,0.85));
-  backdrop-filter:blur(4px);
-  border-radius:14px;
-  padding:14px 18px;
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  gap:16px;
-  box-shadow:0 8px 30px rgba(15,23,42,0.06);
-  z-index:50;
-}
-
-.title{margin:0;font-size:20px;font-weight:700}
-
-/* Counters */
-.counters{display:flex;gap:10px;align-items:center}
-.counter{
-  font-size:13px;
-  color:var(--muted);
-  background:var(--surface);
-  padding:8px 12px;
-  border-radius:10px;
-  border:1px solid #f3f3f3;
-  box-shadow:var(--card-shadow);
-  display:flex;
-  align-items:center;
-  gap:8px;
-}
-
-/* Layout */
-.app-body{
-  margin-top:calc(var(--header-h) + 14px);
-  display:grid;
-  grid-template-columns:var(--sidebar-w) 1fr;
-  gap:var(--gap);
-  align-items:start;
-  min-height:calc(100vh - var(--header-h) - 20px);
-}
-
-/* Sidebar */
-.sidebar{
-  background:#fff;
-  border-radius:var(--radius);
-  padding:14px;
-  border:1px solid #f4f4f4;
-  box-shadow:var(--card-shadow);
-  height:calc(100vh - var(--header-h) - 40px);
-  overflow:auto;
-  position:sticky;
-  top:calc(var(--header-h) + 18px);
-}
-/* ============================
-   SIDEBAR — DISEÑO MEJORADO
-   ============================ */
-
-.sidebar{
-  background:#fff;
-  border-radius:18px;
-  padding:18px 20px;
-  border:1px solid #ececec;
-  box-shadow:
-      0 4px 10px rgba(0,0,0,0.03),
-      0 1px 3px rgba(0,0,0,0.04);
-  height:calc(100vh - var(--header-h) - 40px);
-  overflow:auto;
-  position:sticky;
-  top:calc(var(--header-h) + 18px);
-  display:flex;
-  flex-direction:column;
-  gap:22px;
-}
-
-/* Grupo general */
-.controls-area{
-  display:flex;
-  flex-direction:column;
-  gap:26px;
-}
-
-/* FORMULARIO */
-.controls-area .form{
-  display:flex;
-  flex-direction:column;
-  gap:12px;
-  padding:16px;
-  background:#fafafa;
-  border-radius:14px;
-  border:1px solid #f1f1f1;
-}
-
-.form input[type="text"],
-.form select{
-  padding:12px 14px;
-  border-radius:10px;
-  border:1px solid #e5e5e5;
-  font-size:15px;
-  transition:.18s ease;
-}
-
-.form input[type="text"]:focus,
-.form select:focus{
-  border-color:#c7c7c7;
-  box-shadow:0 0 0 2px rgba(0,0,0,0.04);
-  outline:none;
-}
-
-.form .btn.primary{
-  padding:11px;
-  font-size:15px;
-  border-radius:10px;
-  font-weight:600;
-  background:var(--accent);
-  color:#fff;
-  border:none;
-  transition:.2s ease;
-}
-
-.form .btn.primary:hover{
-  filter:brightness(1.12);
-}
-
-/* FILTROS Y ORDENES */
-.bar{
-  display:flex;
-  flex-direction:column;
-  gap:14px;
-  padding:16px;
-  background:#fafafa;
-  border-radius:14px;
-  border:1px solid #f1f1f1;
-}
-
-.ordering{
-  display:flex;
-  gap:10px;
-  align-items:center;
-  flex-wrap:wrap;
-}
-
-.ordering select{
-  padding:8px 10px;
-  border-radius:10px;
-  border:1px solid #e5e5e5;
-  font-size:14px;
-}
-
-.ordering .btn{
-  padding:8px 12px;
-  border-radius:10px;
-  background:#fff;
-  border:1px solid #e5e5e5;
-  cursor:pointer;
-  transition:.2s;
-}
-
-.ordering .btn:hover{
-  background:#f2f2f2;
-}
-
-.search input{
-  width:100%;
-  padding:10px 12px;
-  border-radius:10px;
-  border:1px solid #e5e5e5;
-  font-size:14px;
-  transition:.18s;
-}
-
-.search input:focus{
-  border-color:#c7c7c7;
-  box-shadow:0 0 0 2px rgba(0,0,0,0.04);
-  outline:none;
-}
-
-/* GESTIÓN MULTIPLE */
-.gestion{
-  display:flex;
-  flex-direction:column;
-  gap:16px;
-  padding:16px;
-  background:#fafafa;
-  border-radius:14px;
-  border:1px solid #f1f1f1;
-}
-
-.select-all{
-  display:flex;
-  align-items:center;
-  gap:8px;
-  font-size:14px;
-  color:var(--muted);
-}
-
-.group{
-  display:flex;
-  gap:10px;
-  flex-wrap:wrap;
-}
-
-.gestion .btn{
-  padding:8px 12px;
-  border-radius:10px;
-  background:#fff;
-  border:1px solid #e5e5e5;
-  cursor:pointer;
-  font-size:14px;
-  transition:.2s;
-}
-
-.gestion .btn:hover{
-  background:#f2f2f2;
-}
-
-.gestion .btn.danger{
-  background:var(--danger);
-  color:#fff;
-  border:none;
-}
-
-.gestion .btn.danger:hover{
-  filter:brightness(1.1);
-}
-
-.gestion select{
-  padding:8px 10px;
-  border-radius:10px;
-  border:1px solid #e5e5e5;
-  font-size:14px;
-}
-
-/* SCROLLBAR REFINADA */
-.sidebar::-webkit-scrollbar{
-  width:8px;
-}
-
-.sidebar::-webkit-scrollbar-track{
-  background:transparent;
-}
-
-.sidebar::-webkit-scrollbar-thumb{
-  background:#d0d0d0;
-  border-radius:10px;
-}
-
-.sidebar::-webkit-scrollbar-thumb:hover{
-  background:#bbbbbb;
-}
-
-/* RESPONSIVO */
-@media (max-width:780px){
-  .sidebar{
-    position:relative;
-    top:0;
-    height:auto;
-    padding:14px 16px;
-  }
-}
-
-/* Formulario */
-.controls-area .form{
-  display:flex;
-  flex-direction:column;
-  gap:10px;
-  margin-bottom:12px;
-}
-.form input[type="text"]{
-  padding:10px 12px;
-  border-radius:10px;
-  border:1px solid #ececec;
-  font-size:15px;
-}
-.form select{
-  padding:10px;
-  border-radius:10px;
-  border:1px solid #ececec;
-}
-.form .btn.primary{
-  padding:10px;
-  border-radius:10px;
-  border:none;
-  background:var(--accent);
-  color:#fff;
-}
-
-/* Filtros */
-.bar{display:flex;flex-direction:column;gap:10px;margin-bottom:12px}
-.ordering{display:flex;gap:8px;align-items:center}
-.search input{
-  width:100%;
-  padding:8px 10px;
-  border-radius:8px;
-  border:1px solid #ececec;
-}
-
-/* Gestión múltiple */
-.gestion{display:flex;flex-direction:column;gap:10px}
-.group{display:flex;gap:8px;flex-wrap:wrap}
-.select-all{display:flex;align-items:center;gap:8px;color:var(--muted)}
-
-/* Content container */
-.content-card{
-  background:#fff;
-  border-radius:var(--radius);
-  padding:14px;
-  border:1px solid #f4f4f4;
-  box-shadow:var(--card-shadow);
-}
-
-/* Checkbox */
-.sel-checkbox{
-  width:18px;
-  height:18px;
-  margin-top:4px;
-}
-
-/* Texto */
-.descripcion{
-  margin:0;
-  font-size:15px;
-  line-height:1.35;
-  color:var(--text);
-}
-
-/* Meta - badge */
-.meta{
-  font-size:13px;
-  margin-top:3px;
-  color:var(--muted);
-}
-.status-badge{
-  display:inline-block;
-  padding:6px 8px;
-  border-radius:8px;
-  font-weight:600;
-  background:#f2f2f2;
-  border:1px solid #e7e7e7;
-}
-
-/* Botones */
-.controls{
-  display:flex;
-  gap:8px;
-  flex-wrap:wrap;
-}
-button.small{
-  padding:7px 10px;
-  border-radius:8px;
-  border:1px solid #e6e6e6;
-  background:#fff;
-  cursor:pointer;
-  font-size:13px;
-}
-button.small.danger{
-  background:var(--danger);
-  color:#fff;
-  border:none;
-}
-
-/* Select inline */
-.priority-change,
-.inline-select{
-  padding:7px;
-  border-radius:8px;
-  border:1px solid #e6e6e6;
-}
-
-/* Notificaciones */
-.notif-container{
-  position:fixed;
-  top:18px;
-  right:18px;
-  display:flex;
-  flex-direction:column;
-  gap:10px;
-  z-index:9999;
-}
-
-/* === TARJETAS PARA LA LISTA DE TAREAS === */
-
-.task-grid {
-  list-style: none;
-  padding: 0;
-  margin: 0;
-  display: grid;
-  gap: 14px;
-}
-
-.task-grid li {
-  background: #fff;
-  border-radius: 14px;
-  padding: 16px;
-  box-shadow: var(--card-shadow);
-  border: 1px solid #f3f3f3;
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  transition: transform .15s ease, box-shadow .15s ease;
-}
-
-.task-grid li:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 10px 26px rgba(16,24,40,0.12);
-}
-
-.task-grid li.completed {
-  background: var(--completed-bg);
-  opacity: 0.85;
-}
-
-/* Header dentro de la tarjeta */
-.task-grid li .left {
-  display:flex;
-  align-items:flex-start;
-  gap:12px;
-}
-
-/* Descripción */
-.task-grid .descripcion {
-  font-size: 15px;
-  font-weight: 500;
-}
-
-/* Priorización */
-.priority-label {
-  padding: 4px 8px;
-  font-size: 12px;
-  border-radius: 8px;
-  background: #efefef;
-  border: 1px solid #e2e2e2;
-}
-
-.priority-alta { color: var(--alta); font-weight: 600; }
-.priority-media { color: var(--media); font-weight: 600; }
-.priority-baja { color: var(--baja); font-weight: 600; }
-
-/* Botones dentro de la tarjeta */
-.task-grid li .controls {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-  margin-top: 8px;
-}
-
-.task-grid li .controls .small {
-  padding: 7px 10px;
-  border-radius: 8px;
-  border: 1px solid #e6e6e6;
-  background: #fff;
-  cursor: pointer;
-  font-size: 13px;
-}
-
-.task-grid li .controls .delete {
-  background: var(--danger);
-  color: #fff;
-  border: none;
-}
-
-/* Select inline */
-.task-grid li .inline-select {
-  padding: 7px;
-  border-radius: 8px;
-  border: 1px solid #e6e6e6;
-}
-
-/* Checkbox */
-.sel-checkbox {
-  width: 18px;
-  height: 18px;
-  flex-shrink: 0;
-  margin-top: 3px;
-}
-
-
-/* Responsivo */
-@media (max-width:780px){
-  .app-body{grid-template-columns:1fr}
-  .sidebar{
-    position:relative;
-    top:0;
-    height:auto;
-  }
-  .app{padding:12px}
-}
-
-/* === VISTAS === */
-.task-grid.lista {
-  display: grid;
-  grid-template-columns: 1fr;
-}
-
-.task-grid.mini {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
-}
-
-.task-grid.mini li {
-  padding: 12px;
-  gap: 6px;
-}
-
-.task-grid.mini .left {
-  flex-direction: column;
-  align-items: flex-start;
-}
-
-.task-grid.mini .controls {
-  display: none !important; /* solo visible en vista lista */
-}
-
-.task-grid.mini .descripcion {
-  font-size: 14px;
-  font-weight: 600;
-}
-
-.task-grid.mini .priority-label {
-  margin-top: 4px;
-}
-
-.view-btn-active {
-  background: var(--accent) !important;
-  color: #fff !important;
-}
-
-/* --- BOTONES A LA DERECHA EN VISTA LISTA --- */
-.task-grid.lista li {
-  flex-direction: row;
-  align-items: center;
-  justify-content: space-between;
-}
-
-.task-grid.lista .left {
-  flex: 1;
-  display: flex;
-  align-items: center;
-  gap: 12px;
-}
-
-.task-grid.lista .controls {
-  display: flex !important;
-  flex-wrap: wrap;
-  gap: 6px;
-}
-
-/* --- MOSTRAR BOTONES EN VISTA MINI --- */
-.task-grid.mini .controls {
-  display: flex !important;
-  flex-wrap: wrap;
-  gap: 6px;
-  margin-top: 6px;
-}
-
-/* --- LIMITE DESCRIPCIÓN --- */
-/* --- LIMITE DESCRIPCIÓN (2 líneas exactas, sin cortes) --- */
-.descripcion {
-  max-height: 40.5px;   /* 2 líneas exactas */
-  overflow: hidden;
-  position: relative;
-  line-height: 1.35;
-  padding-right: 55px; /* espacio para el botón */
-}
-
-.descripcion.expanded {
-  max-height: none;
-}
-
-.ver-mas-btn {
-  position: absolute;
-  right: 0;
-  bottom: 0;
-  transform: translateY(2px); /* desplazamiento */
-  background: transparent;
-  border: none;
-  cursor: pointer;
-  color: var(--text-2);
-  font-size: 12px;
-  padding: 0 4px;
-}
-
-/* Limitar ancho de descripción en vista lista */
-.task-grid.lista .descripcion {
-  max-width: 380px;   /* Ajusta si quieres más o menos */
-  flex-shrink: 0;
-  white-space: normal;
-}
-
-.task-grid.lista .descripcion {
-  overflow-wrap: break-word;
-}
-
-.task-grid.mini li {
-  align-self: start;   /* impide que las tarjetas copien la altura de otras */
-  height: auto;
-}
-
-/* Permite que la descripción crezca para que el botón pueda aparecer */
-.task-grid.mini .descripcion.expanded {
-  max-height: none;
-}
-
-
-.task-grid.mini .descripcion {
-  position: relative;
-  overflow: hidden;
-  padding-right: 55px !important; /* espacio para el botón */
-  max-height: 40.5px; /* igual que vista lista */
-}
-
-.btn-theme {
-  background: var(--surface);
-  border: 1px solid #ddd;
-  border-radius: 50%;
-  width: 38px;
-  height: 38px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  transition: .25s ease;
-}
-
-.btn-theme:hover {
-  background: var(--accent);
-  color: #fff;
-}
-
-:root.dark .btn-theme {
-  border-color: #333;
-}
-
-:root.dark .btn-theme:hover {
-  background: #4c8bff;
-}
-
-</style>
+  <head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <!-- Cargar CSS -->
+  <link
+    rel="stylesheet"
+    href="style.css"
+  />
+  <title>To-Do List</title>
 </head>
-<body>
-  <main class="app">
-    <header class="header">
-      <h1 class="title">To-Do List</h1>
-      <div class="counters">
-        <button id="btnTheme" class="btn-theme" title="Cambiar tema">
-  <svg id="iconTheme" width="20" height="20" viewBox="0 0 24 24" stroke="currentColor" fill="none" stroke-width="2">
-    <circle cx="12" cy="12" r="4"></circle>
-    <line x1="12" y1="2" x2="12" y2="5"></line>
-    <line x1="12" y1="19" x2="12" y2="22"></line>
-    <line x1="4.22" y1="4.22" x2="6.34" y2="6.34"></line>
-    <line x1="17.66" y1="17.66" x2="19.78" y2="19.78"></line>
-    <line x1="2" y1="12" x2="5" y2="12"></line>
-    <line x1="19" y1="12" x2="22" y2="12"></line>
-    <line x1="4.22" y1="19.78" x2="6.34" y2="17.66"></line>
-    <line x1="17.66" y1="6.34" x2="19.78" y2="4.22"></line>
-  </svg>
-</button>
 
-        <div id="total" class="counter">Total: 0</div>
-        <div id="pendientes" class="counter">Pendientes: 0</div>
-      </div>
-    </header>
+  <body>
+    <main class="app">
+      <header class="header">
+        <h1 class="title">To-Do List</h1>
+        <div class="header-search">
+          <input
+            type="text"
+            id="searchInputHeader"
+            placeholder="Buscar por descripción..."
+            aria-label="Buscar"
+          />
+        </div>
+        <div class="counters">
+          <button id="btnTheme" class="btn-theme" title="Cambiar tema" type="button"
+>
+            <svg
+              id="iconTheme"
+              width="20"
+              height="20"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+              fill="none"
+              stroke-width="2"
+            >
+              <circle cx="12" cy="12" r="4"></circle>
+              <line x1="12" y1="2" x2="12" y2="5"></line>
+              <line x1="12" y1="19" x2="12" y2="22"></line>
+              <line x1="4.22" y1="4.22" x2="6.34" y2="6.34"></line>
+              <line x1="17.66" y1="17.66" x2="19.78" y2="19.78"></line>
+              <line x1="2" y1="12" x2="5" y2="12"></line>
+              <line x1="19" y1="12" x2="22" y2="12"></line>
+              <line x1="4.22" y1="19.78" x2="6.34" y2="17.66"></line>
+              <line x1="17.66" y1="6.34" x2="19.78" y2="4.22"></line>
+            </svg>
+          </button>
 
-    <div class="app-body">
-      <!-- Sidebar izquierdo (mantengo la sección controls-area sin cambiar IDs/clases) -->
-      <aside class="sidebar">
-        <section class="controls-area">
-          <form id="formTarea" class="form">
-            <input type="text" id="descripcion" placeholder="Nueva tarea" aria-label="Nueva tarea" required />
-            <select id="prioridad" aria-label="Prioridad">
-              <option value="Media" selected>Media</option>
-              <option value="Alta">Alta</option>
-              <option value="Baja">Baja</option>
-            </select>
-            <button type="submit" class="btn primary">Agregar</button>
-          </form>
+          <div id="total" class="counter">Total: 0</div>
+          <div id="pendientes" class="counter">Pendientes: 0</div>
+        </div>
 
-          <div class="bar">
-            <div class="ordering">
-              <label for="sortSelect" class="small-label">Ordenar</label>
-              <select id="sortSelect">
-                <option value="fecha">Fecha</option>
-                <option value="prioridad">Prioridad</option>
-                <option value="descripcion">Descripción</option>
-              </select>
-              <select id="orderSelect">
-                <option value="asc">Asc</option>
-                <option value="desc">Desc</option>
-              </select>
-              <button id="btnOrdenar" class="btn">Aplicar</button>
+        <button
+          id="btnMenu"
+          class="btn-menu"
+          aria-label="Mostrar u ocultar menú"
+          type="button"
+
+        >
+          ☰
+        </button>
+      </header>
+
+      <div class="app-body">
+        <aside class="sidebar">
+          <button
+            id="btnExpandSidebar"
+            class="btn-expand-sidebar"
+            title="Expandir/Ocultar Sidebar"
+            type="button"
+
+          >
+            <svg
+              width="20"
+              height="20"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+            >
+              <path d="M4 12h16M12 4l8 8-8 8" />
+            </svg>
+          </button>
+
+          <section class="controls-area">
+            <!-- Dentro del sidebar -->
+            <div class="sidebar-counters">
+              <button
+                id="btnThemeSidebar"
+                class="btn-theme"
+                title="Cambiar tema"
+                type="button"
+
+              >
+                <svg
+                  id="iconTheme"
+                  width="20"
+                  height="20"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                  fill="none"
+                  stroke-width="2"
+                >
+                  <circle cx="12" cy="12" r="4"></circle>
+                  <line x1="12" y1="2" x2="12" y2="5"></line>
+                  <line x1="12" y1="19" x2="12" y2="22"></line>
+                  <line x1="4.22" y1="4.22" x2="6.34" y2="6.34"></line>
+                  <line x1="17.66" y1="17.66" x2="19.78" y2="19.78"></line>
+                  <line x1="2" y1="12" x2="5" y2="12"></line>
+                  <line x1="19" y1="12" x2="22" y2="12"></line>
+                  <line x1="4.22" y1="19.78" x2="6.34" y2="17.66"></line>
+                  <line x1="17.66" y1="6.34" x2="19.78" y2="4.22"></line>
+                </svg>
+              </button>
+
+              <div id="totalSidebar" class="counter">Total: 0</div>
+              <div id="pendientesSidebar" class="counter">Pendientes: 0</div>
             </div>
 
-            <div class="search">
-              <input type="text" id="searchInput" placeholder="Buscar por descripción..." aria-label="Buscar" />
-            </div>
-          </div>
-
-          <div class="gestion" id="gestion-avanzada">
-            <label class="select-all"><input type="checkbox" id="selectAll"> Seleccionar todo</label>
-
-            <div class="group">
-              <button id="btnMarcarSeleccionadas" class="btn">Marcar completadas</button>
-              <button id="btnMarcarPendientes" class="btn">Marcar pendientes</button>
-              <button id="btnEliminarSeleccionadas" class="btn danger">Eliminar</button>
-            </div>
-
-            <div class="group">
-              <select id="selCambiarPrioridad" aria-label="Cambiar prioridad">
-                <option value="">-- Cambiar prioridad --</option>
+            <form id="formTarea" class="form">
+              <p class="p">Crea una nueva tarea</p>
+              <input
+                type="text"
+                id="descripcion"
+                placeholder="Nueva tarea"
+                aria-label="Nueva tarea"
+                required
+              />
+              <p class="p">prioridad</p>
+              <select id="prioridad" aria-label="Prioridad">
+                <option value="Media" selected>Media</option>
                 <option value="Alta">Alta</option>
-                <option value="Media">Media</option>
                 <option value="Baja">Baja</option>
               </select>
-              <button id="btnAplicarPrioridad" class="btn">Aplicar</button>
+              <button type="submit" class="btn primary">Agregar</button>
+            </form>
+            <p class="p">Ajustes con selecciòn multiple</p>
+            <div class="gestion" id="gestion-avanzada">
+              <label class="select-all"
+                ><input type="checkbox" id="selectAll" /> Seleccionar
+                todo</label
+              >
+
+              <div class="group">
+                <button id="btnMarcarSeleccionadas" class="btn" type="button"
+>
+                  Marcar completadas
+                </button>
+                <button id="btnMarcarPendientes" class="btn" type="button"
+>
+                  Marcar pendientes
+                </button>
+                <button id="btnEliminarSeleccionadas" class="btn danger" type="button"
+>
+                  Eliminar
+                </button>
+              </div>
+
+              <div class="group">
+                <select id="selCambiarPrioridad" aria-label="Cambiar prioridad">
+                  <option value="">-- Cambiar prioridad --</option>
+                  <option value="Alta">Alta</option>
+                  <option value="Media">Media</option>
+                  <option value="Baja">Baja</option>
+                </select>
+                <button id="btnAplicarPrioridad" class="btn" type="button"
+>Aplicar</button>
+              </div>
+
+              <div class="group" style="margin-top: 8.1px">
+                <button id="btnExportCSV" class="btn" type="button"
+>Exportar CSV</button>
+                <button id="btnExportJSON" class="btn" type="button"
+>Exportar JSON</button>
+              </div>
+            </div>
+          </section>
+        </aside>
+
+        <section class="content">
+          <div class="content-card">
+            <div class="bar">
+              <h2
+                style="margin: 0 0 12px 0; font-size: 16px; color: var(--text)"
+              >
+                Tareas
+              </h2>
+              <div class="search">
+                <input
+                  type="text"
+                  id="searchInputMain"
+                  placeholder="Buscar por descripción..."
+                  aria-label="Buscar"
+                />
+              </div>
+
+              <div class="ordering" aria-label="Ordenar tareas">
+                <label for="sortSelect" class="small-label">Ordenar</label>
+                <select id="sortSelect">
+                  <option value="fecha">Fecha</option>
+                  <option value="prioridad">Prioridad</option>
+                  <option value="descripcion">Descripción</option>
+                </select>
+
+                <select id="orderSelect">
+                  <option value="asc">Asc</option>
+                  <option value="desc">Desc</option>
+                </select>
+
+                <!-- comentado para hacer peticiones automáticas al cambiar los select 
+                <button id="btnOrdenar" class="btn">Aplicar</button>
+                -->
+              </div>
+
+              <div class="view-switch" aria-label="Cambiar vista">
+                <button
+                  id="btnVistaLista"
+                  class="btn"
+                  title="Vista lista"
+                  aria-pressed="true"
+                  type="button"
+                >
+                  <svg
+                    width="16"
+                    height="16"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    color="orange"
+                  >
+                    <line x1="4" y1="6" x2="20" y2="6"></line>
+                    <line x1="4" y1="12" x2="20" y2="12"></line>
+                    <line x1="4" y1="18" x2="20" y2="18"></line>
+                  </svg>
+                </button>
+
+                <button
+                  id="btnVistaMini"
+                  class="btn"
+                  title="Vista miniaturas"
+                  aria-pressed="false"
+                  type="button"
+                >
+                  <svg
+                    width="16"
+                    height="16"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    color="orange"
+                  >
+                    <rect x="4" y="4" width="6" height="6"></rect>
+                    <rect x="14" y="4" width="6" height="6"></rect>
+                    <rect x="4" y="14" width="6" height="6"></rect>
+                    <rect x="14" y="14" width="6" height="6"></rect>
+                  </svg>
+                </button>
+              </div>
             </div>
 
-            <div class="group">
-              <button id="btnExportCSV" class="btn">Exportar CSV</button>
-              <button id="btnExportJSON" class="btn">Exportar JSON</button>
+            <div
+              id="emptyState"
+  class="empty-state"
+  style="
+    display: none;
+    padding: 18px;
+    border-radius: 10px;
+    border: 1px dashed #f2f2f2;
+    color: var(--muted);
+  "
+            >
+              <div>No hay tareas todavía</div>
+              <div style="font-size: 13px; color: var(--muted)">
+                Agrega tu primera tarea usando el campo en el sidebar.
+              </div>
+            </div>
+
+            <div class="list-wrap">
+              <ul id="listaTareas" class="task-grid" aria-live="polite"></ul>
+            </div>
+            <div class="pagination-wrapper">
+              <div class="pagination-controls-wrapper">
+                <div id="paginationControls" class="pagination-controls"></div>
+                <div class="pagination-settings">
+                  <label class="small-label">Por página</label>
+                  <select id="pageSizeSelect">
+                    <option value="5">5</option>
+                    <option value="10" selected>10</option>
+                    <option value="20">20</option>
+                    <option value="50">50</option>
+                  </select>
+                </div>
+              </div>
             </div>
           </div>
         </section>
-      </aside>
+      </div>
 
-      <!-- Content principal: tarjeta contenedor con la lista de tareas -->
-      <section class="content">
-        <div class="content-card">
-          <h2 style="margin:0 0 12px 0;font-size:16px;color:var(--text)">Tareas</h2>
-<div style="display:flex; gap:10px; margin-bottom:12px;">
+      <!-- contenedor para notificaciones -->
+      <div
+        id="notif-container"
+        aria-live="polite"
+        class="notif-container"
+      ></div>
+      <div id="overlay" class="overlay"></div>
+    </main>
 
-  <!-- Vista lista (líneas simples) -->
-  <button id="btnVistaLista" class="btn" title="Vista lista">
-    <svg width="20" height="20" viewBox="0 0 24 24" fill="none"
-         stroke="currentColor" stroke-width="2" stroke-linecap="round">
-      <line x1="4" y1="6" x2="20" y2="6"></line>
-      <line x1="4" y1="12" x2="20" y2="12"></line>
-      <line x1="4" y1="18" x2="20" y2="18"></line>
-    </svg>
-  </button>
-
-  <!-- Vista miniaturas (cuadrícula limpia) -->
-  <button id="btnVistaMini" class="btn" title="Vista miniaturas">
-    <svg width="20" height="20" viewBox="0 0 24 24" fill="none"
-         stroke="currentColor" stroke-width="2" stroke-linecap="round">
-      <rect x="4" y="4" width="6" height="6"></rect>
-      <rect x="14" y="4" width="6" height="6"></rect>
-      <rect x="4" y="14" width="6" height="6"></rect>
-      <rect x="14" y="14" width="6" height="6"></rect>
-    </svg>
-  </button>
-
-</div>
-
-
-          <!-- Estado vacío -->
-          <div id="emptyState" class="empty-state" style="display:block;padding:18px;border-radius:10px;border:1px dashed #f2f2f2;color:var(--muted)">
-            <div>No hay tareas todavía</div>
-            <div style="font-size:13px;color:var(--muted)">Agrega tu primera tarea usando el campo en el sidebar.</div>
-          </div>
-
-          <div class="list-wrap">
-            <ul id="listaTareas" class="task-grid" aria-live="polite"></ul>
-          </div>
-        </div>
-      </section>
-    </div>
-
-    <!-- contenedor para notificaciones -->
-    <div id="notif-container" aria-live="polite" class="notif-container"></div>
-  </main>
-
-  <script src="script.js"></script>
-  <script>
-
-    const btnTheme = document.getElementById("btnTheme");
-const iconTheme = document.getElementById("iconTheme");
-
-// Cargar preferencia guardada
-if (localStorage.getItem("theme") === "dark") {
-  document.documentElement.classList.add("dark");
-}
-
-// Alternar tema
-btnTheme.addEventListener("click", () => {
-  document.documentElement.classList.toggle("dark");
-
-  const isDark = document.documentElement.classList.contains("dark");
-  localStorage.setItem("theme", isDark ? "dark" : "light");
-});
-
-  </script>
-</body>
+    <script src="script.js"></script>
+  </body>
 </html>
