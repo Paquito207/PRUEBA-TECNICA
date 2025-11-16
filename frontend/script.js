@@ -650,13 +650,158 @@ const pageOptions = [5, 10, 20, 50]; // opciones para el selector
 /* ============================
   Listado de tareas con paginación
 ============================ */
+/* ----------------- Overlay helpers + focus-trap (reemplazar versiones previas) ----------------- */
+const offlineOverlay = document.getElementById("offlineOverlay");
+const offlineMessageEl = document.getElementById("offlineMessage");
+const btnRetry = document.getElementById("btnRetry");
+const appRoot = document.querySelector(".app");
+
+let __previouslyFocused = null;
+let __focusTrapHandler = null;
+
+function _getFocusableWithin(el) {
+  return Array.from(
+    el.querySelectorAll(
+      'a[href], area[href], input:not([disabled]), select:not([disabled]), textarea:not([disabled]), button:not([disabled]), iframe, object, embed, [tabindex], [contenteditable]'
+    )
+  ).filter((n) => n.tabIndex >= 0);
+}
+
+function showOfflineOverlay(message) {
+  if (offlineMessageEl && message) offlineMessageEl.textContent = message;
+  if (!offlineOverlay) return;
+
+  // mostrar overlay y bloquear app
+  offlineOverlay.removeAttribute("hidden");
+  document.body.classList.add("offline-active");
+  appRoot?.classList.add("offline-blocked");
+  // accesibilidad: guardar foco y mover foco al primer elemento interactivo del overlay
+  __previouslyFocused = document.activeElement;
+  const focusables = _getFocusableWithin(offlineOverlay);
+  if (focusables.length) {
+    // asegurar que el retry esté enabled
+    btnRetry?.removeAttribute("disabled");
+    focusables[0].focus();
+  } else {
+    offlineOverlay.querySelector(".offline-card")?.focus();
+  }
+
+  // instalar focus-trap: ciclo de tab dentro del overlay
+  __focusTrapHandler = function (e) {
+    if (e.key !== "Tab") return;
+    const focusables = _getFocusableWithin(offlineOverlay);
+    if (focusables.length === 0) {
+      e.preventDefault();
+      return;
+    }
+    const first = focusables[0];
+    const last = focusables[focusables.length - 1];
+    const currently = document.activeElement;
+    if (!e.shiftKey && currently === last) {
+      e.preventDefault();
+      first.focus();
+    } else if (e.shiftKey && currently === first) {
+      e.preventDefault();
+      last.focus();
+    }
+  };
+  document.addEventListener("keydown", __focusTrapHandler, true);
+
+  // Prevent touch/scroll leakage on some mobile browsers (extra guard)
+  document.addEventListener("touchmove", _preventScrollWhileOffline, { passive: false });
+}
+
+function hideOfflineOverlay() {
+  if (!offlineOverlay) return;
+  offlineOverlay.setAttribute("hidden", "true");
+  document.body.classList.remove("offline-active");
+  appRoot?.classList.remove("offline-blocked");
+
+  // restore focus
+  try {
+    if (__previouslyFocused && typeof __previouslyFocused.focus === "function") {
+      __previouslyFocused.focus();
+    }
+  } catch (e) {}
+
+  // remove focus trap
+  if (__focusTrapHandler) {
+    document.removeEventListener("keydown", __focusTrapHandler, true);
+    __focusTrapHandler = null;
+  }
+  document.removeEventListener("touchmove", _preventScrollWhileOffline, { passive: false });
+}
+
+function _preventScrollWhileOffline(e) {
+  e.preventDefault();
+}
+
+/* ----------------- fetchWithTimeout (igual) ----------------- */
+async function fetchWithTimeout(url, opts = {}, ms = 5000) {
+  const controller = new AbortController();
+  const id = setTimeout(() => controller.abort(), ms);
+  try {
+    const res = await fetch(url, { signal: controller.signal, ...opts });
+    clearTimeout(id);
+    return res;
+  } catch (err) {
+    clearTimeout(id);
+    throw err;
+  }
+}
+
+/* ----------------- btnRetry: intenta reconectar PERO NUNCA OCULTA EL OVERLAY DIRECTAMENTE  ----------------- */
+btnRetry?.addEventListener("click", async () => {
+  if (!btnRetry) return;
+  // evitar múltiples clicks
+  btnRetry.setAttribute("disabled", "true");
+  btnRetry.setAttribute("aria-busy", "true");
+  offlineMessageEl.textContent = "Intentando reconectar...";
+
+  // Intentaremos obtener las tareas forzando fetch; listarTareas(true) está preparada para
+  // ocultar el overlay SOLO si consigue respuesta válida del servidor.
+  try {
+    await listarTareas(true);
+    // si listarTareas tuvo éxito, será quien oculte el overlay; aquí sólo limpiamos atributos.
+  } catch (err) {
+    // listarTareas ya muestra overlay/mensaje en caso de fallo; reactivar botón para nuevo intento
+    btnRetry.removeAttribute("disabled");
+    btnRetry.removeAttribute("aria-busy");
+    // actualizar mensaje si es necesario (listarTareas ya llama showNotification)
+    offlineMessageEl.textContent = "No se pudo reconectar. Intentar de nuevo.";
+  }
+});
+
+/* ----------------- online/offline events: NUNCA ocultar overlay automáticamente al 'online' ----------------- */
+window.addEventListener("offline", () => {
+  showOfflineOverlay("Parece que estás desconectado. Revisa tu conexión a internet.");
+});
+
+window.addEventListener("online", async () => {
+  // no quitamos overlay aquí; intentamos forzar una reconexión segura
+  if (!offlineOverlay || offlineOverlay.hasAttribute("hidden")) return;
+  offlineMessageEl.textContent = "Volviste online. Verificando conexión con el servidor...";
+  // deshabilitar retry momentáneamente (evitar floods)
+  btnRetry?.setAttribute("disabled", "true");
+  try {
+    await listarTareas(true); // listarTareas ocultará overlay si la verificación es OK
+  } catch (e) {
+    btnRetry?.removeAttribute("disabled");
+    offlineMessageEl.textContent = "No se pudo conectar al servidor. Intenta de nuevo.";
+  }
+});
+
+/* --------------------- Modificación de listarTareas ---------------------
+   Reemplaza la parte donde haces: const res = await fetch(apiUrl);
+   por la siguiente implementación completa (sustituye tu función listarTareas por ésta).
+*/
 let isLoadingTareas = false;
 async function listarTareas(forceFetch = false) {
   try {
     const emptyState = document.getElementById("emptyState");
 
     // Ocultar siempre antes de iniciar la carga
-    emptyState.style.display = "none";
+    if (emptyState) emptyState.style.display = "none";
 
     if (forceFetch) {
       isLoadingTareas = true;
@@ -664,14 +809,33 @@ async function listarTareas(forceFetch = false) {
 
     // === FETCH SOLO CUANDO SE NECESITE ===
     if (!tareasCacheCargadas || forceFetch) {
-      const res = await fetch(apiUrl);
+      let res;
+      try {
+        // ajusta el timeout (ms) si quieres ser más estricto
+        res = await fetchWithTimeout(apiUrl, {}, 6000);
+      } catch (err) {
+        // error de red o timeout -> mostrar overlay y notificación
+        const msg = navigator.onLine
+          ? "No se pudo conectar al servidor. Comprueba que el backend esté levantado."
+          : "Sin conexión a internet.";
+        showNotification(msg, "error");
+        showOfflineOverlay(msg);
+        isLoadingTareas = false;
+        return; // salimos; no intentamos parsear body
+      }
+
       const body = await safeJson(res);
 
       if (!res.ok) {
-        showNotification(body?.error || "Error al obtener tareas", "error");
+        const errMsg = body?.error || `Error ${res.status} al obtener tareas.`;
+        showNotification(errMsg, "error");
+        showOfflineOverlay(errMsg);
         isLoadingTareas = false;
         return;
       }
+
+      // éxito -> ocultar overlay si estaba visible
+      hideOfflineOverlay();
 
       cachedTareas = body?.tareas ?? [];
       tareasCacheCargadas = true;
@@ -685,7 +849,7 @@ async function listarTareas(forceFetch = false) {
     // === BÚSQUEDA ===
     if (currentSearch.trim() !== "") {
       const q = currentSearch.toLowerCase();
-      tareas = tareas.filter(t =>
+      tareas = tareas.filter((t) =>
         (t.descripcion || "").toLowerCase().includes(q)
       );
     }
@@ -738,15 +902,16 @@ async function listarTareas(forceFetch = false) {
     const start = (currentPage - 1) * pageSize;
     const end = start + pageSize;
 
-    
     renderList(tareas.slice(start, end));
     renderPagination(totalPages);
     actualizarContadores();
-
-
   } catch (err) {
     isLoadingTareas = false;
-    showNotification("Error al obtener tareas: " + err, "error");
+    const msg = err?.name === "AbortError"
+      ? "La petición tardó demasiado y fue cancelada."
+      : "Error al obtener tareas: " + String(err);
+    showNotification(msg, "error");
+    showOfflineOverlay(msg);
   }
 }
 
@@ -1325,32 +1490,65 @@ window.ajustarControles = ajustarControles; // si listas tareas dinámicamente
 /* ============================
    EXPANDIR / COLAPSAR SIDEBAR
 ============================ */
-const btnExpandSidebar = document.getElementById("btnExpandSidebar");
-const sidebarEl = document.querySelector(".sidebar");
-const appBody = document.querySelector(".app-body");
+/* ============================
+   JS: controlar expandir/colapsar
+   ============================ */
+(function () {
+  const btnExpand = document.getElementById("btnExpandSidebar");
+  const sidebar = document.getElementById("appSidebar");
+  const controls = document.getElementById("sidebarContent");
+  const appBody = document.querySelector(".app-body") || document.documentElement; // fallback
 
-btnExpandSidebar.addEventListener("click", () => {
-  if (window.innerWidth >= 961) {
-    sidebarEl.classList.toggle("collapsed");
-    // Ajustar padding del content al colapsar/expandir
-    if (sidebarEl.classList.contains("collapsed")) {
-      appBody.style.gridTemplateColumns = "60px 1fr"; // sidebar colapsado
+  // Ajustes iniciales: asegura atributos ARIA correctos
+  function setAria(expanded) {
+    btnExpand.setAttribute("aria-expanded", String(expanded));
+    sidebar.setAttribute("aria-expanded", String(expanded));
+    controls.setAttribute("aria-hidden", String(!expanded));
+  }
+
+  setAria(!sidebar.classList.contains("collapsed"));
+
+  // Toggle principal
+  btnExpand.addEventListener("click", () => {
+    // only on wide screens (como tenías)
+    if (window.innerWidth >= 961) {
+      const willCollapse = !sidebar.classList.contains("collapsed");
+      // Cambiar clases
+      sidebar.classList.toggle("collapsed");
+      btnExpand.classList.toggle("active");
+
+      // Actualizar aria
+      setAria(!willCollapse);
+
+      // Ajustar grid columnas (suavemente)
+      if (appBody && appBody.style) {
+        appBody.style.gridTemplateColumns = sidebar.classList.contains("collapsed")
+          ? "var(--sidebar-collapsed-w) 1fr"
+          : "var(--sidebar-w) 1fr";
+      }
     } else {
-      appBody.style.gridTemplateColumns = "var(--sidebar-w) 1fr"; // sidebar normal
+      // para pantallas pequeñas puedes querer abrir/ocultar distinto; aquí dejamos comportamiento por defecto
+      sidebar.classList.remove("collapsed");
+      btnExpand.classList.remove("active");
+      setAria(true);
     }
-  }
-});
+  });
 
-window.addEventListener("resize", () => {
-  if (window.innerWidth < 961) {
-    sidebarEl.classList.remove("collapsed");
-    appBody.style.gridTemplateColumns = "1fr"; // móvil/mediano
-  } else {
-    // restaurar estado según colapsado
-    appBody.style.gridTemplateColumns = sidebarEl.classList.contains(
-      "collapsed"
-    )
-      ? "60px 1fr"
-      : "var(--sidebar-w) 1fr";
-  }
-});
+  // Responsivo: restaurar estado correcto al redimensionar
+  window.addEventListener("resize", () => {
+    if (window.innerWidth < 961) {
+      // en móvil siempre expandido (o tu lógica)
+      sidebar.classList.remove("collapsed");
+      btnExpand.classList.remove("active");
+      setAria(true);
+      if (appBody && appBody.style) appBody.style.gridTemplateColumns = "1fr";
+    } else {
+      // restaurar grid acorde al estado actual
+      if (appBody && appBody.style) {
+        appBody.style.gridTemplateColumns = sidebar.classList.contains("collapsed")
+          ? "var(--sidebar-collapsed-w) 1fr"
+          : "var(--sidebar-w) 1fr";
+      }
+    }
+  });
+})();

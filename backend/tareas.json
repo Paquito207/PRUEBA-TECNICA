@@ -91,7 +91,7 @@
 }, {
   "id" : 16,
   "descripcion" : "Generar backups completos",
-  "completada" : true,
+  "completada" : false,
   "fechaCreacion" : "2025-11-01T13:00:00",
   "prioridad" : "Media"
 }, {
@@ -277,7 +277,7 @@
 }, {
   "id" : 47,
   "descripcion" : "Realizar pruebas de estrés",
-  "completada" : true,
+  "completada" : false,
   "fechaCreacion" : "2025-11-01T13:00:00",
   "prioridad" : "Media"
 }, {
@@ -366,10 +366,10 @@
   "prioridad" : "Alta"
 }, {
   "id" : 62,
-  "descripcion" : "Definir workflow de despliegue",
-  "completada" : true,
+  "descripcion" : "Definir workflow de despliegueii",
+  "completada" : false,
   "fechaCreacion" : "2025-11-01T08:00:00",
-  "prioridad" : "Media"
+  "prioridad" : "Alta"
 }, {
   "id" : 63,
   "descripcion" : "Crear plantilla para exportación CSV",
@@ -457,7 +457,7 @@
 }, {
   "id" : 77,
   "descripcion" : "Configurar workers para procesamiento",
-  "completada" : true,
+  "completada" : false,
   "fechaCreacion" : "2025-11-01T13:00:00",
   "prioridad" : "Media"
 }, {
@@ -547,9 +547,9 @@
 }, {
   "id" : 92,
   "descripcion" : "Agregar recordatorios automáticos",
-  "completada" : true,
+  "completada" : false,
   "fechaCreacion" : "2025-11-01T08:00:00",
-  "prioridad" : "Baja"
+  "prioridad" : "Media"
 }, {
   "id" : 93,
   "descripcion" : "Preparar plantillas HTML para correos",
@@ -1169,12 +1169,6 @@
   "fechaCreacion" : "2025-11-14T16:00:00",
   "prioridad" : "Alta"
 }, {
-  "id" : 196,
-  "descripcion" : "Optimizar carga de módulos diferidos",
-  "completada" : true,
-  "fechaCreacion" : "2025-11-15T17:00:00",
-  "prioridad" : "Baja"
-}, {
   "id" : 197,
   "descripcion" : "Agregar modo de pruebas para admins",
   "completada" : false,
@@ -1204,4 +1198,10 @@
   "completada" : false,
   "fechaCreacion" : "2025-11-15T11:42:19.3488282",
   "prioridad" : "Alta"
+}, {
+  "id" : 202,
+  "descripcion" : "na",
+  "completada" : false,
+  "fechaCreacion" : "2025-11-15T13:48:03.2941669",
+  "prioridad" : "Media"
 } ]

@@ -2,7 +2,7 @@
   /* Paleta base (colores modificables SOLO mediante variables) */
   --bg: #ffffff;
   --surface: #ffffff;
-  --panel-bg: #fafafa;
+  --panel-bg: #eeeeee;
   --muted: #6b6b6b;
   --text: #111111;
   --card-shadow: 0 6px 22px rgba(16, 24, 40, 0.06);
@@ -42,50 +42,53 @@
 
   --task-completed-bg: #eef7ec;
   --task-completed-border: rgba(29, 78, 31, 0.08);
+
+  --prioridades-alta: #ff5f5f;   /* rojo brillante sobre fondo oscuro */
+  --prioridades-media: #ffd966;  /* amarillo más cálido y visible */
+  --prioridades-baja: #4ade80; 
+  --tex-prioridades: #000;
 }
+
 
 /* === MODO OSCURO === */
 :root.dark {
-  --bg: #06080d;
-  --surface: #0c1018;
-  --panel-bg: #111621;
-  --muted: #8fa3c0;
-  --text: #e6ecf7;
+  --bg: #0c001f;
+  --surface: #180033;
+  --panel-bg: #220046;
+  --muted: #b1a0c7;
+  --text: #f0eaff;
+  --card-shadow: 0 6px 22px rgba(0,0,20,0.7);
+  --card-shadow-hover: 0 10px 30px rgba(0,0,20,0.78);
+  --header-shadow: 0 8px 30px rgba(10,0,30,0.65);
+  --accent: #79087b;
+  --text-2: #ff9aff;
+  --success: #4cff91;
+  --danger: #ff416c;
+  --alta: #ff416c;
+  --media: #aa87b3;
+  --baja: #6f5275;
+  --completed-bg: rgba(255,61,255,0.05);
 
-  --accent: #0244c8;
-  --text-2: #3c7dff;
+  --border: rgba(255,255,255,0.02);
+  --panel-border: rgba(255,255,255,0.015);
+  --input-border: rgba(255,255,255,0.02);
+  --btn-bg: #180033;
+  --btn-border: rgba(255,255,255,0.015);
+  --badge-bg: rgba(255,61,255,0.07);
+  --badge-border: rgba(255,61,255,0.12);
 
-  --success: #29d48a;
-  --danger: #ff5a5a;
+  --scroll-thumb: rgba(255,255,255,0.05);
+  --scroll-thumb-hover: rgba(255,255,255,0.09);
 
-  --alta: #ff6f6f;
-  --media: #cdd6e5;
-  --baja: #7a8698;
+  --task-pending-bg: rgba(255,255,255,0.01);
+  --task-pending-border: rgba(255,255,255,0.02);
+  --task-completed-bg: rgba(255,61,255,0.05);
+  --task-completed-border: rgba(255,61,255,0.1);
 
-  --completed-bg: #0a0d13;
-
-  --card-shadow: 0 6px 22px rgba(0, 0, 0, 0.55);
-  --card-shadow-hover: 0 10px 26px rgba(0, 0, 0, 0.55);
-  --header-shadow: 0 8px 30px rgba(0, 0, 0, 0.55);
-
-  --border: #1f2633;
-  --panel-border: #191f2a;
-  --input-border: #1f2633;
-
-  --btn-bg: var(--surface);
-  --btn-border: #1f2633;
-
-  --badge-bg: #131823;
-  --badge-border: #1c2330;
-
-  --scroll-thumb: #2a3547;
-  --scroll-thumb-hover: #3a4862;
-
-  --task-pending-bg: #121316;
-  --task-pending-border: rgba(255, 255, 255, 0.04);
-
-  --task-completed-bg: #16321a;
-  --task-completed-border: rgba(16, 74, 27, 0.12);
+   --prioridades-alta: #aa1313;
+  --prioridades-media: #a48710;
+  --prioridades-baja: #12a749;
+  --tex-prioridades: #000;
 }
 
 /* Reset y estructura base */
@@ -130,22 +133,6 @@ body {
   border-radius: 12px;
 }
 
-/* Ajuste visual: si se desea efecto translúcido en light, se puede combinar con --surface */
-:root:not(.dark) .header {
-  background: linear-gradient(
-    180deg,
-    rgba(255, 255, 255, 0.9),
-    rgba(255, 255, 255, 0.85)
-  );
-}
-:root.dark .header {
-  background: linear-gradient(
-    180deg,
-    rgba(26, 26, 29, 0.9),
-    rgba(26, 26, 29, 0.92)
-  );
-}
-
 .title {
   margin: 0;
   font-size: 20px;
@@ -184,6 +171,7 @@ body {
 
 /* Sidebar */
 .sidebar {
+  text-align: center;
   background: var(--surface);
   border-radius: var(--radius);
   padding: 18px 20px;
@@ -196,6 +184,11 @@ body {
   display: flex;
   flex-direction: column;
   gap: 22px;
+}
+.sidebar-header {
+  display: flex;                 /* elementos en fila */
+  justify-content: space-between; /* texto a la izquierda, botón a la derecha */
+  align-items: center;           /* alineación vertical */
 }
 
 /* Grupo general */
@@ -351,37 +344,145 @@ body {
   color: var(--muted);
 }
 
-.group {
+/* ==============================
+   CONTENEDOR PRINCIPAL
+   ============================== */
+.gestion {
+  display: block;
+  max-width: 980px;
+  margin: 0 auto;
+  padding: 16px;
+  background: var(--panel-bg);
+  border-radius: 12px;
+  box-shadow: var(--card-shadow);
+}
+
+/* Top: dos áreas (izq = prioridad, der = acciones) */
+.actions-top {
   display: flex;
-  gap: 10px;
+  gap: 16px;
+  align-items: center;
+  justify-content: space-between;
   flex-wrap: wrap;
 }
 
-.gestion .btn {
-  padding: 8px 12px;
-  border-radius: 10px;
-  background: var(--btn-bg);
-  border: 1px solid var(--btn-border);
-  cursor: pointer;
+/* left / right */
+.actions-top .left {
+  display: flex;
+  gap: 16px;
+  align-items: center;
+  min-width: 220px;
+}
+
+.actions-top .right {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  justify-content: flex-end;
+  flex: 1 1 auto;
+  min-width: 280px;
+}
+
+/* selector + aplicar (alineados) */
+.priority-inline {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+/* ==============================
+   LAYOUT PRINCIPAL PARA ACCIONES
+   ============================== */
+/* contenedor superior con 3 zonas posibles: left / center / right */
+.actions-top {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: nowrap;             /* fuerza una sola línea en pantallas amplias */
+  width: 100%;
+  column-gap: 14px;
+  row-gap: 6px;
+}
+
+/* zonas internas: mantienen los elementos en línea */
+.actions-top .left,
+.actions-top .center,
+.actions-top .right {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  flex-wrap: nowrap;            /* evitar salto de línea dentro de cada zona */
+}
+
+/* utilidad: fila única, evita wrap y controla overflow */
+.single-row {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  flex-wrap: nowrap;
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+/* si algún elemento es largo, truncarlo en lugar de romper la fila */
+.single-row > * {
+  min-width: 0;                /* permite que flex-shrink funcione */
+}
+
+/* ==============================
+   GRUPOS INTERNOS
+   ============================== */
+.group {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  flex-wrap: nowrap;           /* un solo renglón por grupo */
+}
+
+/* acciones principales agrupadas con separación visual */
+.actions-group {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  flex-wrap: nowrap;
+}
+
+/* export - csv y json en la misma fila */
+.export-group {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  flex-wrap: nowrap;
+}
+
+/* ==============================
+   SELECT-ALL y CHECKBOX
+   ============================== */
+.select-all {
+  display: inline-flex;
+  gap: 8px;
+  align-items: center;
   font-size: 14px;
-  transition: var(--animation-time);
   color: var(--text);
+  flex-shrink: 0;
+}
+.select-all input[type="checkbox"] {
+  width: 16px;
+  height: 16px;
+  accent-color: var(--success);
+  flex-shrink: 0;
 }
 
-.gestion .btn:hover {
-  background: var(--panel-bg);
+/* ==============================
+   SELECT (PRIORIDAD) - asegurar una sola fila
+   ============================== */
+.gestion {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: nowrap;
 }
-
-.gestion .btn.danger {
-  background: var(--danger);
-  color: var(--surface);
-  border: none;
-}
-
-.gestion .btn.danger:hover {
-  filter: brightness(1.05);
-}
-
 .gestion select {
   padding: 8px 10px;
   border-radius: 10px;
@@ -389,7 +490,130 @@ body {
   font-size: 14px;
   background: var(--surface);
   color: var(--text);
+  cursor: pointer;
+  min-width: 180px;
+  max-width: 320px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
+
+/* ==============================
+   BOTONES: mantener en la misma línea
+   ============================== */
+.btn {
+  display: inline-flex;
+  gap: 8px;
+  align-items: center;
+  padding: 8px 12px;
+  border-radius: 10px;
+  border: 1px solid var(--btn-border);
+  background: var(--btn-bg);
+  color: var(--text);
+  font-weight: 400;
+  font-size: 14px;
+  cursor: pointer;
+  transition: transform 120ms ease, box-shadow 150ms ease, background 150ms ease, border-color 150ms ease;
+  box-shadow: 0 1px 0 rgba(0,0,0,0.02);
+  line-height: 1;
+  flex-shrink: 0;
+}
+
+/* botones agrupados que deben permanecer en la misma línea */
+.btn-group {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  flex-wrap: nowrap;
+}
+
+/* ejemplos semánticos: marcar completas/pendientes en la misma línea */
+.bulk-toggle { display: inline-flex; gap: 5px; align-items: center; flex-wrap: nowrap; }
+
+/* eliminar y aplicar juntos */
+.apply-delete { display: inline-flex; align-items: center; flex-wrap: nowrap; }
+
+/* export csv/json juntos */
+.export-actions { display: inline-flex; gap: 8px; align-items: center; flex-wrap: nowrap; }
+
+/* focus visible accesible */
+.btn:focus {
+  outline: none;
+  box-shadow: 0 0 0 4px color-mix(in srgb, var(--accent) 12%, transparent 88%);
+  border-color: var(--accent);
+}
+
+/* estados disabled */
+.btn[disabled], .btn:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+/* SVG dentro del botón */
+.btn .ico {
+  width: 16px;           /* tamaño más reducido */
+  height: 16px;
+  flex-shrink: 0;        /* que no se encoja */
+  margin-right: 6px;     /* espacio entre icono y texto */
+  vertical-align: middle;
+  display: inline-block;
+}
+#btnExportJSON {
+  background: var(--prioridades-media);
+}
+
+#btnExportCSV{
+  background: var(--prioridades-baja);
+}
+
+.export-separator {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-muted);
+  margin: 16px 0 8px; /* separa de la sección anterior y de los botones */
+  text-align: center;
+  border-bottom: 1px solid var(--text); /* línea inferior */
+  padding-bottom: 4px;
+  width: 100%;
+}
+
+/* ==============================
+   AJUSTES RESPONSIVE: apilar en pantallas pequeñas
+   ============================== */
+@media (max-width: 720px) {
+  .actions-top {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+
+  .actions-top .left,
+  .actions-top .center,
+  .actions-top .right {
+    justify-content: space-between;
+    width: 100%;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+
+  /* componentes que antes no hacían wrap ahora sí para mejorar legibilidad */
+  .single-row,
+  .group,
+  .actions-group,
+  .export-group,
+  .btn-group,
+  .bulk-toggle,
+  .apply-delete,
+  .export-actions {
+    flex-wrap: wrap;
+    justify-content: flex-start;
+  }
+
+  .gestion select { min-width: 140px; width: 100%; }
+}
+
 
 /* SCROLLBAR REFINADA */
 ::-webkit-scrollbar {
@@ -511,11 +735,7 @@ body {
   gap: 8px;
   flex-wrap: wrap;
 }
-.group #btnAplicarPrioridad,
-#btnOrdenar {
-  background: var(--accent);
-  color: var(--surface);
-}
+
 .select-all {
   display: flex;
   align-items: center;
@@ -523,12 +743,6 @@ body {
   color: var(--muted);
 }
 
-/* Checkbox */
-.sel-checkbox {
-  width: 18px;
-  height: 18px;
-  margin-top: 4px;
-}
 
 /* Texto */
 .descripcion {
@@ -902,12 +1116,31 @@ button.small.danger {
   color: var(--text);
 }
 
+
 /* Checkbox */
 .sel-checkbox {
   width: 18px;
   height: 18px;
   flex-shrink: 0;
   margin-top: 3px;
+}
+/* Badges y checkbox posición absoluta */
+.task-grid.mini .priority-label,
+.task-grid.mini .status-badge {
+  position: absolute;
+  top: 8px;
+  left: 8px;
+  z-index: 12;
+  white-space: nowrap;
+}
+
+.task-grid.mini .sel-checkbox {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  width: 18px;
+  height: 18px;
+  z-index: 12;
 }
 
 /* ==============================
@@ -998,24 +1231,6 @@ button.small.danger {
   max-height: none;
 }
 
-/* Badges y checkbox posición absoluta */
-.task-grid.mini .priority-label,
-.task-grid.mini .status-badge {
-  position: absolute;
-  top: 8px;
-  left: 8px;
-  z-index: 12;
-  white-space: nowrap;
-}
-
-.task-grid.mini .sel-checkbox {
-  position: absolute;
-  top: 8px;
-  right: 8px;
-  width: 18px;
-  height: 18px;
-  z-index: 12;
-}
 
 /* Botones en miniatura al borde inferior */
 .task-grid.mini .controls {
@@ -1675,67 +1890,437 @@ button.small.danger {
     text-overflow: ellipsis; 
   }
 }
+/* =========================
+   VARIABLES útiles
+   ========================= */
+:root{
+  --sidebar-w: 320px;
+  --sidebar-collapsed-w: 72px;
+  --transition-fast: 220ms;
+  --transition-medium: 350ms;
+  --border: #e6e6e6;
+  --text: #111;
+  --text-muted: #666;
+  --btn-bg: #fff;
+  --panel-bg: #f9f9fb;
+}
 
-/* Botón expand/collapse para sidebar */
+/* ==============================
+   SIDEBAR: contenedor y animación de ancho
+   ============================== */
+.sidebar {
+  width: var(--sidebar-w);
+  min-width: 0;
+  box-sizing: border-box;
+  background: var(--panel-bg);
+  border-right: 1px solid var(--border);
+  overflow: hidden; /* importante para que el contenido no desborde durante el cambio de width */
+  transition: width var(--transition-medium) cubic-bezier(.2,.9,.2,1);
+  will-change: width;
+  overflow-y: auto;
+}
+
+/* estado colapsado: ancho pequeño */
+.sidebar.collapsed {
+  width: var(--sidebar-collapsed-w);
+}
+
+/* ==============================
+   CABECERA (titulo + botón)
+   ============================== */
+.sidebar-header {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 60px;
+  padding: 8px 12px;
+  box-sizing: border-box;
+}
+
+/* texto del header se oculta cuando colapsa (fade out) */
+.sidebar-header p {
+  margin: 0;
+  z-index: 2;
+  transition: opacity var(--transition-fast) ease, transform var(--transition-fast) ease;
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* cuando está colapsado, ocultamos inmediatamente el texto (no esperar la expansión) */
+.sidebar.collapsed .sidebar-header p {
+  opacity: 0;
+  transform: translateY(-4px);
+  pointer-events: none;
+}
+
+/* BOTÓN expand/collapse */
 .btn-expand-sidebar {
-  position: relative; 
-  top: 0;
-  left: 0;
+  position: absolute;
+  right: 0;
+  top: 50%;
+  transform: translateY(-50%);
   background: var(--btn-bg);
-  border: 1px solid var(--btn-border);
+  border: 1px solid var(--text);
   border-radius: 6px;
-  padding: 8px 10px; 
+  padding: 6px 7px;
   cursor: pointer;
-  z-index: 50;
-  display: none;
-  transition: all 0.3s ease;
-  font-size: 16px;
+  z-index: 30;
+  display: none; /* aparece solo en pantallas grandes */
+  transition: transform 180ms ease, opacity 180ms ease;
 }
 
 /* Mostrar solo en pantallas grandes */
 @media (min-width: 961px) {
   .btn-expand-sidebar {
-    display: flex;
+    display: inline-flex;
     align-items: center;
     justify-content: center;
-    margin-bottom: 12px; 
   }
 }
 
-/* Sidebar colapsado */
-.sidebar.collapsed {
-  width: 80px; 
-  overflow: hidden;
-  transition: width 0.3s ease;
+/* Mover 4px a la derecha cuando el sidebar está colapsado */
+.sidebar.collapsed .btn-expand-sidebar {
+  transform: translateY(-50%) translateX(4px);
 }
 
-/* Ocultar elementos internos en colapsado */
-.sidebar.collapsed .controls-area,
-.sidebar.collapsed .form,
-.sidebar.collapsed .sidebar-counters {
-  display: none;
+
+/* mostrar botón en pantallas >= 961 */
+@media (min-width: 961px) {
+  .btn-expand-sidebar { display: inline-flex; align-items:center; justify-content:center; }
 }
 
-/* Adaptar contenedor principal al sidebar colapsado */
+/* ==============================
+   HAMBURGER -> X (mejor animación)
+   ============================== */
+.hamburger-icon .line {
+  transform-origin: center;
+  transition: transform 220ms cubic-bezier(.2,.9,.2,1), opacity 160ms ease;
+  stroke: currentColor;
+}
+
+.btn-expand-sidebar.active .line1 {
+  transform: translateY(6px) rotate(45deg);
+}
+.btn-expand-sidebar.active .line2 {
+  opacity: 0;
+  transform: scaleX(0);
+}
+.btn-expand-sidebar.active .line3 {
+  transform: translateY(-6px) rotate(-45deg);
+}
+
+/* ==============================
+   CONTENIDO: aparece solo cuando está expandido
+   ============================== */
+/* contenedor que se muestra/oculta suavemente */
+.controls-area {
+  opacity: 1;
+  transform: translateX(0);
+  transition:
+    opacity var(--transition-fast) ease var(--transition-medium), /* delay on expand */
+    transform var(--transition-fast) ease var(--transition-medium);
+  /* al expandir: delay igual al tiempo de la animación width para que el contenido aparezca después */
+}
+
+/* cuando colapsa: quitar delay (ocultar inmediatamente) */
+.sidebar.collapsed .controls-area {
+  opacity: 0;
+  transform: translateX(-8px);
+  transition:
+    opacity var(--transition-fast) ease 0ms,
+    transform var(--transition-fast) ease 0ms;
+  pointer-events: none; /* evitar interacción mientras está oculto */
+}
+
+/* accesibilidad: aria-hidden true/false será gestionado por JS,
+   pero la CSS anterior ya oculta visualmente el contenido */
+
+/* también podemos restringir la altura en colapsado para mayor seguridad */
+.controls-area > * {
+  will-change: opacity, transform;
+}
+/* Evitar desbordamiento del bloque de gestión */
+.gestion {
+  box-sizing: border-box;       /* asegurar que padding no aumente ancho */
+  width: 100%;                  /* ocupar todo el ancho del contenedor */
+  max-width: 100%;              /* no exceder el ancho del sidebar */
+  overflow: hidden;             /* evitar desbordamiento visual */
+  transition: opacity var(--transition-fast) ease, transform var(--transition-fast) ease;
+}
+
+/* animación al expandir/colapsar */
+.sidebar.collapsed .gestion {
+  opacity: 0;
+  transform: translateX(-8px); /* mover ligeramente al ocultar */
+  pointer-events: none;        /* desactivar interacción mientras está oculto */
+}
+
+.sidebar:not(.collapsed) .gestion {
+  opacity: 1;
+  transform: translateX(0);
+  pointer-events: auto;        /* permitir interacción cuando está visible */
+}
+
+/* ==============================
+   Pequeños estilos internos (botones/iconos)
+   ============================== */
+.btn { /* sin negrita, consistente con lo que pediste */
+  display: inline-flex;
+  gap: 8px;
+  align-items: center;
+  padding: 8px 12px;
+  border-radius: 10px;
+  border: 1px solid var(--border);
+  background: var(--btn-bg);
+  color: var(--text);
+  font-weight: 400;
+  font-size: 14px;
+  cursor: pointer;
+  box-shadow: 0 1px 0 rgba(0,0,0,0.02);
+  line-height: 1;
+}
+
+.btn .ico { width: 16px; height: 16px; flex-shrink: 0; margin-right: 6px; }
+
+/* separador */
+.export-separator {
+  font-size: 12px;
+  font-weight: 400;
+  color: var(--text-muted);
+  margin: 12px 0 8px;
+  text-align: center;
+  border-bottom: 1px solid var(--border);
+  padding-bottom: 6px;
+  width: 100%;
+}
+
+/* grupos y filas (resumen, reutiliza tus clases anteriores) */
+.single-row, .btn-group, .bulk-toggle, .apply-delete, .export-actions {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+/* cuando el sidebar está colapsado, oculta con css visual */
+.sidebar.collapsed .btn, .sidebar.collapsed .select-all, .sidebar.collapsed .btn-theme {
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* opcional: transición para el grid principal (app-body) */
 .app-body {
   display: grid;
-  grid-template-columns: var(--sidebar-w) 1fr; 
-  gap: var(--gap);
-  transition: grid-template-columns 0.3s ease;
+  grid-template-columns: var(--sidebar-w) 1fr;
+  gap: 16px;
+  transition: grid-template-columns var(--transition-medium) cubic-bezier(.2,.9,.2,1);
 }
 
-/* Ajuste dinámico al colapsar/expandir (usar JS) */
-.sidebar.collapsed ~ .content {
-  grid-column: 2; 
-}
+
 
 /* Content card: ocupa todo el espacio disponible */
 .content-card {
-  background: var(--surface);
-  border-radius: var(--radius);
   padding: 16px; 
-  border: 1px solid var(--border);
-  box-shadow: var(--card-shadow);
   width: 100%;
   transition: width 0.3s ease, padding 0.3s ease;
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* OVERLAY FULLSCREEN */
+#offlineOverlay {
+  position: fixed;
+  inset: 0;
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 999999;
+  background: rgba(0,0,0,0.66);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  transition: opacity 180ms ease, visibility 180ms ease;
+}
+.offline-blocked * {
+  pointer-events: none; /* deshabilita todo debajo */
+}
+
+#offlineOverlay[hidden] {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+.offline-card {
+  width: min(720px, 92vw);
+  background: var(--card-bg, #fff);
+  color: var(--text, #222);
+  border-radius: 12px;
+  padding: 22px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.35);
+  text-align: center;
+  display: grid;
+  gap: 12px;
+  align-items: center;
+  pointer-events: auto;
+}
+.offline-title {
+  font-size: 20px;
+  font-weight: 700;
+  margin: 0;
+}
+.offline-desc {
+  font-size: 14px;
+  color: var(--muted, #b0b6bf);
+  line-height: 1.4;
+  max-width: 64ch;
+}
+.offline-actions {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  margin-top: 6px;
+  flex-wrap: wrap;
+}
+.btn-offline {
+  padding: 8px 14px;
+  border-radius: 8px;
+  border: 0;
+  cursor: pointer;
+  font-weight: 600;
+  min-width: 120px;
+}
+.btn-retry {
+  background: #0b84ff;
+  color: white;
+}
+.offline-spinner {
+  width: 36px;
+  height: 36px;
+  margin: 0 auto;
+  border-radius: 50%;
+  border: 4px solid rgba(0,0,0,0.08);
+  border-top-color: rgba(0,0,0,0.45);
+  animation: spin 1s linear infinite;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+
+/* BLOQUEO SCROLL Y INTERACCIÓN */
+body.offline-active {
+  overflow: hidden !important;
+  touch-action: none !important;
+  height: 100vh;
+}
+.app.offline-blocked {
+  pointer-events: none;
+  user-select: none;
+  -webkit-user-select: none;
+}
+#offlineOverlay .offline-card:focus { outline: none; }
+:root .dark #offlineOverlay .offline-card {
+  background: #0f1720;
+  color: #e6eef8;
+  border: 1px solid rgba(255,255,255,0.04);
+}
+
+
+
+
+/* Tareas completadas: tachado + opacidad */
+#listaTareas li.completed .descripcion {
+  text-decoration: line-through;
+  opacity: 0.5;
+  transition: opacity 0.3s, color 0.3s;
+}
+
+/* Opcional: ajustar controles de la tarea completada */
+#listaTareas li.completed .controls button,
+#listaTareas li.completed .controls select {
+  opacity: 0.6;
+  pointer-events: auto; /* si quieres permitir interacción, sino poner none */
+}
+
+/* Hover para enfatizar si quieres */
+#listaTareas li.completed:hover .descripcion {
+  opacity: 0.7;
+}
+
+/* Checkbox y descripción */
+#listaTareas li .left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+#listaTareas li .left input[type="checkbox"] {
+  width: 18px;
+  height: 18px;
+  accent-color: var(--success); /* color del check al seleccionarlo */
+  border: 2px solid var(--input-border); /* borde más visible */
+  border-radius: 4px;
+  cursor: pointer;
+  transition: transform 0.15s, box-shadow 0.15s, border-color 0.2s, background-color 0.2s;
+}
+
+#listaTareas li .left input[type="checkbox"]:hover {
+  transform: scale(1.1);
+  box-shadow: 0 0 3px rgba(0,0,0,0.2);
+  border-color:  var(--accent); /* borde más destacado al pasar el mouse */
+}
+
+
+#listaTareas li .descripcion {
+  font-size: 15px;
+  color: #333;
+  max-width: 400px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  transition: color 0.2s, opacity 0.2s;
+}
+
+#listaTareas li .descripcion.expanded {
+  white-space: normal;
+}
+
+/* Prioridad */
+.priority-label {
+  padding: 3px 10px;
+  border-radius: 10px;
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+  display: inline-block;
+  min-width: 55px;
+  text-align: center;
+  transition: background 0.2s, color 0.2s;
+}
+.priority-alta {
+  background: var(--prioridades-alta);
+  color: var(--bg);
+}
+
+.priority-media {
+  background: var(--prioridades-media);
+  color: var(--tex-prioridades);
+}
+
+.priority-baja {
+  background: var(--prioridades-baja);
+  color: var(--bg);
+}
+
+
+
