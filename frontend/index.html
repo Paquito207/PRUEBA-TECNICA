@@ -35,30 +35,64 @@
     </div>
   </div>
   <body>
-<!-- Confirm modal -->
-<div id="confirmOverlay" class="modal-overlay" role="dialog" aria-modal="true" aria-hidden="true">
-  <div class="modal-card" role="document" aria-labelledby="confirmTitle" tabindex="-1">
-    <h3 id="confirmTitle">Confirmar</h3>
-    <div id="confirmBody" class="modal-body">¿Estás seguro?</div>
-    <div class="modal-actions">
-      <button id="confirmCancelBtn" class="btn-modal" type="button">Cancelar</button>
-      <button id="confirmOkBtn" class="btn-modal primary" type="button">Confirmar</button>
+    <!-- Confirm modal -->
+    <div
+      id="confirmOverlay"
+      class="modal-overlay"
+      role="dialog"
+      aria-modal="true"
+      aria-hidden="true"
+    >
+      <div
+        class="modal-card"
+        role="document"
+        aria-labelledby="confirmTitle"
+        tabindex="-1"
+      >
+        <h3 id="confirmTitle">Confirmar</h3>
+        <div id="confirmBody" class="modal-body">¿Estás seguro?</div>
+        <div class="modal-actions">
+          <button id="confirmCancelBtn" class="btn-modal" type="button">
+            Cancelar
+          </button>
+          <button id="confirmOkBtn" class="btn-modal primary" type="button">
+            Confirmar
+          </button>
+        </div>
+      </div>
     </div>
-  </div>
-</div>
 
-<!-- Edit modal -->
-<div id="editOverlay" class="modal-overlay" role="dialog" aria-modal="true" aria-hidden="true">
-  <div class="modal-card" role="document" aria-labelledby="editTitle" tabindex="-1">
-    <h3 id="editTitle">Editar descripción</h3>
-    <div class="meta-row">Tarea: <span id="editTaskId">—</span></div>
-    <textarea id="editTextarea" class="edit-text" aria-label="Descripción"></textarea>
-    <div class="modal-actions" style="margin-top:8px;">
-      <button id="editCancel" class="btn-modal" type="button">Cancelar</button>
-      <button id="editSave" class="btn-modal primary" type="button">Guardar</button>
+    <!-- Edit modal -->
+    <div
+      id="editOverlay"
+      class="modal-overlay"
+      role="dialog"
+      aria-modal="true"
+      aria-hidden="true"
+    >
+      <div
+        class="modal-card"
+        role="document"
+        aria-labelledby="editTitle"
+        tabindex="-1"
+      >
+        <h3 id="editTitle">Editar descripción</h3>
+        <div class="meta-row">Tarea: <span id="editTaskId">—</span></div>
+        <textarea
+          id="editTextarea"
+          class="edit-text"
+          aria-label="Descripción"
+        ></textarea>
+        <div class="modal-actions" style="margin-top: 8px">
+          <button id="editCancel" class="btn-modal" type="button">
+            Cancelar
+          </button>
+          <button id="editSave" class="btn-modal primary" type="button">
+            Guardar
+          </button>
+        </div>
+      </div>
     </div>
-  </div>
-</div>
     <main class="app">
       <header class="header">
         <h1 class="title">To-Do List</h1>
@@ -116,141 +150,284 @@
         <!-- =========================
      HTML (sidebar)
      ========================= -->
-<aside class="sidebar" id="appSidebar" aria-expanded="true">
-  <div>
-    <div class="sidebar-header">
-      <p>Crea una nueva tarea</p>
+        <aside class="sidebar" id="appSidebar" aria-expanded="true">
+          <div>
+            <div class="sidebar-header">
+              <p>Crea una nueva tarea</p>
 
-      <button
-        id="btnExpandSidebar"
-        class="btn-expand-sidebar"
-        title="Expandir/Ocultar Sidebar"
-        aria-controls="sidebarContent"
-        aria-expanded="true"
-        type="button"
-      >
-        <svg width="24" height="24" viewBox="0 0 24 24" class="hamburger-icon" aria-hidden="true" color="var(--text)">
-          <line class="line line1" x1="3" y1="6" x2="21" y2="6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-          <line class="line line2" x1="3" y1="12" x2="21" y2="12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-          <line class="line line3" x1="3" y1="18" x2="21" y2="18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-        </svg>
-      </button>
-    </div>
-  </div>
+              <button
+                id="btnExpandSidebar"
+                class="btn-expand-sidebar"
+                title="Expandir/Ocultar Sidebar"
+                aria-controls="sidebarContent"
+                aria-expanded="true"
+                type="button"
+              >
+                <svg
+                  width="24"
+                  height="24"
+                  viewBox="0 0 24 24"
+                  class="hamburger-icon"
+                  aria-hidden="true"
+                  color="var(--text)"
+                >
+                  <line
+                    class="line line1"
+                    x1="3"
+                    y1="6"
+                    x2="21"
+                    y2="6"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                  />
+                  <line
+                    class="line line2"
+                    x1="3"
+                    y1="12"
+                    x2="21"
+                    y2="12"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                  />
+                  <line
+                    class="line line3"
+                    x1="3"
+                    y1="18"
+                    x2="21"
+                    y2="18"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                  />
+                </svg>
+              </button>
+            </div>
+          </div>
 
-  <!-- CONTENIDO: envuelto en un nodo con id para aria-hidden -->
-  <section class="controls-area" id="sidebarContent" role="region" aria-hidden="false">
-    <!-- Sidebar counters -->
-    <div class="sidebar-counters">
-      <button id="btnThemeSidebar" class="btn-theme" title="Cambiar tema" type="button">
-        <svg id="iconTheme" width="20" height="20" viewBox="0 0 24 24" stroke="currentColor" fill="none" stroke-width="2" aria-hidden="true">
-          <circle cx="12" cy="12" r="4"></circle>
-          <line x1="12" y1="2" x2="12" y2="5"></line>
-          <line x1="12" y1="19" x2="12" y2="22"></line>
-          <line x1="4.22" y1="4.22" x2="6.34" y2="6.34"></line>
-          <line x1="17.66" y1="17.66" x2="19.78" y2="19.78"></line>
-          <line x1="2" y1="12" x2="5" y2="12"></line>
-          <line x1="19" y1="12" x2="22" y2="12"></line>
-          <line x1="4.22" y1="19.78" x2="6.34" y2="17.66"></line>
-          <line x1="17.66" y1="6.34" x2="19.78" y2="4.22"></line>
-        </svg>
-      </button>
+          <!-- CONTENIDO: envuelto en un nodo con id para aria-hidden -->
+          <section
+            class="controls-area"
+            id="sidebarContent"
+            role="region"
+            aria-hidden="false"
+          >
+            <!-- Sidebar counters -->
+            <div class="sidebar-counters">
+              <button
+                id="btnThemeSidebar"
+                class="btn-theme"
+                title="Cambiar tema"
+                type="button"
+              >
+                <svg
+                  id="iconTheme"
+                  width="20"
+                  height="20"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                  fill="none"
+                  stroke-width="2"
+                  aria-hidden="true"
+                >
+                  <circle cx="12" cy="12" r="4"></circle>
+                  <line x1="12" y1="2" x2="12" y2="5"></line>
+                  <line x1="12" y1="19" x2="12" y2="22"></line>
+                  <line x1="4.22" y1="4.22" x2="6.34" y2="6.34"></line>
+                  <line x1="17.66" y1="17.66" x2="19.78" y2="19.78"></line>
+                  <line x1="2" y1="12" x2="5" y2="12"></line>
+                  <line x1="19" y1="12" x2="22" y2="12"></line>
+                  <line x1="4.22" y1="19.78" x2="6.34" y2="17.66"></line>
+                  <line x1="17.66" y1="6.34" x2="19.78" y2="4.22"></line>
+                </svg>
+              </button>
 
-      <div id="totalSidebar" class="counter">Total: 0</div>
-      <div id="pendientesSidebar" class="counter">Pendientes: 0</div>
-    </div>
+              <div id="totalSidebar" class="counter">Total: 0</div>
+              <div id="pendientesSidebar" class="counter">Pendientes: 0</div>
+            </div>
 
-    <form id="formTarea" class="form">
-      <input type="text" id="descripcion" placeholder="Nueva tarea" aria-label="Nueva tarea" required />
-      <p class="p">prioridad</p>
-      <select id="prioridad" aria-label="Prioridad">
-        <option value="Media" selected>Media</option>
-        <option value="Alta">Alta</option>
-        <option value="Baja">Baja</option>
-      </select>
-      <button type="submit" class="btn primary">Agregar</button>
-    </form>
+            <form id="formTarea" class="form">
+              <input
+                type="text"
+                id="descripcion"
+                placeholder="Nueva tarea"
+                aria-label="Nueva tarea"
+                required
+              />
+              <p class="p">prioridad</p>
+              <select id="prioridad" aria-label="Prioridad">
+                <option value="Media" selected>Media</option>
+                <option value="Alta">Alta</option>
+                <option value="Baja">Baja</option>
+              </select>
+              <button type="submit" class="btn primary">Agregar</button>
+            </form>
 
-    <p class="p">Ajustes con selecciòn multiple</p>
+            <p class="p">Ajustes con selecciòn multiple</p>
 
-    <div class="gestion" id="gestion-avanzada">
-      <!-- FILA 1: checkbox -->
-      <div class="single-row">
-        <label class="select-all">
-          <input type="checkbox" id="selectAll" />
-          <span class="label-text">Seleccionar todo</span>
-        </label>
-      </div>
+            <div class="gestion" id="gestion-avanzada">
+              <!-- FILA 1: checkbox -->
+              <div class="single-row">
+                <label class="select-all">
+                  <input type="checkbox" id="selectAll" />
+                  <span class="label-text">Seleccionar todo</span>
+                </label>
+              </div>
 
-      <!-- FILA 2: select prioridad -->
-      <div class="single-row priority-inline">
-        <select id="selCambiarPrioridad" aria-label="Cambiar prioridad">
-          <option value="">-- Cambiar prioridad --</option>
-          <option value="Alta">Alta</option>
-          <option value="Media">Media</option>
-          <option value="Baja">Baja</option>
-        </select>
-      </div>
+              <!-- FILA 2: select prioridad -->
+              <div class="single-row priority-inline">
+                <select id="selCambiarPrioridad" aria-label="Cambiar prioridad">
+                  <option value="">-- Cambiar prioridad --</option>
+                  <option value="Alta">Alta</option>
+                  <option value="Media">Media</option>
+                  <option value="Baja">Baja</option>
+                </select>
+              </div>
 
-      <!-- FILA 3: marcar completadas / pendientes -->
-      <div class="bulk-toggle btn-group">
-        <button id="btnMarcarSeleccionadas" class="btn btn-primary" type="button">
-          <svg class="ico" viewBox="0 0 24 24" aria-hidden="true">
-            <path d="M20 6L9 17l-5-5" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
-          </svg>
-          completadas
-        </button>
+              <!-- FILA 3: marcar completadas / pendientes -->
+              <div class="bulk-toggle btn-group">
+                <button
+                  id="btnMarcarSeleccionadas"
+                  class="btn btn-primary"
+                  type="button"
+                >
+                  <svg class="ico" viewBox="0 0 24 24" aria-hidden="true">
+                    <path
+                      d="M20 6L9 17l-5-5"
+                      stroke="currentColor"
+                      stroke-width="2"
+                      fill="none"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                    />
+                  </svg>
+                  completadas
+                </button>
 
-        <button id="btnMarcarPendientes" class="btn btn-secondary" type="button">
-          <svg class="ico" viewBox="0 0 24 24" aria-hidden="true">
-            <circle cx="12" cy="12" r="8" stroke="currentColor" stroke-width="2" fill="none"/>
-            <path d="M12 8v4l2 2" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
-          </svg>
-          Pendientes
-        </button>
-      </div>
+                <button
+                  id="btnMarcarPendientes"
+                  class="btn btn-secondary"
+                  type="button"
+                >
+                  <svg class="ico" viewBox="0 0 24 24" aria-hidden="true">
+                    <circle
+                      cx="12"
+                      cy="12"
+                      r="8"
+                      stroke="currentColor"
+                      stroke-width="2"
+                      fill="none"
+                    />
+                    <path
+                      d="M12 8v4l2 2"
+                      stroke="currentColor"
+                      stroke-width="2"
+                      fill="none"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                    />
+                  </svg>
+                  Pendientes
+                </button>
+              </div>
 
-      <!-- FILA 4: eliminar / aplicar -->
-      <div class="apply-delete btn-group">
-        <button id="btnEliminarSeleccionadas" class="btn btn-danger" type="button">
-          <svg class="ico" viewBox="0 0 24 24" aria-hidden="true">
-            <path d="M3 6h18M8 6v14a2 2 0 0 0 2 2h4a2 2 0 0 0 2-2V6" stroke="currentColor" stroke-width="1.4" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
-          </svg>
-          Eliminar
-        </button>
-        <button id="btnAplicarPrioridad" class="btn btn-ghost" type="button">
-          <svg class="ico" viewBox="0 0 24 24" width="14" height="14" aria-hidden="true">
-            <path d="M5 12h14M12 5l7 7-7 7" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
-          </svg>
-          Aplicar
-        </button>
-      </div>
+              <!-- FILA 4: eliminar / aplicar -->
+              <div class="apply-delete btn-group">
+                <button
+                  id="btnEliminarSeleccionadas"
+                  class="btn btn-danger"
+                  type="button"
+                >
+                  <svg class="ico" viewBox="0 0 24 24" aria-hidden="true">
+                    <path
+                      d="M3 6h18M8 6v14a2 2 0 0 0 2 2h4a2 2 0 0 0 2-2V6"
+                      stroke="currentColor"
+                      stroke-width="1.4"
+                      fill="none"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                    />
+                  </svg>
+                  Eliminar
+                </button>
+                <button
+                  id="btnAplicarPrioridad"
+                  class="btn btn-ghost"
+                  type="button"
+                >
+                  <svg
+                    class="ico"
+                    viewBox="0 0 24 24"
+                    width="14"
+                    height="14"
+                    aria-hidden="true"
+                  >
+                    <path
+                      d="M5 12h14M12 5l7 7-7 7"
+                      stroke="currentColor"
+                      stroke-width="1.5"
+                      fill="none"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                    />
+                  </svg>
+                  Aplicar
+                </button>
+              </div>
 
-      <!-- Separador -->
-      <div class="export-separator">Exportar Selección</div>
+              <!-- Separador -->
+              <div class="export-separator">Exportar Selección</div>
 
-      <!-- FILA 5: export CSV / JSON -->
-      <div class="export-actions btn-group">
-        <button id="btnExportCSV" class="btn btn-ghost" type="button">
-          <svg class="ico" viewBox="0 0 24 24" aria-hidden="true">
-            <path d="M4 4h16v16H4z" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
-            <path d="M4 9h16M4 15h16" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
-          </svg>
-          CSV
-        </button>
+              <!-- FILA 5: export CSV / JSON -->
+              <div class="export-actions btn-group">
+                <button id="btnExportCSV" class="btn btn-ghost" type="button">
+                  <svg class="ico" viewBox="0 0 24 24" aria-hidden="true">
+                    <path
+                      d="M4 4h16v16H4z"
+                      stroke="currentColor"
+                      stroke-width="1.5"
+                      fill="none"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                    />
+                    <path
+                      d="M4 9h16M4 15h16"
+                      stroke="currentColor"
+                      stroke-width="1.5"
+                      fill="none"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                    />
+                  </svg>
+                  CSV
+                </button>
 
-        <button id="btnExportJSON" class="btn btn-ghost" type="button">
-          <svg class="ico" viewBox="0 0 24 24" aria-hidden="true">
-            <path d="M6 4h12v16H6z" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
-            <path d="M9 8h6M9 12h6M9 16h6" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
-          </svg>
-          JSON
-        </button>
-      </div>
-    </div>
-  </section>
-</aside>
-
+                <button id="btnExportJSON" class="btn btn-ghost" type="button">
+                  <svg class="ico" viewBox="0 0 24 24" aria-hidden="true">
+                    <path
+                      d="M6 4h12v16H6z"
+                      stroke="currentColor"
+                      stroke-width="1.5"
+                      fill="none"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                    />
+                    <path
+                      d="M9 8h6M9 12h6M9 16h6"
+                      stroke="currentColor"
+                      stroke-width="1.5"
+                      fill="none"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                    />
+                  </svg>
+                  JSON
+                </button>
+              </div>
+            </div>
+          </section>
+        </aside>
 
         <section class="content">
           <div class="content-card">
@@ -386,5 +563,4 @@
 
     <script src="script.js"></script>
   </body>
-  
 </html>

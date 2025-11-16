@@ -91,7 +91,7 @@
 }, {
   "id" : 16,
   "descripcion" : "Generar backups completos",
-  "completada" : false,
+  "completada" : true,
   "fechaCreacion" : "2025-11-01T13:00:00",
   "prioridad" : "Media"
 }, {
@@ -271,7 +271,7 @@
 }, {
   "id" : 47,
   "descripcion" : "Realizar pruebas de estrés",
-  "completada" : false,
+  "completada" : true,
   "fechaCreacion" : "2025-11-01T13:00:00",
   "prioridad" : "Media"
 }, {
@@ -361,7 +361,7 @@
 }, {
   "id" : 62,
   "descripcion" : "Definir workflow de despliegueii",
-  "completada" : false,
+  "completada" : true,
   "fechaCreacion" : "2025-11-01T08:00:00",
   "prioridad" : "Media"
 }, {
@@ -805,7 +805,7 @@
 }, {
   "id" : 137,
   "descripcion" : "Crear visor de novedades recientes",
-  "completada" : false,
+  "completada" : true,
   "fechaCreacion" : "2025-11-01T08:00:00",
   "prioridad" : "Baja"
 }, {
@@ -984,8 +984,8 @@
   "prioridad" : "Baja"
 }, {
   "id" : 167,
-  "descripcion" : "Implementar recordatorios por correos",
-  "completada" : false,
+  "descripcion" : "Implementar recordatorios por correoss",
+  "completada" : true,
   "fechaCreacion" : "2025-11-01T08:00:00",
   "prioridad" : "Media"
 }, {
