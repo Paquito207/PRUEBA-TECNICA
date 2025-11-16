@@ -47,7 +47,14 @@
   --prioridades-media: #ffd966;  /* amarillo más cálido y visible */
   --prioridades-baja: #4ade80; 
   --tex-prioridades: #000;
+  
+  --sidebar-w: 320px;
+  --sidebar-collapsed-w: 72px;
+  --transition-fast: 220ms;
+  --transition-medium: 350ms;
+  --text-muted: #666;
 }
+
 
 
 /* === MODO OSCURO === */
@@ -808,7 +815,7 @@ button.small.danger {
   display: flex;
   flex-direction: column-reverse; /* para que la nueva notificación aparezca abajo */
   gap: 10px;
-  z-index: 9999;
+  z-index: 9999 !important;
   pointer-events: none;
 }
 
@@ -1890,20 +1897,6 @@ button.small.danger {
     text-overflow: ellipsis; 
   }
 }
-/* =========================
-   VARIABLES útiles
-   ========================= */
-:root{
-  --sidebar-w: 320px;
-  --sidebar-collapsed-w: 72px;
-  --transition-fast: 220ms;
-  --transition-medium: 350ms;
-  --border: #e6e6e6;
-  --text: #111;
-  --text-muted: #666;
-  --btn-bg: #fff;
-  --panel-bg: #f9f9fb;
-}
 
 /* ==============================
    SIDEBAR: contenedor y animación de ancho
@@ -2148,7 +2141,7 @@ button.small.danger {
   display: flex;
   align-items: center;
   justify-content: center;
-  z-index: 999999;
+  z-index: 900;
   background: rgba(0,0,0,0.66);
   backdrop-filter: blur(4px);
   -webkit-backdrop-filter: blur(4px);
@@ -2323,4 +2316,103 @@ body.offline-active {
 }
 
 
+/* ============================
+   MODALES ADAPTADOS A VARIABLES
+============================ */
+
+/* overlay */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  z-index: 99999;
+  background: rgba(0, 0, 0, 0.45);         /* mantém transparencia; no se reemplaza */
+  -webkit-backdrop-filter: blur(2px);
+  backdrop-filter: blur(2px);
+}
+.modal-overlay.show {
+  display: flex;
+}
+
+/* card */
+.modal-card {
+  width: min(640px, 94%);
+  max-width: 640px;
+  background: var(--surface);
+  border-radius: var(--radius);
+  padding: 14px;
+  box-shadow: var(--card-shadow);
+  border: 1px solid var(--border);
+  color: var(--text);
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, Arial;
+}
+
+.modal-card h3 {
+  margin: 0 0 8px 0;
+  font-size: 16px;
+  color: var(--text);
+}
+
+.modal-body {
+  font-size: 14px;
+  color: var(--text);
+  opacity: 0.9;
+  margin-bottom: 12px;
+}
+
+.modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+}
+
+/* botones */
+.btn-modal {
+  padding: 8px 12px;
+  border-radius: var(--radius);
+  border: 1px solid var(--btn-border);
+  background: var(--btn-bg);
+  cursor: pointer;
+  font-size: 14px;
+  color: var(--text);
+  transition: background var(--transition-fast), box-shadow var(--transition-fast);
+}
+
+.btn-modal:hover {
+  box-shadow: var(--card-shadow-hover);
+}
+
+.btn-modal.primary {
+  background: var(--accent);
+  color: #fff;
+  border: none;
+  font-weight: 600;
+}
+
+.btn-modal.danger {
+  background: var(--danger);
+  color: #fff;
+  border: none;
+}
+
+/* textarea */
+.edit-text {
+  width: 100%;
+  min-height: 120px;
+  padding: 10px;
+  border-radius: var(--radius);
+  border: 1px solid var(--input-border);
+  background: var(--surface);
+  color: var(--text);
+  resize: vertical;
+}
+
+/* meta info */
+.meta-row {
+  font-size: 13px;
+  color: var(--muted);
+  margin-bottom: 8px;
+}
 

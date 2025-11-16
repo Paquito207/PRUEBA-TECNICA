@@ -134,9 +134,13 @@ let __searchTimer = null;
       showNotification("No hay tareas seleccionadas.", "info");
       return;
     }
-    if (!confirm("Marcar las tareas seleccionadas como completadas?")) return;
-    await markSelectedCompleted(true);
-    listarTareas();
+    if (!(await confirmAction({
+  title: "Marcar completadas",
+  message: "Marcar las tareas seleccionadas como completadas?",
+  confirmText: "Marcar",
+  cancelText: "Cancelar"
+}))) return;
+
   };
 
   document.getElementById("btnMarcarPendientes").onclick = async (e) => {
@@ -145,9 +149,13 @@ let __searchTimer = null;
       showNotification("No hay tareas seleccionadas.", "info");
       return;
     }
-    if (!confirm("Marcar las tareas seleccionadas como pendientes?")) return;
-    await markSelectedCompleted(false);
-    listarTareas();
+    if (!(await confirmAction({
+  title: "Marcar pendientes",
+  message: "Marcar las tareas seleccionadas como pendientes?",
+  confirmText: "Marcar",
+  cancelText: "Cancelar"
+}))) return;
+
   };
 
   document.getElementById("btnEliminarSeleccionadas").onclick = async (e) => {
@@ -156,7 +164,14 @@ let __searchTimer = null;
       showNotification("No hay tareas seleccionadas.", "info");
       return;
     }
-    if (!confirm("Eliminar las tareas seleccionadas?")) return;
+    if (!(await confirmAction({
+  title: "Eliminar tareas",
+  message: `¿Eliminar ${selectedIds.size} tarea(s)? Esta acción no se puede deshacer.`,
+  confirmText: "Eliminar",
+  cancelText: "Cancelar",
+  danger: true
+}))) return;
+
 
     const ids = Array.from(selectedIds);
     try {
@@ -190,8 +205,13 @@ let __searchTimer = null;
       showNotification("No hay tareas seleccionadas.", "info");
       return;
     }
-    if (!confirm(`Cambiar prioridad de las seleccionadas a "${prioridad}"?`))
-      return;
+    if (!(await confirmAction({
+  title: "Cambiar prioridad",
+  message: `Cambiar prioridad de las seleccionadas a "${prioridad}"?`,
+  confirmText: "Cambiar",
+  cancelText: "Cancelar"
+}))) return;
+
 
     const ids = Array.from(selectedIds);
     try {
@@ -1111,31 +1131,37 @@ function renderList(tareas) {
 
     // Editar (usa prompt para simplicidad)
     const btnEdit = document.createElement("button");
-    btnEdit.className = "small";
-    btnEdit.textContent = "Editar";
-    btnEdit.onclick = async () => {
-      const nuevo = prompt("Editar descripción:", t.descripcion);
-      if (nuevo === null) return; // cancel
-      const texto = nuevo.trim();
-      if (!texto) {
-        showNotification("La descripción no puede estar vacía.", "error");
-        return;
-      }
+btnEdit.className = "small";
+btnEdit.textContent = "Editar";
 
-      // validar duplicado local (evitar colisiones)
-      const exists = cachedTareas.some(
-        (other) =>
-          other.id !== t.id &&
-          (other.descripcion || "").trim().toLowerCase() === texto.toLowerCase()
-      );
-      if (exists) {
-        showNotification("Otra tarea ya tiene esa descripción.", "error");
-        return;
-      }
+btnEdit.onclick = async () => {
+  // Abrir modal de edición
+  const nuevo = await openEditPanel(t.id, t.descripcion);
 
-      await editDescripcion(t.id, texto);
-      listarTareas();
-    };
+  // Usuario canceló
+  if (nuevo === null) return;
+
+  const texto = nuevo.trim();
+  if (!texto) {
+    showNotification("La descripción no puede estar vacía.", "error");
+    return;
+  }
+
+  // Validar duplicado local
+  const exists = cachedTareas.some(
+    (other) =>
+      other.id !== t.id &&
+      (other.descripcion || "").trim().toLowerCase() === texto.toLowerCase()
+  );
+  if (exists) {
+    showNotification("Otra tarea ya tiene esa descripción.", "error");
+    return;
+  }
+
+  await editDescripcion(t.id, texto);  
+  listarTareas();
+};
+
 
     // Toggle completed
     const btnToggle = document.createElement("button");
@@ -1167,7 +1193,14 @@ function renderList(tareas) {
     btnDelete.className = "small delete";
     btnDelete.textContent = "Eliminar";
     btnDelete.onclick = async () => {
-      if (!confirm("¿Eliminar esta tarea?")) return;
+      if (!(await confirmAction({
+  title: "Eliminar tarea",
+  message: "¿Eliminar esta tarea?",
+  confirmText: "Eliminar",
+  cancelText: "Cancelar",
+  danger: true
+}))) return;
+
       try {
         const res = await fetch(`${apiUrl}/${t.id}`, { method: "DELETE" });
         const body = await safeJson(res);
@@ -1551,4 +1584,168 @@ window.ajustarControles = ajustarControles; // si listas tareas dinámicamente
       }
     }
   });
+})();
+
+
+(function () {
+  const overlay = document.getElementById('confirmOverlay');
+  const titleEl = document.getElementById('confirmTitle');
+  const bodyEl = document.getElementById('confirmBody');
+  const okBtn = document.getElementById('confirmOkBtn');
+  const cancelBtn = document.getElementById('confirmCancelBtn');
+
+  let queue = [];
+  let active = false;
+  let resolver = null;
+  let lastFocused = null;
+  let timeoutId = null;
+
+  function show(opts) {
+    titleEl.textContent = opts.title || 'Confirmar';
+    bodyEl.textContent = opts.message || '';
+    okBtn.textContent = opts.confirmText || 'Confirmar';
+    cancelBtn.textContent = opts.cancelText || 'Cancelar';
+    okBtn.classList.toggle('danger', !!opts.danger);
+    overlay.classList.add('show');
+    overlay.setAttribute('aria-hidden', 'false');
+    lastFocused = document.activeElement;
+    // focus safety
+    cancelBtn.focus();
+    document.addEventListener('keydown', keyHandler, true);
+  }
+
+  function hide() {
+    overlay.classList.remove('show');
+    overlay.setAttribute('aria-hidden', 'true');
+    document.removeEventListener('keydown', keyHandler, true);
+    if (lastFocused?.focus) lastFocused.focus();
+  }
+
+  function keyHandler(e) {
+    if (e.key === 'Escape') { e.preventDefault(); cancelBtn.click(); }
+    if ((e.ctrlKey || e.metaKey) && (e.key === 'Enter' || e.key === '\n')) { e.preventDefault(); okBtn.click(); }
+  }
+
+  async function processQueue() {
+    if (active || queue.length === 0) return;
+    active = true;
+    const item = queue.shift();
+    const opts = item.opts || {};
+
+    show(opts);
+
+    function finish(val) {
+      if (timeoutId) { clearTimeout(timeoutId); timeoutId = null; }
+      hide();
+      active = false;
+      if (resolver) { resolver(val); resolver = null; }
+      setTimeout(processQueue, 50);
+    }
+
+    okBtn.onclick = () => finish(true);
+    cancelBtn.onclick = () => finish(false);
+    overlay.onclick = (ev) => { if (ev.target === overlay) finish(false); };
+
+    if (opts.timeout && Number(opts.timeout) > 0) {
+      timeoutId = setTimeout(() => finish(false), Number(opts.timeout));
+    }
+  }
+
+  window.confirmAction = function confirmAction(opts = {}) {
+    return new Promise((resolve) => {
+      queue.push({ opts });
+      resolver = resolve;
+      setTimeout(processQueue, 0);
+    });
+  };
+})();
+
+/* ---------------------------
+   Edit modal -> openEditPanel(id, initial) -> Promise<string|null>
+   devuelve null si cancelado
+--------------------------- */
+(function () {
+  const overlay = document.getElementById('editOverlay');
+  const textarea = document.getElementById('editTextarea');
+  const saveBtn = document.getElementById('editSave');
+  const cancelBtn = document.getElementById('editCancel');
+  const taskIdEl = document.getElementById('editTaskId');
+
+  let resolver = null;
+  let currentId = null;
+  let lastFocused = null;
+  let saving = false;
+
+  function open(id, initial) {
+    currentId = id;
+    taskIdEl.textContent = id ?? '—';
+    textarea.value = initial ?? '';
+    overlay.classList.add('show');
+    overlay.setAttribute('aria-hidden','false');
+    lastFocused = document.activeElement;
+    setTimeout(() => textarea.focus(), 50);
+    document.addEventListener('keydown', keyHandler, true);
+  }
+
+  function close() {
+    overlay.classList.remove('show');
+    overlay.setAttribute('aria-hidden','true');
+    document.removeEventListener('keydown', keyHandler, true);
+    if (lastFocused?.focus) lastFocused.focus();
+  }
+
+  function keyHandler(e) {
+    if (e.key === 'Escape') { e.preventDefault(); cancelBtn.click(); }
+    if ((e.ctrlKey || e.metaKey) && (e.key === 's' || e.key === 'S')) { e.preventDefault(); saveBtn.click(); }
+  }
+
+  saveBtn.addEventListener('click', async () => {
+    if (saving) return;
+    const val = (textarea.value || '').trim();
+    if (val.length === 0) {
+      showNotification?.("La descripción no puede estar vacía", "error");
+      textarea.focus();
+      return;
+    }
+    saving = true;
+    saveBtn.setAttribute('disabled','true');
+    try {
+      if (typeof editDescripcion === 'function') {
+        await editDescripcion(currentId, val);
+      } else {
+        await fetch(`${apiUrl}/${currentId}`, {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ descripcion: val }),
+        });
+      }
+      close();
+      if (resolver) { resolver(val); resolver = null; }
+    } catch (err) {
+      showNotification?.("Error al guardar: " + err, "error");
+      if (resolver) { resolver(null); resolver = null; }
+    } finally {
+      saving = false;
+      saveBtn.removeAttribute('disabled');
+    }
+  });
+
+  cancelBtn.addEventListener('click', () => {
+    close();
+    if (resolver) { resolver(null); resolver = null; }
+  });
+
+  overlay.addEventListener('click', (ev) => {
+    if (ev.target === overlay) {
+      close();
+      if (resolver) { resolver(null); resolver = null; }
+    }
+  });
+
+  window.openEditPanel = function openEditPanel(id, initial = '') {
+    return new Promise((resolve) => {
+      resolver = resolve;
+      open(id, initial);
+    });
+  };
 })();

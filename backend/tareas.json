@@ -179,12 +179,6 @@
   "fechaCreacion" : "2025-11-15T17:00:00",
   "prioridad" : "Alta"
 }, {
-  "id" : 31,
-  "descripcion" : "Actualizar iconografía del sistema",
-  "completada" : false,
-  "fechaCreacion" : "2025-11-01T08:00:00",
-  "prioridad" : "Media"
-}, {
   "id" : 32,
   "descripcion" : "Registrar avance del día 1 del sprint",
   "completada" : false,
@@ -369,7 +363,7 @@
   "descripcion" : "Definir workflow de despliegueii",
   "completada" : false,
   "fechaCreacion" : "2025-11-01T08:00:00",
-  "prioridad" : "Alta"
+  "prioridad" : "Media"
 }, {
   "id" : 63,
   "descripcion" : "Crear plantilla para exportación CSV",
@@ -634,12 +628,6 @@
   "completada" : true,
   "fechaCreacion" : "2025-11-15T14:00:00",
   "prioridad" : "Baja"
-}, {
-  "id" : 107,
-  "descripcion" : "Crear plantilla base para dashboards",
-  "completada" : false,
-  "fechaCreacion" : "2025-11-01T09:00:00",
-  "prioridad" : "Media"
 }, {
   "id" : 108,
   "descripcion" : "Ajustar espaciados globales del diseño",
@@ -996,7 +984,7 @@
   "prioridad" : "Baja"
 }, {
   "id" : 167,
-  "descripcion" : "Implementar recordatorios por correo",
+  "descripcion" : "Implementar recordatorios por correos",
   "completada" : false,
   "fechaCreacion" : "2025-11-01T08:00:00",
   "prioridad" : "Media"

@@ -35,6 +35,30 @@
     </div>
   </div>
   <body>
+<!-- Confirm modal -->
+<div id="confirmOverlay" class="modal-overlay" role="dialog" aria-modal="true" aria-hidden="true">
+  <div class="modal-card" role="document" aria-labelledby="confirmTitle" tabindex="-1">
+    <h3 id="confirmTitle">Confirmar</h3>
+    <div id="confirmBody" class="modal-body">¿Estás seguro?</div>
+    <div class="modal-actions">
+      <button id="confirmCancelBtn" class="btn-modal" type="button">Cancelar</button>
+      <button id="confirmOkBtn" class="btn-modal primary" type="button">Confirmar</button>
+    </div>
+  </div>
+</div>
+
+<!-- Edit modal -->
+<div id="editOverlay" class="modal-overlay" role="dialog" aria-modal="true" aria-hidden="true">
+  <div class="modal-card" role="document" aria-labelledby="editTitle" tabindex="-1">
+    <h3 id="editTitle">Editar descripción</h3>
+    <div class="meta-row">Tarea: <span id="editTaskId">—</span></div>
+    <textarea id="editTextarea" class="edit-text" aria-label="Descripción"></textarea>
+    <div class="modal-actions" style="margin-top:8px;">
+      <button id="editCancel" class="btn-modal" type="button">Cancelar</button>
+      <button id="editSave" class="btn-modal primary" type="button">Guardar</button>
+    </div>
+  </div>
+</div>
     <main class="app">
       <header class="header">
         <h1 class="title">To-Do List</h1>
@@ -362,4 +386,5 @@
 
     <script src="script.js"></script>
   </body>
+  
 </html>
