@@ -28,7 +28,12 @@
         reconectar automáticamente.
       </div>
       <div class="offline-actions">
-        <button id="btnRetry" class="btn-offline btn-retry" type="button" title="intento inmediato de reconexión">
+        <button
+          id="btnRetry"
+          class="btn-offline btn-retry"
+          type="button"
+          title="intento inmediato de reconexión"
+        >
           Reintentar ahora
         </button>
       </div>
@@ -52,10 +57,20 @@
         <h3 id="confirmTitle">Confirmar</h3>
         <div id="confirmBody" class="modal-body">¿Estás seguro?</div>
         <div class="modal-actions">
-          <button id="confirmCancelBtn" class="btn-modal" type="button"  title="Cancelar la acción">
+          <button
+            id="confirmCancelBtn"
+            class="btn-modal"
+            type="button"
+            title="Cancelar la acción"
+          >
             Cancelar
           </button>
-          <button id="confirmOkBtn" class="btn-modal primary" type="button"  title="Aceptar y ejecutar la acción">
+          <button
+            id="confirmOkBtn"
+            class="btn-modal primary"
+            type="button"
+            title="Aceptar y ejecutar la acción"
+          >
             Confirmar
           </button>
         </div>
@@ -84,10 +99,20 @@
           aria-label="Descripción"
         ></textarea>
         <div class="modal-actions" style="margin-top: 8px">
-          <button id="editCancel" class="btn-modal" type="button" title="Descartar cambios">
+          <button
+            id="editCancel"
+            class="btn-modal"
+            type="button"
+            title="Descartar cambios"
+          >
             Cancelar
           </button>
-          <button id="editSave" class="btn-modal primary" type="button" title="Guardar cambios">
+          <button
+            id="editSave"
+            class="btn-modal primary"
+            type="button"
+            title="Guardar cambios"
+          >
             Guardar
           </button>
         </div>
@@ -133,8 +158,12 @@
             </svg>
           </button>
 
-          <div id="total" class="counter" title="Cantidad total de tareas">Total: 0</div>
-          <div id="pendientes" class="counter" title="Tareas sin completar">Pendientes: 0</div>
+          <div id="total" class="counter" title="Cantidad total de tareas">
+            Total: 0
+          </div>
+          <div id="pendientes" class="counter" title="Tareas sin completar">
+            Pendientes: 0
+          </div>
         </div>
 
         <button
@@ -149,10 +178,12 @@
       </header>
 
       <div class="app-body">
-        <!-- =========================
-     HTML (sidebar)
-     ========================= -->
-        <aside class="sidebar" id="appSidebar" aria-expanded="true" title="Menú lateral">
+        <aside
+          class="sidebar"
+          id="appSidebar"
+          aria-expanded="true"
+          title="Menú lateral"
+        >
           <div>
             <div class="sidebar-header">
               <button
@@ -206,7 +237,6 @@
             </div>
           </div>
 
-          <!-- CONTENIDO: envuelto en un nodo con id para aria-hidden -->
           <section
             class="controls-area"
             id="sidebarContent"
@@ -214,7 +244,6 @@
             aria-hidden="false"
             title="Opciones principales"
           >
-            <!-- Sidebar counters -->
             <div class="sidebar-counters">
               <button
                 id="btnThemeSidebar"
@@ -244,8 +273,20 @@
                 </svg>
               </button>
 
-              <div id="totalSidebar" class="counter" title="Total de tareas registradas">Total: 0</div>
-              <div id="pendientesSidebar" class="counter" title="Tareas que aún no están completadas">Pendientes: 0</div>
+              <div
+                id="totalSidebar"
+                class="counter"
+                title="Total de tareas registradas"
+              >
+                Total: 0
+              </div>
+              <div
+                id="pendientesSidebar"
+                class="counter"
+                title="Tareas que aún no están completadas"
+              >
+                Pendientes: 0
+              </div>
             </div>
 
             <form id="formTarea" class="form" title="Crear una nueva tarea">
@@ -259,31 +300,41 @@
                 title="Escribe la descripción de la tarea"
               />
               <p class="p">prioridad</p>
-              <select id="prioridad" aria-label="Prioridad" title="Selecciona la prioridad de la tarea">
+              <select
+                id="prioridad"
+                aria-label="Prioridad"
+                title="Selecciona la prioridad de la tarea"
+              >
                 <option value="Media" selected>Media</option>
                 <option value="Alta">Alta</option>
                 <option value="Baja">Baja</option>
               </select>
-              <button type="submit" class="btn primary" title="Agregar tarea">Agregar</button>
+              <button type="submit" class="btn primary" title="Agregar tarea">
+                Agregar
+              </button>
             </form>
 
             <p class="p">Ajustes con selecciòn multiple</p>
 
-            <div class="gestion" id="gestion-avanzada" title="Acciones para tareas seleccionadas">
-              <!-- FILA 1: checkbox -->
+            <div
+              class="gestion"
+              id="gestion-avanzada"
+              title="Acciones para tareas seleccionadas"
+            >
               <div class="single-row">
-                <label class="select-all" title="Seleccionar o deseleccionar todas las tareas">
+                <label
+                  class="select-all"
+                  title="Seleccionar o deseleccionar todas las tareas"
+                >
                   <input type="checkbox" id="selectAll" />
                   <span class="label-text">Seleccionar todo</span>
                 </label>
               </div>
 
-              <!-- FILA 2: select prioridad -->
               <div
                 class="single-row priority-inline"
                 style="position: relative"
               >
-                <!-- ICONO para modo colapsado -->
                 <button
                   id="btnPrioridadIcon"
                   class="priority-icon-btn"
@@ -303,7 +354,11 @@
                   </svg>
                 </button>
 
-                <select id="selCambiarPrioridad" aria-label="Cambiar prioridad" title="Asignar una nueva prioridad a las tareas seleccionadas">
+                <select
+                  id="selCambiarPrioridad"
+                  aria-label="Cambiar prioridad"
+                  title="Asignar una nueva prioridad a las tareas seleccionadas"
+                >
                   <option value="">-- Cambiar prioridad --</option>
                   <option value="Alta">Alta</option>
                   <option value="Media">Media</option>
@@ -311,7 +366,6 @@
                 </select>
               </div>
 
-              <!-- FILA 3: marcar completadas / pendientes -->
               <div class="bulk-toggle btn-group">
                 <button
                   id="btnMarcarSeleccionadas"
@@ -360,7 +414,6 @@
                 </button>
               </div>
 
-              <!-- FILA 4: eliminar / aplicar -->
               <div class="apply-delete btn-group">
                 <button
                   id="btnEliminarSeleccionadas"
@@ -402,16 +455,23 @@
                       stroke-linejoin="round"
                     />
                   </svg>
-                  <span class="btn-label" title="Aplicar cambios a tareas seleccionadas">Aplicar</span>
+                  <span
+                    class="btn-label"
+                    title="Aplicar cambios a tareas seleccionadas"
+                    >Aplicar</span
+                  >
                 </button>
               </div>
 
-              <!-- Separador -->
               <div class="export-separator">Exportar Selección</div>
 
-              <!-- FILA 5: export CSV / JSON -->
               <div class="export-actions btn-group">
-                <button id="btnExportCSV" class="btn btn-ghost" type="button" title="Exportar selección como archivo CSV">
+                <button
+                  id="btnExportCSV"
+                  class="btn btn-ghost"
+                  type="button"
+                  title="Exportar selección como archivo CSV"
+                >
                   <svg class="ico" viewBox="0 0 24 24" aria-hidden="true">
                     <path
                       d="M4 4h16v16H4z"
@@ -433,7 +493,12 @@
                   <span class="btn-label">CSV</span>
                 </button>
 
-                <button id="btnExportJSON" class="btn btn-ghost" type="button" title="Exportar selección como archivo JSON">
+                <button
+                  id="btnExportJSON"
+                  class="btn btn-ghost"
+                  type="button"
+                  title="Exportar selección como archivo JSON"
+                >
                   <svg class="ico" viewBox="0 0 24 24" aria-hidden="true">
                     <path
                       d="M6 4h12v16H6z"
@@ -477,7 +542,11 @@
                 />
               </div>
 
-              <div class="ordering" aria-label="Ordenar tareas" title="Opciones de ordenamiento">
+              <div
+                class="ordering"
+                aria-label="Ordenar tareas"
+                title="Opciones de ordenamiento"
+              >
                 <label for="sortSelect" class="small-label">Ordenar</label>
                 <select id="sortSelect" title="Ordenar tareas por categoría">
                   <option value="fecha">Fecha</option>
@@ -497,7 +566,11 @@
                 -->
               </div>
 
-              <div class="view-switch" aria-label="Cambiar vista" title="Cambiar entre modo lista o miniaturas">
+              <div
+                class="view-switch"
+                aria-label="Cambiar vista"
+                title="Cambiar entre modo lista o miniaturas"
+              >
                 <button
                   id="btnVistaLista"
                   class="btn"
@@ -569,10 +642,17 @@
             </div>
             <div class="pagination-wrapper">
               <div class="pagination-controls-wrapper">
-                <div id="paginationControls" class="pagination-controls" title="Navegación de páginas"></div>
+                <div
+                  id="paginationControls"
+                  class="pagination-controls"
+                  title="Navegación de páginas"
+                ></div>
                 <div class="pagination-settings">
                   <label class="small-label">Por página</label>
-                  <select id="pageSizeSelect" title="Cantidad de tareas por página">
+                  <select
+                    id="pageSizeSelect"
+                    title="Cantidad de tareas por página"
+                  >
                     <option value="5">5</option>
                     <option value="10" selected>10</option>
                     <option value="20">20</option>
@@ -581,11 +661,11 @@
                 </div>
               </div>
             </div>
+            <p class="by">by: Robert C. ☕ / github - Paquito207</p>
           </div>
         </section>
       </div>
 
-      <!-- contenedor para notificaciones -->
       <div
         id="notif-container"
         aria-live="polite"

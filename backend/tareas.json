@@ -1524,7 +1524,7 @@
   "prioridad" : "Alta"
 }, {
   "id" : 258,
-  "descripcion" : "jhffffffffffffffffffffffffffffasccccccccccccccccccccccccccccccccccccccccccffffffffbvnbvnbvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv",
+  "descripcion" : "jsdfsd asx",
   "completada" : false,
   "fechaCreacion" : "2025-11-16T20:27:29.9380608",
   "prioridad" : "Media"
@@ -1533,5 +1533,712 @@
   "descripcion" : "alskjs ojjaj jaskjda sd iahiouoIHUS Isiu fdsosfdsifohdosfodhiso fdoi sofios fidifdiofdioahsifd sfodi fa eofiao g UASIAOSsdfsdfsd",
   "completada" : true,
   "fechaCreacion" : "2025-11-16T20:28:21.9668654",
+  "prioridad" : "Baja"
+}, {
+  "id" : 260,
+  "descripcion" : "La vista miniaturas limita el texto de la descripción",
+  "completada" : false,
+  "fechaCreacion" : "2025-11-17T14:00:03.0784903",
   "prioridad" : "Alta"
-} ]
+},
+  {
+    "id": 261,
+    "descripcion": "Comprar leche y pan",
+    "completada": true,
+    "fechaCreacion": "2025-11-02T09:58:20.0000000",
+    "prioridad": "Media"
+  },
+  {
+    "id": 262,
+    "descripcion": "Revisar correo electrónico de trabajo",
+    "completada": true,
+    "fechaCreacion": "2025-09-25T02:38:21.0000000",
+    "prioridad": "Media"
+  },
+  {
+    "id": 263,
+    "descripcion": "Preparar presentación para la reunión",
+    "completada": false,
+    "fechaCreacion": "2025-11-06T00:49:26.0000000",
+    "prioridad": "Media"
+  },
+  {
+    "id": 264,
+    "descripcion": "Hacer copia de seguridad del servidor",
+    "completada": false,
+    "fechaCreacion": "2025-10-28T15:56:50.0000000",
+    "prioridad": "Alta"
+  },
+  {
+    "id": 265,
+    "descripcion": "Pagar factura de electricidad",
+    "completada": true,
+    "fechaCreacion": "2025-09-22T13:27:48.0000000",
+    "prioridad": "Media"
+  },
+  {
+    "id": 266,
+    "descripcion": "Actualizar dependencias del proyecto",
+    "completada": true,
+    "fechaCreacion": "2025-10-25T19:47:44.0000000",
+    "prioridad": "Media"
+  },
+  {
+    "id": 267,
+    "descripcion": "Escribir tests unitarios",
+    "completada": false,
+    "fechaCreacion": "2025-10-24T05:48:20.0000000",
+    "prioridad": "Media"
+  },
+  {
+    "id": 268,
+    "descripcion": "Corregir bug en el formulario de login",
+    "completada": false,
+    "fechaCreacion": "2025-09-28T08:13:52.0000000",
+    "prioridad": "Alta"
+  },
+  {
+    "id": 269,
+    "descripcion": "Limpieza semanal del equipo de oficina",
+    "completada": false,
+    "fechaCreacion": "2025-09-16T20:01:59.0000000",
+    "prioridad": "Media"
+  },
+  {
+    "id": 270,
+    "descripcion": "Planificar la agenda de la semana",
+    "completada": true,
+    "fechaCreacion": "2025-09-16T10:17:36.0000000",
+    "prioridad": "Media"
+  },
+  {
+    "id": 271,
+    "descripcion": "Responder mensajes pendientes en Slack",
+    "completada": true,
+    "fechaCreacion": "2025-09-11T06:10:01.0000000",
+    "prioridad": "Alta"
+  },
+  {
+    "id": 272,
+    "descripcion": "Revisar pull requests abiertos",
+    "completada": false,
+    "fechaCreacion": "2025-10-04T17:28:29.0000000",
+    "prioridad": "Baja"
+  },
+  {
+    "id": 273,
+    "descripcion": "Optimizar consulta SQL lenta",
+    "completada": false,
+    "fechaCreacion": "2025-11-11T04:23:53.0000000",
+    "prioridad": "Alta"
+  },
+  {
+    "id": 274,
+    "descripcion": "Configurar pipeline de CI",
+    "completada": true,
+    "fechaCreacion": "2025-10-08T02:02:56.0000000",
+    "prioridad": "Alta"
+  },
+  {
+    "id": 275,
+    "descripcion": "Documentar endpoints de la API",
+    "completada": false,
+    "fechaCreacion": "2025-11-01T08:50:12.0000000",
+    "prioridad": "Baja"
+  },
+  {
+    "id": 276,
+    "descripcion": "Diseñar mockups para la nueva pantalla",
+    "completada": true,
+    "fechaCreacion": "2025-10-27T09:19:40.0000000",
+    "prioridad": "Alta"
+  },
+  {
+    "id": 277,
+    "descripcion": "Probar compatibilidad en móviles",
+    "completada": true,
+    "fechaCreacion": "2025-11-04T12:51:18.0000000",
+    "prioridad": "Alta"
+  },
+  {
+    "id": 278,
+    "descripcion": "Actualizar README del repositorio",
+    "completada": false,
+    "fechaCreacion": "2025-09-09T01:55:43.0000000",
+    "prioridad": "Baja"
+  },
+  {
+    "id": 279,
+    "descripcion": "Reparar estilos rotos en CSS",
+    "completada": true,
+    "fechaCreacion": "2025-10-08T05:45:29.0000000",
+    "prioridad": "Media"
+  },
+  {
+    "id": 280,
+    "descripcion": "Enviar cotización al cliente",
+    "completada": true,
+    "fechaCreacion": "2025-10-06T18:07:14.0000000",
+    "prioridad": "Media"
+  },
+  {
+    "id": 281,
+    "descripcion": "Programar reunión con marketing",
+    "completada": true,
+    "fechaCreacion": "2025-11-05T09:37:16.0000000",
+    "prioridad": "Baja"
+  },
+  {
+    "id": 282,
+    "descripcion": "Actualizar versionamiento en package.json",
+    "completada": true,
+    "fechaCreacion": "2025-11-03T06:01:54.0000000",
+    "prioridad": "Media"
+  },
+  {
+    "id": 283,
+    "descripcion": "Analizar métricas de uso mensual",
+    "completada": false,
+    "fechaCreacion": "2025-10-23T04:38:10.0000000",
+    "prioridad": "Alta"
+  },
+  {
+    "id": 284,
+    "descripcion": "Realizar auditoría de seguridad básica",
+    "completada": true,
+    "fechaCreacion": "2025-10-08T04:11:42.0000000",
+    "prioridad": "Baja"
+  },
+  {
+    "id": 285,
+    "descripcion": "Crear copia de la base de datos de prueba",
+    "completada": false,
+    "fechaCreacion": "2025-11-07T03:32:00.0000000",
+    "prioridad": "Media"
+  },
+  {
+    "id": 286,
+    "descripcion": "Configurar backups automáticos",
+    "completada": false,
+    "fechaCreacion": "2025-11-14T22:18:01.0000000",
+    "prioridad": "Alta"
+  },
+  {
+    "id": 287,
+    "descripcion": "Revisar logs de errores recientes",
+    "completada": false,
+    "fechaCreacion": "2025-09-04T10:47:56.0000000",
+    "prioridad": "Media"
+  },
+  {
+    "id": 288,
+    "descripcion": "Implementar paginación en lista",
+    "completada": true,
+    "fechaCreacion": "2025-09-07T18:13:50.0000000",
+    "prioridad": "Baja"
+  },
+  {
+    "id": 289,
+    "descripcion": "Agregar validación en el backend",
+    "completada": false,
+    "fechaCreacion": "2025-11-10T00:51:41.0000000",
+    "prioridad": "Media"
+  },
+  {
+    "id": 290,
+    "descripcion": "Mejorar accesibilidad de la app",
+    "completada": false,
+    "fechaCreacion": "2025-10-09T17:53:20.0000000",
+    "prioridad": "Media"
+  },
+  {
+    "id": 291,
+    "descripcion": "Traducir textos faltantes al español",
+    "completada": true,
+    "fechaCreacion": "2025-09-15T04:54:53.0000000",
+    "prioridad": "Alta"
+  },
+  {
+    "id": 292,
+    "descripcion": "Sincronizar ramas git y resolver conflictos",
+    "completada": false,
+    "fechaCreacion": "2025-10-25T20:04:57.0000000",
+    "prioridad": "Media"
+  },
+  {
+    "id": 293,
+    "descripcion": "Enviar encuesta de satisfacción",
+    "completada": false,
+    "fechaCreacion": "2025-10-12T22:19:23.0000000",
+    "prioridad": "Media"
+  },
+  {
+    "id": 294,
+    "descripcion": "Organizar archivos en Drive",
+    "completada": false,
+    "fechaCreacion": "2025-09-22T15:03:15.0000000",
+    "prioridad": "Alta"
+  },
+  {
+    "id": 295,
+    "descripcion": "Solicitar presupuesto de hosting",
+    "completada": true,
+    "fechaCreacion": "2025-10-19T05:58:30.0000000",
+    "prioridad": "Alta"
+  },
+  {
+    "id": 296,
+    "descripcion": "Probar carga en entorno staging",
+    "completada": true,
+    "fechaCreacion": "2025-09-11T23:30:03.0000000",
+    "prioridad": "Alta"
+  },
+  {
+    "id": 297,
+    "descripcion": "Actualizar certificados SSL",
+    "completada": false,
+    "fechaCreacion": "2025-11-06T09:38:10.0000000",
+    "prioridad": "Alta"
+  },
+  {
+    "id": 298,
+    "descripcion": "Implementar caché para endpoints críticos",
+    "completada": false,
+    "fechaCreacion": "2025-10-08T09:14:14.0000000",
+    "prioridad": "Media"
+  },
+  {
+    "id": 299,
+    "descripcion": "Reducir tamaño de imágenes en frontend",
+    "completada": false,
+    "fechaCreacion": "2025-09-25T17:50:14.0000000",
+    "prioridad": "Baja"
+  },
+  {
+    "id": 300,
+    "descripcion": "Refactorizar componente de usuario",
+    "completada": false,
+    "fechaCreacion": "2025-09-02T10:45:09.0000000",
+    "prioridad": "Alta"
+  },
+  {
+    "id": 301,
+    "descripcion": "Agregar animaciones suaves en UI",
+    "completada": false,
+    "fechaCreacion": "2025-10-23T11:13:53.0000000",
+    "prioridad": "Media"
+  },
+  {
+    "id": 302,
+    "descripcion": "Crear endpoints para exportar datos",
+    "completada": true,
+    "fechaCreacion": "2025-10-04T08:39:58.0000000",
+    "prioridad": "Media"
+  },
+  {
+    "id": 303,
+    "descripcion": "Generar script de migración de DB",
+    "completada": true,
+    "fechaCreacion": "2025-10-15T09:15:10.0000000",
+    "prioridad": "Media"
+  },
+  {
+    "id": 304,
+    "descripcion": "Verificar cumplimiento GDPR",
+    "completada": true,
+    "fechaCreacion": "2025-11-10T04:58:39.0000000",
+    "prioridad": "Media"
+  },
+  {
+    "id": 305,
+    "descripcion": "Configurar monitoreo de uptime",
+    "completada": false,
+    "fechaCreacion": "2025-09-18T16:17:20.0000000",
+    "prioridad": "Alta"
+  },
+  {
+    "id": 306,
+    "descripcion": "Implementar búsqueda con autocompletar",
+    "completada": false,
+    "fechaCreacion": "2025-11-01T01:03:18.0000000",
+    "prioridad": "Media"
+  },
+  {
+    "id": 307,
+    "descripcion": "Depurar problema de rendimiento en mobile",
+    "completada": true,
+    "fechaCreacion": "2025-10-30T11:00:12.0000000",
+    "prioridad": "Media"
+  },
+  {
+    "id": 308,
+    "descripcion": "Enviar recordatorio de pago al equipo",
+    "completada": false,
+    "fechaCreacion": "2025-09-17T00:26:11.0000000",
+    "prioridad": "Media"
+  },
+  {
+    "id": 309,
+    "descripcion": "Actualizar políticas internas",
+    "completada": false,
+    "fechaCreacion": "2025-10-22T19:48:49.0000000",
+    "prioridad": "Media"
+  },
+  {
+    "id": 310,
+    "descripcion": "Preparar kit de bienvenida para nuevos empleados",
+    "completada": true,
+    "fechaCreacion": "2025-10-18T18:32:01.0000000",
+    "prioridad": "Baja"
+  },
+  {
+    "id": 311,
+    "descripcion": "Revisar integraciones con terceros",
+    "completada": true,
+    "fechaCreacion": "2025-10-01T04:33:35.0000000",
+    "prioridad": "Alta"
+  },
+  {
+    "id": 312,
+    "descripcion": "Limpiar código muerto en utils",
+    "completada": false,
+    "fechaCreacion": "2025-10-26T10:02:14.0000000",
+    "prioridad": "Alta"
+  },
+  {
+    "id": 313,
+    "descripcion": "Implementar rollback en despliegues",
+    "completada": false,
+    "fechaCreacion": "2025-10-18T12:26:23.0000000",
+    "prioridad": "Baja"
+  },
+  {
+    "id": 314,
+    "descripcion": "Configurar variables de entorno seguras",
+    "completada": false,
+    "fechaCreacion": "2025-10-23T01:17:43.0000000",
+    "prioridad": "Alta"
+  },
+  {
+    "id": 315,
+    "descripcion": "Actualizar plantilla de email",
+    "completada": false,
+    "fechaCreacion": "2025-10-17T11:29:17.0000000",
+    "prioridad": "Alta"
+  },
+  {
+    "id": 316,
+    "descripcion": "Publicar nueva versión en producción",
+    "completada": false,
+    "fechaCreacion": "2025-10-22T13:34:08.0000000",
+    "prioridad": "Media"
+  },
+  {
+    "id": 317,
+    "descripcion": "Revisar comentarios de usuarios",
+    "completada": false,
+    "fechaCreacion": "2025-09-21T21:31:32.0000000",
+    "prioridad": "Media"
+  },
+  {
+    "id": 318,
+    "descripcion": "Crear plantilla de tickets de soporte",
+    "completada": true,
+    "fechaCreacion": "2025-11-07T07:30:29.0000000",
+    "prioridad": "Media"
+  },
+  {
+    "id": 319,
+    "descripcion": "Optimizar imágenes para retina",
+    "completada": false,
+    "fechaCreacion": "2025-11-05T13:08:38.0000000",
+    "prioridad": "Media"
+  },
+  {
+    "id": 320,
+    "descripcion": "Agregar iconos vectoriales",
+    "completada": false,
+    "fechaCreacion": "2025-10-21T14:02:20.0000000",
+    "prioridad": "Alta"
+  },
+  {
+    "id": 321,
+    "descripcion": "Revisar permisos de acceso",
+    "completada": false,
+    "fechaCreacion": "2025-09-07T13:11:28.0000000",
+    "prioridad": "Media"
+  },
+  {
+    "id": 322,
+    "descripcion": "Actualizar lista de dependencias vulnerables",
+    "completada": false,
+    "fechaCreacion": "2025-09-23T16:12:22.0000000",
+    "prioridad": "Alta"
+  },
+  {
+    "id": 323,
+    "descripcion": "Programar backup completo mensual",
+    "completada": false,
+    "fechaCreacion": "2025-11-09T01:23:20.0000000",
+    "prioridad": "Alta"
+  },
+  {
+    "id": 324,
+    "descripcion": "Implementar feature toggle",
+    "completada": false,
+    "fechaCreacion": "2025-09-04T09:11:50.0000000",
+    "prioridad": "Alta"
+  },
+  {
+    "id": 325,
+    "descripcion": "Crear pruebas de integración",
+    "completada": true,
+    "fechaCreacion": "2025-09-24T10:35:27.0000000",
+    "prioridad": "Media"
+  },
+  {
+    "id": 326,
+    "descripcion": "Mejorar UX del formulario de registro",
+    "completada": true,
+    "fechaCreacion": "2025-10-23T16:30:22.0000000",
+    "prioridad": "Baja"
+  },
+  {
+    "id": 327,
+    "descripcion": "Analizar costes del servicio en la nube",
+    "completada": false,
+    "fechaCreacion": "2025-10-26T18:37:36.0000000",
+    "prioridad": "Alta"
+  },
+  {
+    "id": 328,
+    "descripcion": "Configurar alertas por errores críticos",
+    "completada": false,
+    "fechaCreacion": "2025-10-17T06:06:24.0000000",
+    "prioridad": "Alta"
+  },
+  {
+    "id": 329,
+    "descripcion": "Actualizar la roadmap del proyecto",
+    "completada": false,
+    "fechaCreacion": "2025-09-10T17:51:54.0000000",
+    "prioridad": "Media"
+  },
+  {
+    "id": 330,
+    "descripcion": "Enviar resumen semanal al equipo",
+    "completada": false,
+    "fechaCreacion": "2025-10-11T05:56:15.0000000",
+    "prioridad": "Media"
+  },
+  {
+    "id": 331,
+    "descripcion": "Configurar autenticación multifactor",
+    "completada": false,
+    "fechaCreacion": "2025-11-05T17:03:11.0000000",
+    "prioridad": "Media"
+  },
+  {
+    "id": 332,
+    "descripcion": "Probar restauración desde backup",
+    "completada": false,
+    "fechaCreacion": "2025-09-07T05:14:15.0000000",
+    "prioridad": "Media"
+  },
+  {
+    "id": 333,
+    "descripcion": "Revisar tiempos de respuesta API",
+    "completada": true,
+    "fechaCreacion": "2025-09-11T22:36:55.0000000",
+    "prioridad": "Alta"
+  },
+  {
+    "id": 334,
+    "descripcion": "Mejorar documentación interna del equipo",
+    "completada": true,
+    "fechaCreacion": "2025-10-14T21:20:43.0000000",
+    "prioridad": "Alta"
+  },
+  {
+    "id": 335,
+    "descripcion": "Crear prototipo interactivo",
+    "completada": true,
+    "fechaCreacion": "2025-10-16T06:00:05.0000000",
+    "prioridad": "Baja"
+  },
+  {
+    "id": 336,
+    "descripcion": "Revisar compatibilidad cross-browser",
+    "completada": false,
+    "fechaCreacion": "2025-10-14T08:34:10.0000000",
+    "prioridad": "Baja"
+  },
+  {
+    "id": 337,
+    "descripcion": "Reducir latencia de la API",
+    "completada": true,
+    "fechaCreacion": "2025-09-10T20:08:37.0000000",
+    "prioridad": "Baja"
+  },
+  {
+    "id": 338,
+    "descripcion": "Actualizar diseño de la cabecera",
+    "completada": false,
+    "fechaCreacion": "2025-09-02T18:23:17.0000000",
+    "prioridad": "Baja"
+  },
+  {
+    "id": 339,
+    "descripcion": "Implementar carga perezosa de imágenes",
+    "completada": true,
+    "fechaCreacion": "2025-09-24T06:48:14.0000000",
+    "prioridad": "Media"
+  },
+  {
+    "id": 340,
+    "descripcion": "Verificar integridad de datos",
+    "completada": false,
+    "fechaCreacion": "2025-09-22T02:04:02.0000000",
+    "prioridad": "Baja"
+  },
+  {
+    "id": 341,
+    "descripcion": "Probar importación de CSV",
+    "completada": false,
+    "fechaCreacion": "2025-09-17T07:37:56.0000000",
+    "prioridad": "Baja"
+  },
+  {
+    "id": 342,
+    "descripcion": "Implementar sistema de etiquetas",
+    "completada": false,
+    "fechaCreacion": "2025-09-27T01:58:04.0000000",
+    "prioridad": "Media"
+  },
+  {
+    "id": 343,
+    "descripcion": "Revisar experiencia de usuario en móvil",
+    "completada": false,
+    "fechaCreacion": "2025-09-29T00:40:43.0000000",
+    "prioridad": "Baja"
+  },
+  {
+    "id": 344,
+    "descripcion": "Configurar CDN para assets estáticos",
+    "completada": false,
+    "fechaCreacion": "2025-11-16T09:21:52.0000000",
+    "prioridad": "Media"
+  },
+  {
+    "id": 345,
+    "descripcion": "Limpiar sesiones antiguas",
+    "completada": true,
+    "fechaCreacion": "2025-09-16T08:42:09.0000000",
+    "prioridad": "Alta"
+  },
+  {
+    "id": 346,
+    "descripcion": "Actualizar tutoriales de usuario",
+    "completada": false,
+    "fechaCreacion": "2025-09-07T00:16:33.0000000",
+    "prioridad": "Media"
+  },
+  {
+    "id": 347,
+    "descripcion": "Preparar demostración para inversores",
+    "completada": false,
+    "fechaCreacion": "2025-11-12T22:54:33.0000000",
+    "prioridad": "Alta"
+  },
+  {
+    "id": 348,
+    "descripcion": "Revisión de seguridad de dependencias",
+    "completada": false,
+    "fechaCreacion": "2025-10-17T14:59:51.0000000",
+    "prioridad": "Baja"
+  },
+  {
+    "id": 349,
+    "descripcion": "Crear plan de recuperación ante desastres",
+    "completada": true,
+    "fechaCreacion": "2025-09-16T14:50:41.0000000",
+    "prioridad": "Media"
+  },
+  {
+    "id": 350,
+    "descripcion": "Mejorar mensajes de error",
+    "completada": true,
+    "fechaCreacion": "2025-09-19T09:00:12.0000000",
+    "prioridad": "Alta"
+  },
+  {
+    "id": 351,
+    "descripcion": "Implementar logs estructurados",
+    "completada": false,
+    "fechaCreacion": "2025-09-24T04:03:53.0000000",
+    "prioridad": "Baja"
+  },
+  {
+    "id": 352,
+    "descripcion": "Optimizar rendimiento de consultas ORM",
+    "completada": true,
+    "fechaCreacion": "2025-10-26T15:26:23.0000000",
+    "prioridad": "Media"
+  },
+  {
+    "id": 353,
+    "descripcion": "Tarea adicional 1: revisar elemento #1",
+    "completada": true,
+    "fechaCreacion": "2025-10-31T11:15:48.0000000",
+    "prioridad": "Media"
+  },
+  {
+    "id": 354,
+    "descripcion": "Tarea adicional 2: revisar elemento #2",
+    "completada": false,
+    "fechaCreacion": "2025-10-26T05:04:27.0000000",
+    "prioridad": "Baja"
+  },
+  {
+    "id": 355,
+    "descripcion": "Tarea adicional 3: revisar elemento #3",
+    "completada": false,
+    "fechaCreacion": "2025-09-21T03:57:30.0000000",
+    "prioridad": "Media"
+  },
+  {
+    "id": 356,
+    "descripcion": "Tarea adicional 4: revisar elemento #4",
+    "completada": false,
+    "fechaCreacion": "2025-09-27T02:55:36.0000000",
+    "prioridad": "Media"
+  },
+  {
+    "id": 357,
+    "descripcion": "Tarea adicional 5: revisar elemento #5",
+    "completada": false,
+    "fechaCreacion": "2025-09-30T11:02:37.0000000",
+    "prioridad": "Baja"
+  },
+  {
+    "id": 358,
+    "descripcion": "Tarea adicional 6: revisar elemento #6",
+    "completada": true,
+    "fechaCreacion": "2025-09-08T09:02:15.0000000",
+    "prioridad": "Media"
+  },
+  {
+    "id": 359,
+    "descripcion": "Tarea adicional 7: revisar elemento #7",
+    "completada": false,
+    "fechaCreacion": "2025-10-25T23:52:12.0000000",
+    "prioridad": "Alta"
+  },
+  {
+    "id": 360,
+    "descripcion": "Tarea adicional 8: revisar elemento #8",
+    "completada": false,
+    "fechaCreacion": "2025-09-22T00:41:07.0000000",
+    "prioridad": "Alta"
+  }
+]

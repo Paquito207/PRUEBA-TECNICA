@@ -1,16 +1,26 @@
 const apiUrl = "http://localhost:8080/api/tareas";
-
+/* ============================
+  Variables globales
+============================ */
 let currentSort = "fecha";
 let currentOrder = "desc";
 let currentSearch = "";
 const selectedIds = new Set();
 let cachedTareas = []; // cache local para validaciones y evitar fetchs extra
-let currentView = "lista"; // lista | mini
+let currentView = "lista";
 let currentPage = 1;
 let pageSize = Number(localStorage.getItem("pageSize") || 10);
 let tareasCacheCargadas = false;
+let __pagResizeTimer = null;
+let isLoadingTareas = false;
+let __scrollLock = false;
+let __previouslyFocused = null;
+let __focusTrapHandler = null;
 
 
+/* ============================
+  Botones de cambio de vista
+============================ */
 document.getElementById("btnVistaLista").onclick = () => {
   currentView = "lista";
   aplicarVista();
@@ -20,10 +30,9 @@ document.getElementById("btnVistaMini").onclick = () => {
   currentView = "mini";
   aplicarVista();
 };
-// Evita submits accidentales: todos los botones reciben type="button" si no tienen type.
-// Mantén los <button type="submit"> que ya tengas (p. ej. el de agregar).
+
 document.addEventListener("DOMContentLoaded", () => {
-  document.querySelectorAll("button").forEach(b => {
+  document.querySelectorAll("button").forEach((b) => {
     if (!b.hasAttribute("type")) b.setAttribute("type", "button");
   });
 });
@@ -57,35 +66,34 @@ document.addEventListener("DOMContentLoaded", () => {
     currentOrder = document.getElementById("orderSelect").value;
     listarTareas(true);
   };*/
-document.getElementById("sortSelect").addEventListener("change", () => {
-  currentSort = document.getElementById("sortSelect").value;
-  currentPage = 1;
-  listarTareas(true);
-});
-document.getElementById("orderSelect").addEventListener("change", () => {
-  currentOrder = document.getElementById("orderSelect").value;
-  currentPage = 1;
-  listarTareas(true);
-});
+  document.getElementById("sortSelect").addEventListener("change", () => {
+    currentSort = document.getElementById("sortSelect").value;
+    currentPage = 1;
+    listarTareas(true);
+  });
+  document.getElementById("orderSelect").addEventListener("change", () => {
+    currentOrder = document.getElementById("orderSelect").value;
+    currentPage = 1;
+    listarTareas(true);
+  });
 
   const SEARCH_DEBOUNCE_MS = 160;
-let __searchTimer = null;
+  let __searchTimer = null;
 
-["searchInputHeader", "searchInputMain"].forEach(id => {
-  const input = document.getElementById(id);
-  if (!input) return;
+  ["searchInputHeader", "searchInputMain"].forEach((id) => {
+    const input = document.getElementById(id);
+    if (!input) return;
 
-  input.addEventListener("input", (e) => {
-    currentSearch = e.target.value.trim();
-    currentPage = 1;
+    input.addEventListener("input", (e) => {
+      currentSearch = e.target.value.trim();
+      currentPage = 1;
 
-    clearTimeout(__searchTimer);
-    __searchTimer = setTimeout(() => {
-      listarTareas();
-    }, SEARCH_DEBOUNCE_MS);
+      clearTimeout(__searchTimer);
+      __searchTimer = setTimeout(() => {
+        listarTareas();
+      }, SEARCH_DEBOUNCE_MS);
+    });
   });
-});
-
 
   document.getElementById("formTarea").onsubmit = async (e) => {
     e.preventDefault();
@@ -96,7 +104,6 @@ let __searchTimer = null;
       return;
     }
 
-    // validación duplicado local (case-insensitive)
     const existe = cachedTareas.some(
       (t) =>
         (t.descripcion || "").trim().toLowerCase() === descripcion.toLowerCase()
@@ -114,21 +121,19 @@ let __searchTimer = null;
       });
 
       const body = await safeJson(res);
-if (!res.ok) {
-  showNotification(body?.error || "Error al crear tarea", "error");
-  return;
-}
+      if (!res.ok) {
+        showNotification(body?.error || "Error al crear tarea", "error");
+        return;
+      }
 
-showNotification(body?.message || "Tarea creada", "success");
+      showNotification(body?.message || "Tarea creada", "success");
 
-// Guardar ID de la última tarea creada
-localStorage.setItem("lastCreatedId", body.id);
+      localStorage.setItem("lastCreatedId", body.id);
 
-document.getElementById("descripcion").value = "";
-document.getElementById("prioridad").value = "Media";
-document.getElementById("descripcion").blur();
-listarTareas();
-
+      document.getElementById("descripcion").value = "";
+      document.getElementById("prioridad").value = "Media";
+      document.getElementById("descripcion").blur();
+      listarTareas();
     } catch (err) {
       showNotification("Error al crear tarea: " + err, "error");
     }
@@ -140,13 +145,15 @@ listarTareas();
       showNotification("No hay tareas seleccionadas.", "info");
       return;
     }
-    if (!(await confirmAction({
-  title: "Marcar completadas",
-  message: "Marcar las tareas seleccionadas como completadas?",
-  confirmText: "Marcar",
-  cancelText: "Cancelar"
-}))) return;
-
+    if (
+      !(await confirmAction({
+        title: "Marcar completadas",
+        message: "Marcar las tareas seleccionadas como completadas?",
+        confirmText: "Marcar",
+        cancelText: "Cancelar",
+      }))
+    )
+      return;
   };
 
   document.getElementById("btnMarcarPendientes").onclick = async (e) => {
@@ -155,13 +162,15 @@ listarTareas();
       showNotification("No hay tareas seleccionadas.", "info");
       return;
     }
-    if (!(await confirmAction({
-  title: "Marcar pendientes",
-  message: "Marcar las tareas seleccionadas como pendientes?",
-  confirmText: "Marcar",
-  cancelText: "Cancelar"
-}))) return;
-
+    if (
+      !(await confirmAction({
+        title: "Marcar pendientes",
+        message: "Marcar las tareas seleccionadas como pendientes?",
+        confirmText: "Marcar",
+        cancelText: "Cancelar",
+      }))
+    )
+      return;
   };
 
   document.getElementById("btnEliminarSeleccionadas").onclick = async (e) => {
@@ -170,14 +179,16 @@ listarTareas();
       showNotification("No hay tareas seleccionadas.", "info");
       return;
     }
-    if (!(await confirmAction({
-  title: "Eliminar tareas",
-  message: `¿Eliminar ${selectedIds.size} tarea(s)? Esta acción no se puede deshacer.`,
-  confirmText: "Eliminar",
-  cancelText: "Cancelar",
-  danger: true
-}))) return;
-
+    if (
+      !(await confirmAction({
+        title: "Eliminar tareas",
+        message: `¿Eliminar ${selectedIds.size} tarea(s)? Esta acción no se puede deshacer.`,
+        confirmText: "Eliminar",
+        cancelText: "Cancelar",
+        danger: true,
+      }))
+    )
+      return;
 
     const ids = Array.from(selectedIds);
     try {
@@ -211,13 +222,15 @@ listarTareas();
       showNotification("No hay tareas seleccionadas.", "info");
       return;
     }
-    if (!(await confirmAction({
-  title: "Cambiar prioridad",
-  message: `Cambiar prioridad de las seleccionadas a "${prioridad}"?`,
-  confirmText: "Cambiar",
-  cancelText: "Cancelar"
-}))) return;
-
+    if (
+      !(await confirmAction({
+        title: "Cambiar prioridad",
+        message: `Cambiar prioridad de las seleccionadas a "${prioridad}"?`,
+        confirmText: "Cambiar",
+        cancelText: "Cancelar",
+      }))
+    )
+      return;
 
     const ids = Array.from(selectedIds);
     try {
@@ -273,7 +286,9 @@ listarTareas();
   aplicarVista();
 });
 
-// safe parse JSON helper
+/* ============================
+  safeJson: intenta parsear JSON, devuelve null si falla
+============================ */
 async function safeJson(res) {
   try {
     return await res.json();
@@ -282,15 +297,16 @@ async function safeJson(res) {
   }
 }
 
-// mostrar notificación simple (toast)
-// ---------- Configuración ----------
+/* ============================
+  Notificaciones mejoradas con persistencia y throttle
+============================ */
 const NOTIF_KEY = "pendingNotifications";
 const NOTIF_RECENT_KEY = "recentNotifications"; // cache corta para evitar repetidos
 const DEFAULT_THROTTLE_MS = 4000; // tiempo mínimo entre notificaciones idénticas (para tipos que se throttlean)
 const SUCCESS_THROTTLE_MS = 6000; // valor disponible si se quisiera usar, pero por defecto success no se throttlea
-
-// ---------- Storage helpers ----------
-// ahora usamos localStorage para sobrevivir a recargas completas
+ /* ============================
+  Lectura JSON genérica
+============================ */
 function _readJSON(key) {
   try {
     const raw = localStorage.getItem(key);
@@ -299,29 +315,51 @@ function _readJSON(key) {
     return [];
   }
 }
+
+/* ============================
+  Escritura JSON genérica
+============================ */
 function _writeJSON(key, arr) {
   try {
     localStorage.setItem(key, JSON.stringify(arr || []));
   } catch (e) {}
 }
 
-// Pendientes (persistencia explícita)
+/* ============================
+  Gestión de notificaciones pendientes (persistencia)
+============================ */
 function _readPending() {
   return _readJSON(NOTIF_KEY);
 }
+
+/* ============================
+  Escritura de notificaciones pendientes (persistencia)
+============================ */
 function _writePending(arr) {
   _writeJSON(NOTIF_KEY, arr);
 }
+
+/* ============================
+  Añadir / eliminar / limpiar notificaciones pendientes (persistencia)
+============================ */
 function _addPending(n) {
   const arr = (_readPending() || []).filter((x) => x && x.id);
   // evitar duplicados por id
   if (!arr.some((x) => x.id === n.id)) arr.push(n);
   _writePending(arr);
 }
+
+/* ============================
+  Eliminar notificación pendiente por id (persistencia)
+============================ */
 function _removePendingById(id) {
   const arr = (_readPending() || []).filter((x) => !(x && x.id === id));
   _writePending(arr);
 }
+
+/* ============================
+  Limpiar notificaciones pendientes expiradas (persistencia)
+============================ */
 function _clearExpiredPending() {
   const now = Date.now();
   const arr = (_readPending() || []).filter(
@@ -330,7 +368,9 @@ function _clearExpiredPending() {
   _writePending(arr);
 }
 
-// Recent cache para throttle (también en localStorage para sobrevivir a reloads cortos)
+/* ============================
+  Gestión de notificaciones recientes (throttle)
+============================ */
 function _readRecent() {
   return _readJSON(NOTIF_RECENT_KEY);
 }
@@ -344,11 +384,19 @@ function _cleanupRecent() {
   );
   _writeRecent(arr);
 }
+
+/* ============================
+  Ver si notificación es reciente (throttle)
+============================ */
 function _isRecent(hash) {
   _cleanupRecent();
   const arr = _readRecent();
   return arr.some((r) => r.hash === hash);
 }
+
+/* ============================
+  Marcar notificación como reciente (throttle)
+============================ */
 function _markRecent(hash, ms) {
   if (!ms || ms <= 0) return;
   _cleanupRecent();
@@ -357,7 +405,9 @@ function _markRecent(hash, ms) {
   _writeRecent(arr);
 }
 
-// simple hash: tipo+mensaje+titulo -> base64 (no criptográfico, suficiente para dedupe)
+/* ============================
+  Generar hash simple para notificación
+============================ */
 function _notifHash(message, type, title) {
   const s = `${type}|${title || ""}|${message}`;
   try {
@@ -367,7 +417,9 @@ function _notifHash(message, type, title) {
   }
 }
 
-// helper escape (si ya la tienes en tu proyecto, úsala; la dejo por completitud)
+/* ============================
+  escapeHtml: escapa texto para HTML
+============================ */
 function escapeHtml(unsafe) {
   if (!unsafe && unsafe !== 0) return "";
   return String(unsafe)
@@ -378,14 +430,9 @@ function escapeHtml(unsafe) {
     .replace(/'/g, "&#039;");
 }
 
-// ---------- showNotification mejorada con throttle y persistencia opcional ----------
-/**
- * showNotification(message, type = "info", ttl = 4000, title = "", options = {})
- * options:
- *   - persist: boolean (por defecto false) -> guarda en localStorage para rehidratar tras reload
- *   - id: string -> id opcional para control externo
- *   - rehydrated: boolean -> interno para rehidratación (evita volver a guardar)
- */
+/* ============================
+  showNotification: muestra notificación con persistencia y throttle
+============================ */
 function showNotification(
   message,
   type = "info",
@@ -402,8 +449,6 @@ function showNotification(
   // for success ensure a minimum visible ttl
   if (type === "success") ttl = Math.max(ttl, 3000);
 
-  // si rehidratado no persistas; persist si options.persist === true
-  // además: para garantizar que success sobrevivan a recargas, los persistimos automáticamente
   const shouldPersist =
     !options.rehydrated && (options.persist === true || type === "success");
 
@@ -416,13 +461,11 @@ function showNotification(
   // dedupe throttle: evita mostrar el mismo mensaje repetido en corto periodo
   const hash = _notifHash(message, type, title);
   if (throttleMs > 0 && _isRecent(hash)) {
-    // ya se mostró hace poco: ignorar (solo para tipos throttled)
     return;
   }
   // marca como reciente ahora para bloquear repetidos inmediatos (solo si aplicamos throttle)
   if (throttleMs > 0) _markRecent(hash, throttleMs);
 
-  // Generar id
   const id =
     options.id || `n_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`;
 
@@ -489,7 +532,6 @@ function showNotification(
   function removeNow() {
     if (removed) return;
     removed = true;
-    // quitar del storage si existía
     try {
       _removePendingById(id);
     } catch (e) {}
@@ -498,7 +540,9 @@ function showNotification(
       el.remove();
     }, 220);
   }
-
+/* ============================
+  Iniciar progreso de barra
+============================ */
   function startProgress(duration) {
     progress.style.transition = `width ${duration}ms linear`;
     progress.style.width = "100%";
@@ -532,11 +576,12 @@ function showNotification(
     removeNow();
   });
 
-  // start
   requestAnimationFrame(() => startProgress(ttl));
 }
 
-// ---------- Rehidratación al cargar (rehydrate) ----------
+/* ============================
+  rehydratePendingNotifications: rehidrata notificaciones pendientes desde storage
+============================ */
 function rehydratePendingNotifications() {
   const now = Date.now();
   const arr = (_readPending() || []).filter(
@@ -549,28 +594,28 @@ function rehydratePendingNotifications() {
 
   arr.forEach((n) => {
     const remaining = Math.max(0, n.expiry - now);
-    // NO marcamos recent para 'success' (queremos que puedan repetirse) y además
-    // showNotification omite throttle para success por configuración arriba.
-    // re-llamamos showNotification con rehydrated:true para NO volver a guardar en storage
     showNotification(n.message, n.type, remaining, n.title || "", {
       persist: false,
       id: n.id,
       rehydrated: true,
     });
-    // finalmente removemos la entrada persistente (evita rehidratación repetida)
     _removePendingById(n.id);
   });
 
   _clearExpiredPending();
 }
 
-// Inicializar en DOMContentLoaded
+/* ============================
+  Inicialización de notificaciones al cargar DOM
+============================ */
 document.addEventListener("DOMContentLoaded", () => {
-  _cleanupRecent(); // limpiar antiguos
+  _cleanupRecent(); 
   rehydratePendingNotifications();
 });
 
-// helper para escapar texto (seguridad XSS si se usa texto arbitrario)
+/* ============================
+  escapeHtml: escapa texto para HTML
+============================ */
 function escapeHtml(s) {
   if (!s && s !== 0) return "";
   return String(s)
@@ -581,6 +626,9 @@ function escapeHtml(s) {
     .replace(/'/g, "&#039;");
 }
 
+/* ============================
+  ordenarLocal: ordena array localmente según currentSort y currentOrder
+============================ */
 function ordenarLocal(arr) {
   const dir = currentOrder === "asc" ? 1 : -1;
 
@@ -605,11 +653,10 @@ function ordenarLocal(arr) {
       }
 
       case "estado": {
-  x = a.completada ? 1 : 0; 
-  y = b.completada ? 1 : 0; 
-  break;
-}
-
+        x = a.completada ? 1 : 0;
+        y = b.completada ? 1 : 0;
+        break;
+      }
 
       case "descripcion": {
         x = (a.descripcion || "").toLowerCase();
@@ -618,31 +665,31 @@ function ordenarLocal(arr) {
       }
 
       case "hoy": {
-  const hoy = new Date();
-  hoy.setHours(0, 0, 0, 0);
+        const hoy = new Date();
+        hoy.setHours(0, 0, 0, 0);
 
-  const fa = new Date(a.fechaCreacion ?? a.fecha ?? 0);
-  const fb = new Date(b.fechaCreacion ?? b.fecha ?? 0);
+        const fa = new Date(a.fechaCreacion ?? a.fecha ?? 0);
+        const fb = new Date(b.fechaCreacion ?? b.fecha ?? 0);
 
-  // Filtrar solo tareas de hoy
-  const esHoyA = fa >= hoy;
-  const esHoyB = fb >= hoy;
+        const esHoyA = fa >= hoy;
+        const esHoyB = fb >= hoy;
 
-  // Si ambos son de hoy, ordenar por hora
-  if (esHoyA && esHoyB) {
-    x = fa.getTime();
-    y = fb.getTime();
-  } else if (esHoyA) {
-    x = 1; y = 0;
-  } else if (esHoyB) {
-    x = 0; y = 1;
-  } else {
-    x = 0; y = 0;
-  }
-  break;
-}
-
-
+        // Si ambos son de hoy, ordenar por hora
+        if (esHoyA && esHoyB) {
+          x = fa.getTime();
+          y = fb.getTime();
+        } else if (esHoyA) {
+          x = 1;
+          y = 0;
+        } else if (esHoyB) {
+          x = 0;
+          y = 1;
+        } else {
+          x = 0;
+          y = 0;
+        }
+        break;
+      }
 
       default: {
         x = a[currentSort];
@@ -674,16 +721,22 @@ function ordenarLocal(arr) {
   });
 }
 
-
+/* ============================
+  actualizarContadores: actualiza contadores de tareas en UI
+============================ */
 function actualizarContadores() {
   const total = cachedTareas.length;
-  const pendientes = cachedTareas.filter(t => !t.completada).length;
+  const pendientes = cachedTareas.filter((t) => !t.completada).length;
 
   document.getElementById("total").textContent = `Total: ${total}`;
-  document.getElementById("pendientes").textContent = `Pendientes: ${pendientes}`;
+  document.getElementById(
+    "pendientes"
+  ).textContent = `Pendientes: ${pendientes}`;
 
   document.getElementById("totalSidebar").textContent = `Total: ${total}`;
-  document.getElementById("pendientesSidebar").textContent = `Pendientes: ${pendientes}`;
+  document.getElementById(
+    "pendientesSidebar"
+  ).textContent = `Pendientes: ${pendientes}`;
 }
 
 /* ============================
@@ -692,25 +745,27 @@ function actualizarContadores() {
 const pageOptions = [5, 10, 20, 50]; // opciones para el selector
 
 /* ============================
-  Listado de tareas con paginación
+  Offline Overlay Management
 ============================ */
-/* ----------------- Overlay helpers + focus-trap (reemplazar versiones previas) ----------------- */
 const offlineOverlay = document.getElementById("offlineOverlay");
 const offlineMessageEl = document.getElementById("offlineMessage");
 const btnRetry = document.getElementById("btnRetry");
 const appRoot = document.querySelector(".app");
 
-let __previouslyFocused = null;
-let __focusTrapHandler = null;
-
+/* ============================
+  getFocusableWithin: obtiene elementos focusables dentro de un contenedor
+============================ */
 function _getFocusableWithin(el) {
   return Array.from(
     el.querySelectorAll(
-      'a[href], area[href], input:not([disabled]), select:not([disabled]), textarea:not([disabled]), button:not([disabled]), iframe, object, embed, [tabindex], [contenteditable]'
+      "a[href], area[href], input:not([disabled]), select:not([disabled]), textarea:not([disabled]), button:not([disabled]), iframe, object, embed, [tabindex], [contenteditable]"
     )
   ).filter((n) => n.tabIndex >= 0);
 }
 
+/* ============================
+  showOfflineOverlay / hideOfflineOverlay
+============================ */
 function showOfflineOverlay(message) {
   if (offlineMessageEl && message) offlineMessageEl.textContent = message;
   if (!offlineOverlay) return;
@@ -719,7 +774,6 @@ function showOfflineOverlay(message) {
   offlineOverlay.removeAttribute("hidden");
   document.body.classList.add("offline-active");
   appRoot?.classList.add("offline-blocked");
-  // accesibilidad: guardar foco y mover foco al primer elemento interactivo del overlay
   __previouslyFocused = document.activeElement;
   const focusables = _getFocusableWithin(offlineOverlay);
   if (focusables.length) {
@@ -751,36 +805,48 @@ function showOfflineOverlay(message) {
   };
   document.addEventListener("keydown", __focusTrapHandler, true);
 
-  // Prevent touch/scroll leakage on some mobile browsers (extra guard)
-  document.addEventListener("touchmove", _preventScrollWhileOffline, { passive: false });
+  document.addEventListener("touchmove", _preventScrollWhileOffline, {
+    passive: false,
+  });
 }
 
+/* ============================
+  hideOfflineOverlay
+============================ */
 function hideOfflineOverlay() {
   if (!offlineOverlay) return;
   offlineOverlay.setAttribute("hidden", "true");
   document.body.classList.remove("offline-active");
   appRoot?.classList.remove("offline-blocked");
 
-  // restore focus
   try {
-    if (__previouslyFocused && typeof __previouslyFocused.focus === "function") {
+    if (
+      __previouslyFocused &&
+      typeof __previouslyFocused.focus === "function"
+    ) {
       __previouslyFocused.focus();
     }
   } catch (e) {}
 
-  // remove focus trap
   if (__focusTrapHandler) {
     document.removeEventListener("keydown", __focusTrapHandler, true);
     __focusTrapHandler = null;
   }
-  document.removeEventListener("touchmove", _preventScrollWhileOffline, { passive: false });
+  document.removeEventListener("touchmove", _preventScrollWhileOffline, {
+    passive: false,
+  });
 }
 
+/* ============================
+  _preventScrollWhileOffline: evita scroll cuando está offline
+============================ */
 function _preventScrollWhileOffline(e) {
   e.preventDefault();
 }
 
-/* ----------------- fetchWithTimeout (igual) ----------------- */
+/* ============================
+  fetchWithTimeout: fetch con timeout abortable
+============================ */
 async function fetchWithTimeout(url, opts = {}, ms = 5000) {
   const controller = new AbortController();
   const id = setTimeout(() => controller.abort(), ms);
@@ -794,7 +860,9 @@ async function fetchWithTimeout(url, opts = {}, ms = 5000) {
   }
 }
 
-/* ----------------- btnRetry: intenta reconectar PERO NUNCA OCULTA EL OVERLAY DIRECTAMENTE  ----------------- */
+/* ============================
+  btnRetry click event: intentar reconectar
+============================ */
 btnRetry?.addEventListener("click", async () => {
   if (!btnRetry) return;
   // evitar múltiples clicks
@@ -802,7 +870,6 @@ btnRetry?.addEventListener("click", async () => {
   btnRetry.setAttribute("aria-busy", "true");
   offlineMessageEl.textContent = "Intentando reconectar...";
 
-  // Intentaremos obtener las tareas forzando fetch; listarTareas(true) está preparada para
   // ocultar el overlay SOLO si consigue respuesta válida del servidor.
   try {
     await listarTareas(true);
@@ -816,28 +883,41 @@ btnRetry?.addEventListener("click", async () => {
   }
 });
 
-/* ----------------- online/offline events: NUNCA ocultar overlay automáticamente al 'online' ----------------- */
+/* ============================
+  Eventos online/offline del navegador
+============================ */
 window.addEventListener("offline", () => {
-  showOfflineOverlay("Parece que estás desconectado. Revisa tu conexión a internet.");
+  showOfflineOverlay(
+    "Parece que estás desconectado. Revisa tu conexión a internet."
+  );
 });
 
+/* ============================
+  Evento online: intentar reconectar
+============================ */
 window.addEventListener("online", async () => {
   // no quitamos overlay aquí; intentamos forzar una reconexión segura
   if (!offlineOverlay || offlineOverlay.hasAttribute("hidden")) return;
-  offlineMessageEl.textContent = "Volviste online. Verificando conexión con el servidor...";
+  offlineMessageEl.textContent =
+    "Volviste online. Verificando conexión con el servidor...";
   // deshabilitar retry momentáneamente (evitar floods)
   btnRetry?.setAttribute("disabled", "true");
   try {
     await listarTareas(true); // listarTareas ocultará overlay si la verificación es OK
   } catch (e) {
     btnRetry?.removeAttribute("disabled");
-    offlineMessageEl.textContent = "No se pudo conectar al servidor. Intenta de nuevo.";
+    offlineMessageEl.textContent =
+      "No se pudo conectar al servidor. Intenta de nuevo.";
   }
 });
-// ----------------- Helpers de fecha -----------------
+
+/* ============================
+  formatFechaCreacion: formatea fecha de creación de tarea
+============================ */
 function _pad(n) {
   return String(n).padStart(2, "0");
 }
+
 
 function formatFechaCreacion(fechaInput) {
   if (!fechaInput) return "";
@@ -851,7 +931,11 @@ function formatFechaCreacion(fechaInput) {
     d.getMonth() === now.getMonth() &&
     d.getDate() === now.getDate();
 
-  const yesterday = new Date(now.getFullYear(), now.getMonth(), now.getDate() - 1);
+  const yesterday = new Date(
+    now.getFullYear(),
+    now.getMonth(),
+    now.getDate() - 1
+  );
   const isYesterday =
     d.getFullYear() === yesterday.getFullYear() &&
     d.getMonth() === yesterday.getMonth() &&
@@ -859,17 +943,13 @@ function formatFechaCreacion(fechaInput) {
 
   if (sameDay) return `Hoy, ${_pad(d.getHours())}:${_pad(d.getMinutes())}`;
   if (isYesterday) return "Ayer";
-  // formato: dd/mm/yyyy (ejemplo solicitado)
+  // formato: dd/mm/yyyy 
   return `${_pad(d.getDate())}/${_pad(d.getMonth() + 1)}/${d.getFullYear()}`;
 }
 
-/* --------------------- Modificación de listarTareas ---------------------
-   Reemplaza la parte donde haces: const res = await fetch(apiUrl);
-   por la siguiente implementación completa (sustituye tu función listarTareas por ésta).
-*/
-
-let __scrollLock = false;
-
+/* ============================
+  Gestión de scroll durante recarga de lista
+============================ */
 function freezeScroll() {
   if (__scrollLock) return;
   __scrollLock = true;
@@ -879,7 +959,9 @@ function freezeScroll() {
   window.__savedScrollX = x;
   window.__savedScrollY = y;
 }
-
+/* ============================
+  restoreScroll: restaura posición de scroll guardada
+============================ */
 function restoreScroll() {
   const x = window.__savedScrollX ?? 0;
   const y = window.__savedScrollY ?? 0;
@@ -893,9 +975,11 @@ function restoreScroll() {
   });
 }
 
-let isLoadingTareas = false;
+/* ============================
+  listarTareas: obtiene y muestra la lista de tareas
+============================ */
 async function listarTareas(forceFetch = false) {
-   freezeScroll();
+  freezeScroll();
 
   try {
     const emptyState = document.getElementById("emptyState");
@@ -953,15 +1037,15 @@ async function listarTareas(forceFetch = false) {
         (t.descripcion || "").toLowerCase().includes(q)
       );
     }
-// === FILTRO "CREADAS HOY" ===
-if (currentSort === "hoy") {
-  const hoy = new Date();
-  hoy.setHours(0, 0, 0, 0);
-  tareas = tareas.filter((t) => {
-    const fecha = new Date(t.fechaCreacion ?? t.fecha ?? 0);
-    return fecha >= hoy;
-  });
-}
+    // === FILTRO "CREADAS HOY" ===
+    if (currentSort === "hoy") {
+      const hoy = new Date();
+      hoy.setHours(0, 0, 0, 0);
+      tareas = tareas.filter((t) => {
+        const fecha = new Date(t.fechaCreacion ?? t.fecha ?? 0);
+        return fecha >= hoy;
+      });
+    }
     // === ORDEN ===
     tareas = ordenarLocal(tareas);
 
@@ -1015,18 +1099,16 @@ if (currentSort === "hoy") {
     actualizarContadores();
   } catch (err) {
     isLoadingTareas = false;
-    const msg = err?.name === "AbortError"
-      ? "La petición tardó demasiado y fue cancelada."
-      : "Error al obtener tareas: " + String(err);
+    const msg =
+      err?.name === "AbortError"
+        ? "La petición tardó demasiado y fue cancelada."
+        : "Error al obtener tareas: " + String(err);
     showNotification(msg, "error");
     showOfflineOverlay(msg);
-  }
- finally {
+  } finally {
     restoreScroll();
   }
 }
-
-
 
 /* ============================
   Cálculo de botones visibles según tamaño ventana
@@ -1153,8 +1235,9 @@ function renderPagination(totalPages) {
   });
 }
 
-// re-render ligero al redimensionar (debounced) para recalcular cantidad de botones
-let __pagResizeTimer = null;
+/* ============================
+  Evento resize: recargar lista para ajustar paginación
+============================ */
 window.addEventListener("resize", () => {
   clearTimeout(__pagResizeTimer);
   __pagResizeTimer = setTimeout(() => {
@@ -1162,7 +1245,6 @@ window.addEventListener("resize", () => {
     listarTareas();
   }, 120);
 });
-
 
 /* ============================
   Renderizado de la lista de tareas
@@ -1180,17 +1262,16 @@ function renderList(tareas) {
     tareas.length === 0 ? "block" : "none";
 
   tareas.forEach((t) => {
-  const li = document.createElement("li");
-  li.className = t.completada ? "completed" : "";
+    const li = document.createElement("li");
+    li.className = t.completada ? "completed" : "";
 
-  // ANIMACIÓN SOLO PARA TAREAS NUEVAS
-  const lastId = Number(localStorage.getItem("lastCreatedId"));
+    // ANIMACIÓN SOLO PARA TAREAS NUEVAS
+    const lastId = Number(localStorage.getItem("lastCreatedId"));
     if (t.id === lastId) {
       li.classList.add("task-enter");
       setTimeout(() => li.classList.remove("task-enter"), 350);
       localStorage.removeItem("lastCreatedId");
     }
-
 
     // Checkbox selección
     const sel = document.createElement("input");
@@ -1202,7 +1283,6 @@ function renderList(tareas) {
       const id = Number(e.target.dataset.id);
       if (e.target.checked) selectedIds.add(id);
       else selectedIds.delete(id);
-      // uncheck selectAll if not all selected
       const allBoxes = document.querySelectorAll(".sel-checkbox");
       const allChecked = [...allBoxes].every((b) => b.checked);
       document.getElementById("selectAll").checked = allChecked;
@@ -1219,69 +1299,69 @@ function renderList(tareas) {
     const desc = document.createElement("div");
     desc.className = "descripcion";
     // Dentro de la creación de desc
-desc.onclick = () => {
-  desc.classList.toggle("expanded");
-};
+    desc.onclick = () => {
+      desc.classList.toggle("expanded");
+    };
 
     desc.textContent = t.descripcion;
 
     // crear label (igual que antes)
-const label = document.createElement("span");
-label.className = "priority-label " + priorityClass(t.prioridad);
-label.textContent = t.prioridad || "Media";
+    const label = document.createElement("span");
+    label.className = "priority-label " + priorityClass(t.prioridad);
+    label.textContent = t.prioridad || "Media";
 
-// crear fecha (igual que antes)
-const fechaPriority = document.createElement("span");
-fechaPriority.className = "fecha-priority";
-fechaPriority.textContent = formatFechaCreacion(t.fechaCreacion ?? t.fecha ?? null);
+    // crear fecha (igual que antes)
+    const fechaPriority = document.createElement("span");
+    fechaPriority.className = "fecha-priority";
+    fechaPriority.textContent = formatFechaCreacion(
+      t.fechaCreacion ?? t.fecha ?? null
+    );
 
-// WRAPPER para prioridad + fecha (no altera resto)
-const priorityWrap = document.createElement("div");
-priorityWrap.className = "priority-wrap";
-priorityWrap.appendChild(label);
-priorityWrap.appendChild(fechaPriority);
+    // WRAPPER para prioridad + fecha (no altera resto)
+    const priorityWrap = document.createElement("div");
+    priorityWrap.className = "priority-wrap";
+    priorityWrap.appendChild(label);
+    priorityWrap.appendChild(fechaPriority);
 
-// append en el orden: descripción, luego el wrapper (no tocamos checkbox)
-left.appendChild(desc);
-left.appendChild(priorityWrap);
-
+    // append en el orden: descripción, luego el wrapper (no tocamos checkbox)
+    left.appendChild(desc);
+    left.appendChild(priorityWrap);
 
     const controls = document.createElement("div");
     controls.className = "controls";
 
     // Editar (usa prompt para simplicidad)
     const btnEdit = document.createElement("button");
-btnEdit.className = "small";
-btnEdit.textContent = "Editar";
+    btnEdit.className = "small";
+    btnEdit.textContent = "Editar";
 
-btnEdit.onclick = async () => {
-  // Abrir modal de edición
-  const nuevo = await openEditPanel(t.id, t.descripcion);
+    btnEdit.onclick = async () => {
+      // Abrir modal de edición
+      const nuevo = await openEditPanel(t.id, t.descripcion);
 
-  // Usuario canceló
-  if (nuevo === null) return;
+      // Usuario canceló
+      if (nuevo === null) return;
 
-  const texto = nuevo.trim();
-  if (!texto) {
-    showNotification("La descripción no puede estar vacía.", "error");
-    return;
-  }
+      const texto = nuevo.trim();
+      if (!texto) {
+        showNotification("La descripción no puede estar vacía.", "error");
+        return;
+      }
 
-  // Validar duplicado local
-  const exists = cachedTareas.some(
-    (other) =>
-      other.id !== t.id &&
-      (other.descripcion || "").trim().toLowerCase() === texto.toLowerCase()
-  );
-  if (exists) {
-    showNotification("Otra tarea ya tiene esa descripción.", "error");
-    return;
-  }
+      // Validar duplicado local
+      const exists = cachedTareas.some(
+        (other) =>
+          other.id !== t.id &&
+          (other.descripcion || "").trim().toLowerCase() === texto.toLowerCase()
+      );
+      if (exists) {
+        showNotification("Otra tarea ya tiene esa descripción.", "error");
+        return;
+      }
 
-  await editDescripcion(t.id, texto);  
-  listarTareas();
-};
-
+      await editDescripcion(t.id, texto);
+      listarTareas();
+    };
 
     // Toggle completed
     const btnToggle = document.createElement("button");
@@ -1313,13 +1393,16 @@ btnEdit.onclick = async () => {
     btnDelete.className = "small delete";
     btnDelete.textContent = "Eliminar";
     btnDelete.onclick = async () => {
-      if (!(await confirmAction({
-  title: "Eliminar tarea",
-  message: "¿Eliminar esta tarea?",
-  confirmText: "Eliminar",
-  cancelText: "Cancelar",
-  danger: true
-}))) return;
+      if (
+        !(await confirmAction({
+          title: "Eliminar tarea",
+          message: "¿Eliminar esta tarea?",
+          confirmText: "Eliminar",
+          cancelText: "Cancelar",
+          danger: true,
+        }))
+      )
+        return;
 
       try {
         const res = await fetch(`${apiUrl}/${t.id}`, { method: "DELETE" });
@@ -1334,52 +1417,58 @@ btnEdit.onclick = async () => {
         showNotification("Error al eliminar: " + err, "error");
       }
     };
-// Checkbox selección
-sel.type = "checkbox";
-sel.className = "sel-checkbox";
-sel.dataset.id = t.id;
-sel.checked = selectedIds.has(t.id);
-sel.title = "Seleccionar tarea";
+    // Checkbox selección
+    sel.type = "checkbox";
+    sel.className = "sel-checkbox";
+    sel.dataset.id = t.id;
+    sel.checked = selectedIds.has(t.id);
+    sel.title = "Seleccionar tarea";
 
-// Descripción
-desc.className = "descripcion";
-desc.textContent = t.descripcion;
-desc.title = t.descripcion;
+    // Descripción
+    desc.className = "descripcion";
+    desc.textContent = t.descripcion;
+    desc.title = t.descripcion;
 
-// Etiqueta prioridad
-label.className = "priority-label " + priorityClass(t.prioridad);
-label.textContent = t.prioridad || "Media";
-label.title = "Prioridad: " + t.prioridad;
+    // Etiqueta prioridad
+    label.className = "priority-label " + priorityClass(t.prioridad);
+    label.textContent = t.prioridad || "Media";
+    label.title = "Prioridad: " + t.prioridad;
 
-// Fecha
-fechaPriority.className = "fecha-priority";
-fechaPriority.textContent = formatFechaCreacion(t.fechaCreacion ?? t.fecha ?? null);
-fechaPriority.title = "Creada el " + fechaPriority.textContent;
+    // Fecha
+    fechaPriority.className = "fecha-priority";
+    fechaPriority.textContent = formatFechaCreacion(
+      t.fechaCreacion ?? t.fecha ?? null
+    );
+    fechaPriority.title = "Creada el " + fechaPriority.textContent;
 
-// Botón editar
-btnEdit.className = "small";
-btnEdit.textContent = "Editar";
-btnEdit.title = "Editar descripción";
+    // Botón editar
+    btnEdit.className = "small";
+    btnEdit.textContent = "Editar";
+    btnEdit.title = "Editar descripción";
 
-// Botón toggle completada
-btnToggle.className = "small toggle";
-btnToggle.textContent = t.completada ? "Marcar Pendiente" : "Marcar Completada";
-btnToggle.title = t.completada ? "Marcar como pendiente" : "Marcar como completada";
+    // Botón toggle completada
+    btnToggle.className = "small toggle";
+    btnToggle.textContent = t.completada
+      ? "Marcar Pendiente"
+      : "Marcar Completada";
+    btnToggle.title = t.completada
+      ? "Marcar como pendiente"
+      : "Marcar como completada";
 
-// Select prioridad
-select.className = "inline-select";
-select.title = "Cambiar prioridad";
+    // Select prioridad
+    select.className = "inline-select";
+    select.title = "Cambiar prioridad";
 
-// Botón eliminar
-btnDelete.className = "small delete";
-btnDelete.textContent = "Eliminar";
-btnDelete.title = "Eliminar tarea";
+    // Botón eliminar
+    btnDelete.className = "small delete";
+    btnDelete.textContent = "Eliminar";
+    btnDelete.title = "Eliminar tarea";
 
     controls.appendChild(btnEdit);
     controls.appendChild(btnToggle);
     controls.appendChild(select);
     controls.appendChild(btnDelete);
-    
+
     li.appendChild(left);
     li.appendChild(controls);
     ul.appendChild(li);
@@ -1393,8 +1482,6 @@ btnDelete.title = "Eliminar tarea";
   } else {
     document.getElementById("selectAll").checked = false;
   }
-  
-  
 }
 
 /* ============================
@@ -1555,7 +1642,6 @@ function toggleTheme() {
 btnThemeHeader?.addEventListener("click", toggleTheme);
 btnThemeSidebar?.addEventListener("click", toggleTheme);
 
-
 /* ============================
    VISTA (lista / mini)
 ============================ */
@@ -1620,7 +1706,6 @@ if (ulLista) {
 
   aplicarVista(false);
 }
-
 
 /* ============================
    AJUSTE DE CONTROLES EN LISTA
@@ -1703,7 +1788,6 @@ overlay?.addEventListener("click", () => {
 
   restoreState();
 
-  /* Aplicar layout después de restaurar (esto faltaba) */
   if (window.innerWidth >= 961) {
     appBody.style.gridTemplateColumns = sidebar.classList.contains("collapsed")
       ? "var(--sidebar-collapsed-w) 1fr"
@@ -1765,13 +1849,15 @@ overlay?.addEventListener("click", () => {
   });
 })();
 
-
+/* ============================
+    Confirm modal -> confirmAction(opts) -> Promise<bool>
+============================ */
 (function () {
-  const overlay = document.getElementById('confirmOverlay');
-  const titleEl = document.getElementById('confirmTitle');
-  const bodyEl = document.getElementById('confirmBody');
-  const okBtn = document.getElementById('confirmOkBtn');
-  const cancelBtn = document.getElementById('confirmCancelBtn');
+  const overlay = document.getElementById("confirmOverlay");
+  const titleEl = document.getElementById("confirmTitle");
+  const bodyEl = document.getElementById("confirmBody");
+  const okBtn = document.getElementById("confirmOkBtn");
+  const cancelBtn = document.getElementById("confirmCancelBtn");
 
   let queue = [];
   let active = false;
@@ -1780,29 +1866,35 @@ overlay?.addEventListener("click", () => {
   let timeoutId = null;
 
   function show(opts) {
-    titleEl.textContent = opts.title || 'Confirmar';
-    bodyEl.textContent = opts.message || '';
-    okBtn.textContent = opts.confirmText || 'Confirmar';
-    cancelBtn.textContent = opts.cancelText || 'Cancelar';
-    okBtn.classList.toggle('danger', !!opts.danger);
-    overlay.classList.add('show');
-    overlay.setAttribute('aria-hidden', 'false');
+    titleEl.textContent = opts.title || "Confirmar";
+    bodyEl.textContent = opts.message || "";
+    okBtn.textContent = opts.confirmText || "Confirmar";
+    cancelBtn.textContent = opts.cancelText || "Cancelar";
+    okBtn.classList.toggle("danger", !!opts.danger);
+    overlay.classList.add("show");
+    overlay.setAttribute("aria-hidden", "false");
     lastFocused = document.activeElement;
     // focus safety
     cancelBtn.focus();
-    document.addEventListener('keydown', keyHandler, true);
+    document.addEventListener("keydown", keyHandler, true);
   }
 
   function hide() {
-    overlay.classList.remove('show');
-    overlay.setAttribute('aria-hidden', 'true');
-    document.removeEventListener('keydown', keyHandler, true);
+    overlay.classList.remove("show");
+    overlay.setAttribute("aria-hidden", "true");
+    document.removeEventListener("keydown", keyHandler, true);
     if (lastFocused?.focus) lastFocused.focus();
   }
 
   function keyHandler(e) {
-    if (e.key === 'Escape') { e.preventDefault(); cancelBtn.click(); }
-    if ((e.ctrlKey || e.metaKey) && (e.key === 'Enter' || e.key === '\n')) { e.preventDefault(); okBtn.click(); }
+    if (e.key === "Escape") {
+      e.preventDefault();
+      cancelBtn.click();
+    }
+    if ((e.ctrlKey || e.metaKey) && (e.key === "Enter" || e.key === "\n")) {
+      e.preventDefault();
+      okBtn.click();
+    }
   }
 
   async function processQueue() {
@@ -1814,16 +1906,24 @@ overlay?.addEventListener("click", () => {
     show(opts);
 
     function finish(val) {
-      if (timeoutId) { clearTimeout(timeoutId); timeoutId = null; }
+      if (timeoutId) {
+        clearTimeout(timeoutId);
+        timeoutId = null;
+      }
       hide();
       active = false;
-      if (resolver) { resolver(val); resolver = null; }
+      if (resolver) {
+        resolver(val);
+        resolver = null;
+      }
       setTimeout(processQueue, 50);
     }
 
     okBtn.onclick = () => finish(true);
     cancelBtn.onclick = () => finish(false);
-    overlay.onclick = (ev) => { if (ev.target === overlay) finish(false); };
+    overlay.onclick = (ev) => {
+      if (ev.target === overlay) finish(false);
+    };
 
     if (opts.timeout && Number(opts.timeout) > 0) {
       timeoutId = setTimeout(() => finish(false), Number(opts.timeout));
@@ -1844,11 +1944,11 @@ overlay?.addEventListener("click", () => {
    devuelve null si cancelado
 --------------------------- */
 (function () {
-  const overlay = document.getElementById('editOverlay');
-  const textarea = document.getElementById('editTextarea');
-  const saveBtn = document.getElementById('editSave');
-  const cancelBtn = document.getElementById('editCancel');
-  const taskIdEl = document.getElementById('editTaskId');
+  const overlay = document.getElementById("editOverlay");
+  const textarea = document.getElementById("editTextarea");
+  const saveBtn = document.getElementById("editSave");
+  const cancelBtn = document.getElementById("editCancel");
+  const taskIdEl = document.getElementById("editTaskId");
 
   let resolver = null;
   let currentId = null;
@@ -1857,39 +1957,45 @@ overlay?.addEventListener("click", () => {
 
   function open(id, initial) {
     currentId = id;
-    taskIdEl.textContent = id ?? '—';
-    textarea.value = initial ?? '';
-    overlay.classList.add('show');
-    overlay.setAttribute('aria-hidden','false');
+    taskIdEl.textContent = id ?? "—";
+    textarea.value = initial ?? "";
+    overlay.classList.add("show");
+    overlay.setAttribute("aria-hidden", "false");
     lastFocused = document.activeElement;
     setTimeout(() => textarea.focus(), 50);
-    document.addEventListener('keydown', keyHandler, true);
+    document.addEventListener("keydown", keyHandler, true);
   }
 
   function close() {
-    overlay.classList.remove('show');
-    overlay.setAttribute('aria-hidden','true');
-    document.removeEventListener('keydown', keyHandler, true);
+    overlay.classList.remove("show");
+    overlay.setAttribute("aria-hidden", "true");
+    document.removeEventListener("keydown", keyHandler, true);
     if (lastFocused?.focus) lastFocused.focus();
   }
 
   function keyHandler(e) {
-    if (e.key === 'Escape') { e.preventDefault(); cancelBtn.click(); }
-    if ((e.ctrlKey || e.metaKey) && (e.key === 's' || e.key === 'S')) { e.preventDefault(); saveBtn.click(); }
+    if (e.key === "Escape") {
+      e.preventDefault();
+      cancelBtn.click();
+    }
+    if ((e.ctrlKey || e.metaKey) && (e.key === "s" || e.key === "S")) {
+      e.preventDefault();
+      saveBtn.click();
+    }
   }
 
-  saveBtn.addEventListener('click', async () => {
+  saveBtn.addEventListener("click", async () => {
     if (saving) return;
-    const val = (textarea.value || '').trim();
+    const val = (textarea.value || "").trim();
     if (val.length === 0) {
       showNotification?.("La descripción no puede estar vacía", "error");
       textarea.focus();
       return;
     }
     saving = true;
-    saveBtn.setAttribute('disabled','true');
+    saveBtn.setAttribute("disabled", "true");
     try {
-      if (typeof editDescripcion === 'function') {
+      if (typeof editDescripcion === "function") {
         await editDescripcion(currentId, val);
       } else {
         await fetch(`${apiUrl}/${currentId}`, {
@@ -1899,29 +2005,41 @@ overlay?.addEventListener("click", () => {
         });
       }
       close();
-      if (resolver) { resolver(val); resolver = null; }
+      if (resolver) {
+        resolver(val);
+        resolver = null;
+      }
     } catch (err) {
       showNotification?.("Error al guardar: " + err, "error");
-      if (resolver) { resolver(null); resolver = null; }
+      if (resolver) {
+        resolver(null);
+        resolver = null;
+      }
     } finally {
       saving = false;
-      saveBtn.removeAttribute('disabled');
+      saveBtn.removeAttribute("disabled");
     }
   });
 
-  cancelBtn.addEventListener('click', () => {
+  cancelBtn.addEventListener("click", () => {
     close();
-    if (resolver) { resolver(null); resolver = null; }
+    if (resolver) {
+      resolver(null);
+      resolver = null;
+    }
   });
 
-  overlay.addEventListener('click', (ev) => {
+  overlay.addEventListener("click", (ev) => {
     if (ev.target === overlay) {
       close();
-      if (resolver) { resolver(null); resolver = null; }
+      if (resolver) {
+        resolver(null);
+        resolver = null;
+      }
     }
   });
 
-  window.openEditPanel = function openEditPanel(id, initial = '') {
+  window.openEditPanel = function openEditPanel(id, initial = "") {
     return new Promise((resolve) => {
       resolver = resolve;
       open(id, initial);
@@ -1929,7 +2047,9 @@ overlay?.addEventListener("click", () => {
   };
 })();
 
-
+/* ============================
+    POPUP SELECT PRIORIDAD
+============================ */
 const btnIcon = document.getElementById("btnPrioridadIcon");
 const sel = document.getElementById("selCambiarPrioridad");
 let popup = null;
@@ -1960,7 +2080,7 @@ btnIcon.addEventListener("click", () => {
 
   const r = btnIcon.getBoundingClientRect();
   popup.style.top = r.top + "px";
-  popup.style.left = (r.right + 8) + "px";
+  popup.style.left = r.right + 8 + "px";
 
   clone.focus();
 
