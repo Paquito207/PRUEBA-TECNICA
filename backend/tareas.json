@@ -1192,4 +1192,346 @@
   "completada" : false,
   "fechaCreacion" : "2025-11-15T13:48:03.2941669",
   "prioridad" : "Media"
+}, {
+  "id" : 203,
+  "descripcion" : "fazer um viajem pra o brasil fazfazer um viajem pra o brasilfazer um viajem pra o brasilfazer um viajem pra o brasilfazer um viajem pra o brasilfazer um viajem pra o brasilfazer um viajem pra o brasiler um viajem pra o brasilfazer um viajem pra o brasil",
+  "completada" : false,
+  "fechaCreacion" : "2025-11-16T11:49:12.7835012",
+  "prioridad" : "Media"
+}, {
+  "id" : 204,
+  "descripcion" : "next day",
+  "completada" : false,
+  "fechaCreacion" : "2025-11-16T15:38:54.6622342",
+  "prioridad" : "Media"
+}, {
+  "id" : 205,
+  "descripcion" : "mmmmm",
+  "completada" : false,
+  "fechaCreacion" : "2025-11-16T15:46:57.4570515",
+  "prioridad" : "Media"
+}, {
+  "id" : 206,
+  "descripcion" : "nscsdsssssssdsds",
+  "completada" : false,
+  "fechaCreacion" : "2025-11-16T15:56:43.8270194",
+  "prioridad" : "Media"
+}, {
+  "id" : 207,
+  "descripcion" : "asdasdasda",
+  "completada" : false,
+  "fechaCreacion" : "2025-11-16T15:56:52.6206676",
+  "prioridad" : "Media"
+}, {
+  "id" : 208,
+  "descripcion" : "fdgfdgfgdfgdf",
+  "completada" : false,
+  "fechaCreacion" : "2025-11-16T15:57:24.5468501",
+  "prioridad" : "Alta"
+}, {
+  "id" : 209,
+  "descripcion" : "yutyutyutytyuty",
+  "completada" : false,
+  "fechaCreacion" : "2025-11-16T15:57:51.4731368",
+  "prioridad" : "Alta"
+}, {
+  "id" : 210,
+  "descripcion" : "ertertert",
+  "completada" : false,
+  "fechaCreacion" : "2025-11-16T15:58:16.8608946",
+  "prioridad" : "Media"
+}, {
+  "id" : 211,
+  "descripcion" : "erterter",
+  "completada" : false,
+  "fechaCreacion" : "2025-11-16T15:58:20.9769224",
+  "prioridad" : "Media"
+}, {
+  "id" : 212,
+  "descripcion" : "awlkne",
+  "completada" : false,
+  "fechaCreacion" : "2025-11-16T16:09:23.9211381",
+  "prioridad" : "Media"
+}, {
+  "id" : 213,
+  "descripcion" : "wet",
+  "completada" : false,
+  "fechaCreacion" : "2025-11-16T16:10:02.5083216",
+  "prioridad" : "Media"
+}, {
+  "id" : 214,
+  "descripcion" : "GHOSTEMANE - BONESAW",
+  "completada" : false,
+  "fechaCreacion" : "2025-11-16T16:11:30.0478067",
+  "prioridad" : "Media"
+}, {
+  "id" : 215,
+  "descripcion" : "GHOSTEMANE - BONESAWss",
+  "completada" : false,
+  "fechaCreacion" : "2025-11-16T16:11:38.3866526",
+  "prioridad" : "Media"
+}, {
+  "id" : 216,
+  "descripcion" : "@keyframes taskEnter {   0% {     opacity: 0;     transform: translateY(-14px);     filter: blur(4px);   }   60% {     opacity: 1;     transform: translateY(2px);     filter: blur(1px);   }   100% {     opacity: 1;     transform: translateY(0);     filter: blur(0);   } }  .task-enter {   animation: taskEnter 0.75s cubic-bezier(0.16, 1, 0.3, 1); }",
+  "completada" : false,
+  "fechaCreacion" : "2025-11-16T16:12:16.3667885",
+  "prioridad" : "Media"
+}, {
+  "id" : 217,
+  "descripcion" : "animation: taskEnter",
+  "completada" : false,
+  "fechaCreacion" : "2025-11-16T16:12:44.2817685",
+  "prioridad" : "Media"
+}, {
+  "id" : 218,
+  "descripcion" : "animation: taskEnters",
+  "completada" : false,
+  "fechaCreacion" : "2025-11-16T16:12:56.5110896",
+  "prioridad" : "Media"
+}, {
+  "id" : 219,
+  "descripcion" : "animation: taskEnteranimation: taskEnter",
+  "completada" : false,
+  "fechaCreacion" : "2025-11-16T16:13:03.0606641",
+  "prioridad" : "Media"
+}, {
+  "id" : 220,
+  "descripcion" : "transform: translateY(2px);",
+  "completada" : false,
+  "fechaCreacion" : "2025-11-16T16:13:22.5753782",
+  "prioridad" : "Alta"
+}, {
+  "id" : 221,
+  "descripcion" : "transform: translateY(2px);transform: translateY(2px);",
+  "completada" : false,
+  "fechaCreacion" : "2025-11-16T16:13:28.0927665",
+  "prioridad" : "Media"
+}, {
+  "id" : 222,
+  "descripcion" : "will-change: transform, opacity, filter;",
+  "completada" : false,
+  "fechaCreacion" : "2025-11-16T16:17:28.1355217",
+  "prioridad" : "Media"
+}, {
+  "id" : 223,
+  "descripcion" : "animation: taskPushDown",
+  "completada" : false,
+  "fechaCreacion" : "2025-11-16T16:18:32.2770328",
+  "prioridad" : "Media"
+}, {
+  "id" : 224,
+  "descripcion" : "transform: translateYasdasd",
+  "completada" : false,
+  "fechaCreacion" : "2025-11-16T16:21:12.4465034",
+  "prioridad" : "Media"
+}, {
+  "id" : 225,
+  "descripcion" : "@keyframes enterZoomCinematic {   0% { opacity: 0; transform: scale(0.6) translateY(30px); filter: blur(6px); }   40% { opacity: 1; transform: scale(1.05) translateY(-6px); filter: blur(1px); }   100% { transform: scale(1) translateY(0); filter: blur(0); } }",
+  "completada" : false,
+  "fechaCreacion" : "2025-11-16T16:22:06.4015476",
+  "prioridad" : "Media"
+}, {
+  "id" : 226,
+  "descripcion" : "enterAccordion",
+  "completada" : false,
+  "fechaCreacion" : "2025-11-16T16:23:00.0474389",
+  "prioridad" : "Media"
+}, {
+  "id" : 227,
+  "descripcion" : "enterZoomCinematic",
+  "completada" : false,
+  "fechaCreacion" : "2025-11-16T16:23:24.0904088",
+  "prioridad" : "Media"
+}, {
+  "id" : 228,
+  "descripcion" : "enterZoomCinematicd",
+  "completada" : false,
+  "fechaCreacion" : "2025-11-16T16:23:29.7401674",
+  "prioridad" : "Media"
+}, {
+  "id" : 229,
+  "descripcion" : "enterZoomCinematicff",
+  "completada" : false,
+  "fechaCreacion" : "2025-11-16T16:23:48.0760798",
+  "prioridad" : "Media"
+}, {
+  "id" : 230,
+  "descripcion" : "enterElastic",
+  "completada" : false,
+  "fechaCreacion" : "2025-11-16T16:24:11.8918411",
+  "prioridad" : "Media"
+}, {
+  "id" : 231,
+  "descripcion" : "enterGravity",
+  "completada" : false,
+  "fechaCreacion" : "2025-11-16T16:24:41.1282122",
+  "prioridad" : "Media"
+}, {
+  "id" : 232,
+  "descripcion" : "enterPulseSoft",
+  "completada" : false,
+  "fechaCreacion" : "2025-11-16T16:25:05.5986491",
+  "prioridad" : "Media"
+}, {
+  "id" : 233,
+  "descripcion" : "enterPulseSoftdd",
+  "completada" : false,
+  "fechaCreacion" : "2025-11-16T16:25:11.3228584",
+  "prioridad" : "Media"
+}, {
+  "id" : 234,
+  "descripcion" : "enterExpand",
+  "completada" : false,
+  "fechaCreacion" : "2025-11-16T16:25:36.2188184",
+  "prioridad" : "Media"
+}, {
+  "id" : 235,
+  "descripcion" : "enterFloat",
+  "completada" : true,
+  "fechaCreacion" : "2025-11-16T16:26:29.359595",
+  "prioridad" : "Media"
+}, {
+  "id" : 236,
+  "descripcion" : "enterFloatccc",
+  "completada" : false,
+  "fechaCreacion" : "2025-11-16T16:26:35.1358731",
+  "prioridad" : "Media"
+}, {
+  "id" : 237,
+  "descripcion" : "enterWave",
+  "completada" : false,
+  "fechaCreacion" : "2025-11-16T16:27:19.2194827",
+  "prioridad" : "Alta"
+}, {
+  "id" : 238,
+  "descripcion" : "enterWavesdsds",
+  "completada" : false,
+  "fechaCreacion" : "2025-11-16T16:27:28.9145354",
+  "prioridad" : "Alta"
+}, {
+  "id" : 239,
+  "descripcion" : "enterSlideTop",
+  "completada" : false,
+  "fechaCreacion" : "2025-11-16T16:34:41.1898511",
+  "prioridad" : "Alta"
+}, {
+  "id" : 240,
+  "descripcion" : "enterSlideTopzxzx",
+  "completada" : false,
+  "fechaCreacion" : "2025-11-16T16:35:54.8094036",
+  "prioridad" : "Alta"
+}, {
+  "id" : 241,
+  "descripcion" : "asdas",
+  "completada" : false,
+  "fechaCreacion" : "2025-11-16T16:36:02.690244",
+  "prioridad" : "Alta"
+}, {
+  "id" : 242,
+  "descripcion" : "enterSlideLeft",
+  "completada" : false,
+  "fechaCreacion" : "2025-11-16T16:38:03.53656",
+  "prioridad" : "Alta"
+}, {
+  "id" : 243,
+  "descripcion" : "ss",
+  "completada" : false,
+  "fechaCreacion" : "2025-11-16T16:38:09.9519173",
+  "prioridad" : "Alta"
+}, {
+  "id" : 244,
+  "descripcion" : "cvbcvbc",
+  "completada" : false,
+  "fechaCreacion" : "2025-11-16T16:38:24.932071",
+  "prioridad" : "Alta"
+}, {
+  "id" : 245,
+  "descripcion" : ".task-enter",
+  "completada" : false,
+  "fechaCreacion" : "2025-11-16T16:39:24.2426215",
+  "prioridad" : "Alta"
+}, {
+  "id" : 246,
+  "descripcion" : "enterFadeIn",
+  "completada" : false,
+  "fechaCreacion" : "2025-11-16T16:40:35.2633279",
+  "prioridad" : "Alta"
+}, {
+  "id" : 247,
+  "descripcion" : "enterSlideBottom",
+  "completada" : false,
+  "fechaCreacion" : "2025-11-16T16:41:26.8333555",
+  "prioridad" : "Alta"
+}, {
+  "id" : 248,
+  "descripcion" : "enterSlideBottom ccc",
+  "completada" : false,
+  "fechaCreacion" : "2025-11-16T16:41:37.686027",
+  "prioridad" : "Alta"
+}, {
+  "id" : 249,
+  "descripcion" : "enterSlideBottom sa",
+  "completada" : false,
+  "fechaCreacion" : "2025-11-16T16:41:45.2521568",
+  "prioridad" : "Alta"
+}, {
+  "id" : 250,
+  "descripcion" : "enterSlideBottom erwew",
+  "completada" : false,
+  "fechaCreacion" : "2025-11-16T16:41:52.698528",
+  "prioridad" : "Alta"
+}, {
+  "id" : 251,
+  "descripcion" : "transform: translateY(0);",
+  "completada" : false,
+  "fechaCreacion" : "2025-11-16T16:43:25.9428401",
+  "prioridad" : "Alta"
+}, {
+  "id" : 252,
+  "descripcion" : "transform: translateY(0);as",
+  "completada" : false,
+  "fechaCreacion" : "2025-11-16T16:43:36.4980342",
+  "prioridad" : "Alta"
+}, {
+  "id" : 253,
+  "descripcion" : "Entrada lenta, sin salto",
+  "completada" : false,
+  "fechaCreacion" : "2025-11-16T16:44:51.6704941",
+  "prioridad" : "Alta"
+}, {
+  "id" : 254,
+  "descripcion" : "Entrada lenta, sin saltoasd",
+  "completada" : false,
+  "fechaCreacion" : "2025-11-16T16:45:08.6441003",
+  "prioridad" : "Alta"
+}, {
+  "id" : 255,
+  "descripcion" : "Entrada lenta, sin saltoxcz",
+  "completada" : false,
+  "fechaCreacion" : "2025-11-16T16:45:17.2058541",
+  "prioridad" : "Alta"
+}, {
+  "id" : 256,
+  "descripcion" : "Entrada lenta, sin saltowerwer",
+  "completada" : true,
+  "fechaCreacion" : "2025-11-16T16:45:26.7978063",
+  "prioridad" : "Alta"
+}, {
+  "id" : 257,
+  "descripcion" : "Entrada lenta, sin saltowerwerjhgjhgjjhgjh",
+  "completada" : false,
+  "fechaCreacion" : "2025-11-16T19:12:54.9872431",
+  "prioridad" : "Alta"
+}, {
+  "id" : 258,
+  "descripcion" : "jhffffffffffffffffffffffffffffasccccccccccccccccccccccccccccccccccccccccccffffffffbvnbvnbvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv",
+  "completada" : false,
+  "fechaCreacion" : "2025-11-16T20:27:29.9380608",
+  "prioridad" : "Media"
+}, {
+  "id" : 259,
+  "descripcion" : "alskjs ojjaj jaskjda sd iahiouoIHUS Isiu fdsosfdsifohdosfodhiso fdoi sofios fidifdiofdioahsifd sfodi fa eofiao g UASIAOSsdfsdfsd",
+  "completada" : false,
+  "fechaCreacion" : "2025-11-16T20:28:21.9668654",
+  "prioridad" : "Baja"
 } ]

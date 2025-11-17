@@ -153,7 +153,7 @@
         <aside class="sidebar" id="appSidebar" aria-expanded="true">
           <div>
             <div class="sidebar-header">
-              <p>Crea una nueva tarea</p>
+              
 
               <button
                 id="btnExpandSidebar"
@@ -248,6 +248,7 @@
             </div>
 
             <form id="formTarea" class="form">
+              <p>Crea una nueva tarea</p>
               <input
                 type="text"
                 id="descripcion"
@@ -276,14 +277,81 @@
               </div>
 
               <!-- FILA 2: select prioridad -->
-              <div class="single-row priority-inline">
-                <select id="selCambiarPrioridad" aria-label="Cambiar prioridad">
-                  <option value="">-- Cambiar prioridad --</option>
-                  <option value="Alta">Alta</option>
-                  <option value="Media">Media</option>
-                  <option value="Baja">Baja</option>
-                </select>
-              </div>
+<div class="single-row priority-inline" style="position:relative;">
+
+  <!-- ICONO para modo colapsado -->
+  <button id="btnPrioridadIcon" class="priority-icon-btn" aria-label="Cambiar prioridad">
+    <svg width="20" height="20" viewBox="0 0 24 24" stroke="currentColor" fill="none" stroke-width="2">
+      <path d="M4 6h12l-2 4 2 4H4z"></path>
+      <path d="M4 6v16"></path>
+    </svg>
+  </button>
+
+  <select id="selCambiarPrioridad" aria-label="Cambiar prioridad">
+    <option value="">-- Cambiar prioridad --</option>
+    <option value="Alta">Alta</option>
+    <option value="Media">Media</option>
+    <option value="Baja">Baja</option>
+  </select>
+</div>
+<script>
+const btnIcon = document.getElementById("btnPrioridadIcon");
+const sel = document.getElementById("selCambiarPrioridad");
+let popup = null;
+
+btnIcon.addEventListener("click", () => {
+  if (popup) return closePopup();
+
+  popup = document.createElement("div");
+  popup.style.position = "fixed";
+  popup.style.zIndex = "2000";
+  popup.style.background = "var(--panel-bg)";
+  popup.style.border = "1px solid rgba(0,0,0,0.12)";
+  popup.style.boxShadow = "0 6px 22px rgba(0,0,0,.25)";
+  popup.style.padding = "6px";
+  popup.style.borderRadius = "10px";
+
+  const clone = sel.cloneNode(true);
+  clone.id = "popupPrioritySel";
+
+  clone.addEventListener("change", () => {
+    sel.value = clone.value;
+    sel.dispatchEvent(new Event("change"));
+    closePopup();
+  });
+
+  popup.appendChild(clone);
+  document.body.appendChild(popup);
+
+  const r = btnIcon.getBoundingClientRect();
+  popup.style.top = r.top + "px";
+  popup.style.left = (r.right + 8) + "px";
+
+  clone.focus();
+
+  document.addEventListener("mousedown", outsideClose);
+  document.addEventListener("keydown", escClose);
+});
+
+function outsideClose(e) {
+  if (!popup) return;
+  if (popup.contains(e.target) || e.target === btnIcon) return;
+  closePopup();
+}
+
+function escClose(e) {
+  if (e.key === "Escape") closePopup();
+}
+
+function closePopup() {
+  if (!popup) return;
+  popup.remove();
+  popup = null;
+  document.removeEventListener("mousedown", outsideClose);
+  document.removeEventListener("keydown", escClose);
+}
+</script>
+
 
               <!-- FILA 3: marcar completadas / pendientes -->
               <div class="bulk-toggle btn-group">
@@ -302,7 +370,8 @@
                       stroke-linejoin="round"
                     />
                   </svg>
-                  completadas
+                  <span class="btn-label">completadas</span>
+                  
                 </button>
 
                 <button
@@ -328,7 +397,8 @@
                       stroke-linejoin="round"
                     />
                   </svg>
-                  Pendientes
+                  <span class="btn-label">Pendientes</span>
+                  
                 </button>
               </div>
 
@@ -349,7 +419,8 @@
                       stroke-linejoin="round"
                     />
                   </svg>
-                  Eliminar
+                  <span class="btn-label">Eliminar</span>
+                  
                 </button>
                 <button
                   id="btnAplicarPrioridad"
@@ -372,7 +443,8 @@
                       stroke-linejoin="round"
                     />
                   </svg>
-                  Aplicar
+                  <span class="btn-label">Aplicar</span>
+                  
                 </button>
               </div>
 
@@ -400,7 +472,8 @@
                       stroke-linejoin="round"
                     />
                   </svg>
-                  CSV
+                  <span class="btn-label">CSV</span>
+                  
                 </button>
 
                 <button id="btnExportJSON" class="btn btn-ghost" type="button">
@@ -422,7 +495,8 @@
                       stroke-linejoin="round"
                     />
                   </svg>
-                  JSON
+                  <span class="btn-label">JSON</span>
+                  
                 </button>
               </div>
             </div>
@@ -451,12 +525,15 @@
                 <select id="sortSelect">
                   <option value="fecha">Fecha</option>
                   <option value="prioridad">Prioridad</option>
+                  <option value="estado">Estado</option>
                   <option value="descripcion">Descripción</option>
+                  <option value="hoy">Solo hoy</option>
                 </select>
 
                 <select id="orderSelect">
-                  <option value="asc">Asc</option>
                   <option value="desc">Desc</option>
+                  <option value="asc">Asc</option>
+                  
                 </select>
 
                 <!-- comentado para hacer peticiones automáticas al cambiar los select 

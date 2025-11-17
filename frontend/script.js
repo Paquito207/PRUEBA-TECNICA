@@ -1,7 +1,7 @@
 const apiUrl = "http://localhost:8080/api/tareas";
 
 let currentSort = "fecha";
-let currentOrder = "asc";
+let currentOrder = "desc";
 let currentSearch = "";
 const selectedIds = new Set();
 let cachedTareas = []; // cache local para validaciones y evitar fetchs extra
@@ -114,15 +114,21 @@ let __searchTimer = null;
       });
 
       const body = await safeJson(res);
-      if (!res.ok) {
-        showNotification(body?.error || "Error al crear tarea", "error");
-        return;
-      }
+if (!res.ok) {
+  showNotification(body?.error || "Error al crear tarea", "error");
+  return;
+}
 
-      showNotification(body?.message || "Tarea creada", "success");
-      document.getElementById("descripcion").value = "";
-      document.getElementById("prioridad").value = "Media";
-      listarTareas();
+showNotification(body?.message || "Tarea creada", "success");
+
+// Guardar ID de la última tarea creada
+localStorage.setItem("lastCreatedId", body.id);
+
+document.getElementById("descripcion").value = "";
+document.getElementById("prioridad").value = "Media";
+document.getElementById("descripcion").blur();
+listarTareas();
+
     } catch (err) {
       showNotification("Error al crear tarea: " + err, "error");
     }
@@ -266,22 +272,6 @@ let __searchTimer = null;
   listarTareas();
   aplicarVista();
 });
-
-function crearVerMas(descEl, texto) {
-  const limite = 120; // caracteres aproximados antes de mostrar botón
-  if (texto.length <= limite) return;
-
-  const btn = document.createElement("button");
-  btn.className = "ver-mas-btn";
-  btn.textContent = "Ver más";
-
-  btn.onclick = () => {
-    const expanded = descEl.classList.toggle("expanded");
-    btn.textContent = expanded ? "Ver menos" : "Ver más";
-  };
-
-  return btn;
-}
 
 // safe parse JSON helper
 async function safeJson(res) {
@@ -614,11 +604,45 @@ function ordenarLocal(arr) {
         break;
       }
 
+      case "estado": {
+  x = a.completada ? 1 : 0; 
+  y = b.completada ? 1 : 0; 
+  break;
+}
+
+
       case "descripcion": {
         x = (a.descripcion || "").toLowerCase();
         y = (b.descripcion || "").toLowerCase();
         break;
       }
+
+      case "hoy": {
+  const hoy = new Date();
+  hoy.setHours(0, 0, 0, 0);
+
+  const fa = new Date(a.fechaCreacion ?? a.fecha ?? 0);
+  const fb = new Date(b.fechaCreacion ?? b.fecha ?? 0);
+
+  // Filtrar solo tareas de hoy
+  const esHoyA = fa >= hoy;
+  const esHoyB = fb >= hoy;
+
+  // Si ambos son de hoy, ordenar por hora
+  if (esHoyA && esHoyB) {
+    x = fa.getTime();
+    y = fb.getTime();
+  } else if (esHoyA) {
+    x = 1; y = 0;
+  } else if (esHoyB) {
+    x = 0; y = 1;
+  } else {
+    x = 0; y = 0;
+  }
+  break;
+}
+
+
 
       default: {
         x = a[currentSort];
@@ -810,13 +834,69 @@ window.addEventListener("online", async () => {
     offlineMessageEl.textContent = "No se pudo conectar al servidor. Intenta de nuevo.";
   }
 });
+// ----------------- Helpers de fecha -----------------
+function _pad(n) {
+  return String(n).padStart(2, "0");
+}
+
+function formatFechaCreacion(fechaInput) {
+  if (!fechaInput) return "";
+  // acepta timestamp, ISO string u objeto Date
+  const d = fechaInput instanceof Date ? fechaInput : new Date(fechaInput);
+  if (isNaN(d)) return "";
+
+  const now = new Date();
+  const sameDay =
+    d.getFullYear() === now.getFullYear() &&
+    d.getMonth() === now.getMonth() &&
+    d.getDate() === now.getDate();
+
+  const yesterday = new Date(now.getFullYear(), now.getMonth(), now.getDate() - 1);
+  const isYesterday =
+    d.getFullYear() === yesterday.getFullYear() &&
+    d.getMonth() === yesterday.getMonth() &&
+    d.getDate() === yesterday.getDate();
+
+  if (sameDay) return `Hoy, ${_pad(d.getHours())}:${_pad(d.getMinutes())}`;
+  if (isYesterday) return "Ayer";
+  // formato: dd/mm/yyyy (ejemplo solicitado)
+  return `${_pad(d.getDate())}/${_pad(d.getMonth() + 1)}/${d.getFullYear()}`;
+}
 
 /* --------------------- Modificación de listarTareas ---------------------
    Reemplaza la parte donde haces: const res = await fetch(apiUrl);
    por la siguiente implementación completa (sustituye tu función listarTareas por ésta).
 */
+
+let __scrollLock = false;
+
+function freezeScroll() {
+  if (__scrollLock) return;
+  __scrollLock = true;
+  const x = window.scrollX;
+  const y = window.scrollY;
+  document.body.style.scrollBehavior = "auto";
+  window.__savedScrollX = x;
+  window.__savedScrollY = y;
+}
+
+function restoreScroll() {
+  const x = window.__savedScrollX ?? 0;
+  const y = window.__savedScrollY ?? 0;
+
+  requestAnimationFrame(() => {
+    window.scrollTo(x, y);
+    requestAnimationFrame(() => {
+      document.body.style.scrollBehavior = "";
+      __scrollLock = false;
+    });
+  });
+}
+
 let isLoadingTareas = false;
 async function listarTareas(forceFetch = false) {
+   freezeScroll();
+
   try {
     const emptyState = document.getElementById("emptyState");
 
@@ -873,7 +953,15 @@ async function listarTareas(forceFetch = false) {
         (t.descripcion || "").toLowerCase().includes(q)
       );
     }
-
+// === FILTRO "CREADAS HOY" ===
+if (currentSort === "hoy") {
+  const hoy = new Date();
+  hoy.setHours(0, 0, 0, 0);
+  tareas = tareas.filter((t) => {
+    const fecha = new Date(t.fechaCreacion ?? t.fecha ?? 0);
+    return fecha >= hoy;
+  });
+}
     // === ORDEN ===
     tareas = ordenarLocal(tareas);
 
@@ -932,6 +1020,9 @@ async function listarTareas(forceFetch = false) {
       : "Error al obtener tareas: " + String(err);
     showNotification(msg, "error");
     showOfflineOverlay(msg);
+  }
+ finally {
+    restoreScroll();
   }
 }
 
@@ -1072,6 +1163,7 @@ window.addEventListener("resize", () => {
   }, 120);
 });
 
+
 /* ============================
   Renderizado de la lista de tareas
 ============================ */
@@ -1088,8 +1180,17 @@ function renderList(tareas) {
     tareas.length === 0 ? "block" : "none";
 
   tareas.forEach((t) => {
-    const li = document.createElement("li");
-    li.className = t.completada ? "completed" : "";
+  const li = document.createElement("li");
+  li.className = t.completada ? "completed" : "";
+
+  // ANIMACIÓN SOLO PARA TAREAS NUEVAS
+  const lastId = Number(localStorage.getItem("lastCreatedId"));
+    if (t.id === lastId) {
+      li.classList.add("task-enter");
+      setTimeout(() => li.classList.remove("task-enter"), 350);
+      localStorage.removeItem("lastCreatedId");
+    }
+
 
     // Checkbox selección
     const sel = document.createElement("input");
@@ -1117,14 +1218,33 @@ function renderList(tareas) {
 
     const desc = document.createElement("div");
     desc.className = "descripcion";
+    // Dentro de la creación de desc
+desc.onclick = () => {
+  desc.classList.toggle("expanded");
+};
+
     desc.textContent = t.descripcion;
 
-    const label = document.createElement("span");
-    label.className = "priority-label " + priorityClass(t.prioridad);
-    label.textContent = t.prioridad || "Media";
+    // crear label (igual que antes)
+const label = document.createElement("span");
+label.className = "priority-label " + priorityClass(t.prioridad);
+label.textContent = t.prioridad || "Media";
 
-    left.appendChild(desc);
-    left.appendChild(label);
+// crear fecha (igual que antes)
+const fechaPriority = document.createElement("span");
+fechaPriority.className = "fecha-priority";
+fechaPriority.textContent = formatFechaCreacion(t.fechaCreacion ?? t.fecha ?? null);
+
+// WRAPPER para prioridad + fecha (no altera resto)
+const priorityWrap = document.createElement("div");
+priorityWrap.className = "priority-wrap";
+priorityWrap.appendChild(label);
+priorityWrap.appendChild(fechaPriority);
+
+// append en el orden: descripción, luego el wrapper (no tocamos checkbox)
+left.appendChild(desc);
+left.appendChild(priorityWrap);
+
 
     const controls = document.createElement("div");
     controls.className = "controls";
@@ -1219,16 +1339,7 @@ btnEdit.onclick = async () => {
     controls.appendChild(btnToggle);
     controls.appendChild(select);
     controls.appendChild(btnDelete);
-    // ahora verMas
-    const verMas = crearVerMas(desc, t.descripcion);
-    if (verMas) {
-      if (currentView === "mini") {
-        controls.appendChild(verMas);
-      } else {
-        // en lista, agregar después de descripción para que no quede oculto
-        desc.parentElement.appendChild(verMas);
-      }
-    }
+    
     li.appendChild(left);
     li.appendChild(controls);
     ul.appendChild(li);

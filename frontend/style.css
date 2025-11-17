@@ -175,7 +175,6 @@ body {
 
 /* Sidebar */
 .sidebar {
-  text-align: center;
   background: var(--surface);
   border-radius: var(--radius);
   padding: 18px 20px;
@@ -329,274 +328,189 @@ body {
   outline: none;
 }
 
-/* GESTIÓN MULTIPLE */
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* Contenedor principal: columna única */
 .gestion {
   display: flex;
   flex-direction: column;
-  gap: 16px;
-  padding: 16px;
-  background: var(--panel-bg);
-  border-radius: 14px;
-  border: 1px solid var(--panel-border);
+  gap: var(--gap);
+  width: 100%;
+  max-width: 420px;
+  background: var(--surface);
+  padding: var(--gap);
+  border-radius: var(--radius);
+  box-shadow: var(--card-shadow);
+  box-sizing: border-box;
+  font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+  color: var(--text);
 }
 
-.select-all {
+/* Cada fila mantiene alineación vertical centrada */
+.single-row,
+.bulk-toggle,
+.apply-delete,
+.export-actions {
   display: flex;
-  align-items: center;
+  flex-direction: column;
   gap: 8px;
-  font-size: 14px;
-  color: var(--muted);
+  width: 100%;
 }
 
-/* ==============================
-   CONTENEDOR PRINCIPAL
-   ============================== */
-.gestion {
-  display: block;
-  max-width: 980px;
-  margin: 0 auto;
-  padding: 16px;
+/* Label "Seleccionar todo" */
+.select-all {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+  user-select: none;
+  font-weight: 600;
+  color: var(--text);
+}
+
+/* Checkbox más legible */
+.select-all input[type="checkbox"]{
+  width: 18px;
+  height: 18px;
+  margin: 0;
+  accent-color: var(--accent);
+  flex: 0 0 18px;
+}
+
+/* Select: ancho completo y apariencia limpia */
+.priority-inline select {
+  width: 100%;
+  padding: 10px 12px;
+  border-radius: var(--radius);
+  border: 1px solid var(--input-border);
   background: var(--panel-bg);
-  border-radius: 12px;
+  font-weight: 600;
+  appearance: none;
+  color: var(--text);
+  box-sizing: border-box;
+}
+
+/* Grupos de botones: columna */
+.btn-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  width: 100%;
+}
+
+/* Botón base */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 12px;
+  border-radius: var(--radius);
+  border: 1px solid var(--btn-border);
+  background: var(--btn-bg);
+  cursor: pointer;
+  text-align: left;
+  transition: transform var(--transition-fast) ease, box-shadow var(--transition-fast) ease;
+  width: 100%;
+  height: 50px;
+  box-sizing: border-box;
+}
+
+/* Iconos */
+.btn .ico {
+  width: 16px;
+  height: 16px;
+  flex: 0 0 16px;
+  display: inline-block;
+}
+
+/* Estados y variantes */
+.btn-primary {
+  background: var(--accent);
+  color: #fff;
+  border-color: transparent;
   box-shadow: var(--card-shadow);
 }
 
-/* Top: dos áreas (izq = prioridad, der = acciones) */
-.actions-top {
-  display: flex;
-  gap: 16px;
-  align-items: center;
-  justify-content: space-between;
-  flex-wrap: wrap;
-}
-
-/* left / right */
-.actions-top .left {
-  display: flex;
-  gap: 16px;
-  align-items: center;
-  min-width: 220px;
-}
-
-.actions-top .right {
-  display: flex;
-  gap: 12px;
-  align-items: center;
-  justify-content: flex-end;
-  flex: 1 1 auto;
-  min-width: 280px;
-}
-
-/* selector + aplicar (alineados) */
-.priority-inline {
-  display: flex;
-  gap: 8px;
-  align-items: center;
-}
-
-/* ==============================
-   LAYOUT PRINCIPAL PARA ACCIONES
-   ============================== */
-/* contenedor superior con 3 zonas posibles: left / center / right */
-.actions-top {
-  display: flex;
-  gap: 12px;
-  align-items: center;
-  justify-content: space-between;
-  flex-wrap: nowrap; /* fuerza una sola línea en pantallas amplias */
-  width: 100%;
-  column-gap: 14px;
-  row-gap: 6px;
-}
-
-/* zonas internas: mantienen los elementos en línea */
-.actions-top .left,
-.actions-top .center,
-.actions-top .right {
-  display: flex;
-  gap: 10px;
-  align-items: center;
-  flex-wrap: nowrap; /* evitar salto de línea dentro de cada zona */
-}
-
-/* utilidad: fila única, evita wrap y controla overflow */
-.single-row {
-  display: flex;
-  gap: 8px;
-  align-items: center;
-  flex-wrap: nowrap;
-  white-space: nowrap;
-  overflow: hidden;
-}
-
-/* si algún elemento es largo, truncarlo en lugar de romper la fila */
-.single-row > * {
-  min-width: 0; /* permite que flex-shrink funcione */
-}
-
-/* ==============================
-   GRUPOS INTERNOS
-   ============================== */
-.group {
-  display: flex;
-  gap: 8px;
-  align-items: center;
-  flex-wrap: nowrap; /* un solo renglón por grupo */
-}
-
-/* acciones principales agrupadas con separación visual */
-.actions-group {
-  display: flex;
-  gap: 8px;
-  align-items: center;
-  flex-wrap: nowrap;
-}
-
-/* export - csv y json en la misma fila */
-.export-group {
-  display: flex;
-  gap: 8px;
-  align-items: center;
-  flex-wrap: nowrap;
-}
-
-/* ==============================
-   SELECT-ALL y CHECKBOX
-   ============================== */
-.select-all {
-  display: inline-flex;
-  gap: 8px;
-  align-items: center;
-  font-size: 14px;
+.btn-secondary {
+  background: var(--panel-bg);
   color: var(--text);
-  flex-shrink: 0;
-}
-.select-all input[type="checkbox"] {
-  width: 16px;
-  height: 16px;
-  accent-color: var(--success);
-  flex-shrink: 0;
+  border: 1px solid var(--panel-border);
 }
 
-/* ==============================
-   SELECT (PRIORIDAD) - asegurar una sola fila
-   ============================== */
-.gestion {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  flex-wrap: nowrap;
+.btn-danger {
+  background: var(--danger);
+  color: #fff;
+  border: 1px solid var(--danger);
 }
-.gestion select {
-  padding: 8px 10px;
-  border-radius: 10px;
-  border: 1px solid var(--input-border);
-  font-size: 14px;
-  background: var(--surface);
+
+.btn-ghost {
+  background: transparent;
   color: var(--text);
-  cursor: pointer;
-  min-width: 180px;
-  max-width: 320px;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
+  border: 1px dashed var(--panel-border);
 }
 
-/* ==============================
-   BOTONES: mantener en la misma línea
-   ============================== */
-.btn {
-  display: inline-flex;
-  gap: 8px;
-  align-items: center;
-  padding: 8px 12px;
-  border-radius: 10px;
-  border: 1px solid var(--btn-border);
-  background: var(--btn-bg);
-  color: var(--text);
-  font-weight: 400;
-  font-size: 14px;
-  cursor: pointer;
-  transition: transform 120ms ease, box-shadow 150ms ease, background 150ms ease,
-    border-color 150ms ease;
-  box-shadow: 0 1px 0 rgba(0, 0, 0, 0.02);
-  line-height: 1;
-  flex-shrink: 0;
+/* Hover / active / focus accesible */
+.btn:hover { transform: translateY(-1px); box-shadow: var(--card-shadow-hover); }
+.btn:active { transform: translateY(0); }
+.btn:focus-visible,
+.select-all input:focus-visible,
+.priority-inline select:focus-visible {
+  outline: 3px solid var(--accent);
+  outline-offset: 2px;
+  border-radius: var(--radius);
 }
 
-/* botones agrupados que deben permanecer en la misma línea */
-.btn-group {
-  display: flex;
-  gap: 8px;
-  align-items: center;
-  flex-wrap: nowrap;
-}
-
-/* ejemplos semánticos: marcar completas/pendientes en la misma línea */
-.bulk-toggle {
-  display: inline-flex;
-  gap: 5px;
-  align-items: center;
-  flex-wrap: nowrap;
-}
-
-/* eliminar y aplicar juntos */
-.apply-delete {
-  display: inline-flex;
-  align-items: center;
-  flex-wrap: nowrap;
-}
-
-/* export csv/json juntos */
-.export-actions {
-  display: inline-flex;
-  gap: 8px;
-  align-items: center;
-  flex-wrap: nowrap;
-}
-
-/* focus visible accesible */
-.btn:focus {
-  outline: none;
-  box-shadow: 0 0 0 4px color-mix(in srgb, var(--accent) 12%, transparent 88%);
-  border-color: var(--accent);
-}
-
-/* estados disabled */
-.btn[disabled],
-.btn:disabled {
-  opacity: 0.45;
-  cursor: not-allowed;
-  transform: none;
-  box-shadow: none;
-}
-/* SVG dentro del botón */
-.btn .ico {
-  width: 16px; /* tamaño más reducido */
-  height: 16px;
-  flex-shrink: 0; /* que no se encoja */
-  margin-right: 6px; /* espacio entre icono y texto */
-  vertical-align: middle;
-  display: inline-block;
-}
-#btnExportJSON {
-  background: var(--prioridades-media);
-}
-
-#btnExportCSV {
-  background: var(--prioridades-baja);
-}
-
+/* Separador textual */
 .export-separator {
   font-size: 12px;
-  font-weight: 600;
-  color: var(--text-muted);
-  margin: 16px 0 8px; /* separa de la sección anterior y de los botones */
-  text-align: center;
-  border-bottom: 1px solid var(--text); /* línea inferior */
-  padding-bottom: 4px;
-  width: 100%;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.6px;
+  padding-top: 4px;
 }
+
+/* Heredar color automáticamente a SVG */
+.gestion svg[aria-hidden="true"] { display: inline-block; vertical-align: middle; }
+.gestion svg path, .gestion svg circle { stroke: currentColor; }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 /* ==============================
    AJUSTES RESPONSIVE: apilar en pantallas pequeñas
@@ -1070,16 +984,6 @@ button.small.danger {
   max-height: none;
 }
 
-/* Botón ver más */
-.ver-mas-btn {
-  background: transparent;
-  border: none;
-  cursor: pointer;
-  color: var(--text-2);
-  font-size: 12px;
-  padding: 0 4px;
-}
-
 /* Priorización */
 .priority-label {
   padding: 4px 8px;
@@ -1088,19 +992,6 @@ button.small.danger {
   background: var(--panel-bg);
   border: 1px solid var(--panel-border);
   color: var(--text);
-}
-
-.priority-alta {
-  color: var(--alta);
-  font-weight: 600;
-}
-.priority-media {
-  color: var(--media);
-  font-weight: 600;
-}
-.priority-baja {
-  color: var(--baja);
-  font-weight: 600;
 }
 
 /* Botones dentro de la tarjeta */
@@ -1142,24 +1033,6 @@ button.small.danger {
   height: 18px;
   flex-shrink: 0;
   margin-top: 3px;
-}
-/* Badges y checkbox posición absoluta */
-.task-grid.mini .priority-label,
-.task-grid.mini .status-badge {
-  position: absolute;
-  top: 8px;
-  left: 8px;
-  z-index: 12;
-  white-space: nowrap;
-}
-
-.task-grid.mini .sel-checkbox {
-  position: absolute;
-  top: 8px;
-  right: 8px;
-  width: 18px;
-  height: 18px;
-  z-index: 12;
 }
 
 /* ==============================
@@ -1207,64 +1080,6 @@ button.small.danger {
   flex-wrap: wrap;
   gap: 6px;
   margin-top: 4px;
-}
-/* ==============================
-   Vista miniaturas
-   ============================== */
-.task-grid.mini {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-  gap: 10px;
-}
-
-.task-grid.mini li {
-  position: relative;
-  padding: 50px 10px 16px 10px;
-  box-sizing: border-box;
-  width: 250px;
-  min-height: 220px;
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-  overflow: hidden;
-}
-
-.task-grid.mini .left {
-  flex-direction: column;
-  align-items: flex-start;
-  padding-top: 0;
-}
-
-.task-grid.mini .descripcion {
-  font-size: 14px;
-  font-weight: 600;
-  padding-right: 10px;
-  max-height: 72px;
-  overflow: hidden;
-  width: 100%;
-  text-overflow: ellipsis;
-  line-height: 1.35;
-}
-
-.task-grid.mini .descripcion.expanded {
-  max-height: none;
-}
-
-/* Botones en miniatura al borde inferior */
-.task-grid.mini .controls {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: flex-end;
-  gap: 6px;
-}
-.task-grid .descripcion .ver-mas-btn {
-  display: inline-block;
-  margin-left: 4px;
-  cursor: pointer;
-}
-
-.task-grid.mini .controls .ver-mas-btn {
-  flex-shrink: 0;
 }
 
 /* ==============================
@@ -1326,16 +1141,6 @@ button.small.danger {
   box-shadow: 0 6px 18px rgba(20, 40, 20, 0.03);
 }
 
-/* Mini-cards también heredan los fondos definidos */
-.task-grid.mini li {
-  background: var(--task-pending-bg);
-  border: 1px solid var(--task-pending-border);
-}
-.task-grid.mini li.completed {
-  background: var(--task-completed-bg);
-  border-color: var(--task-completed-border);
-}
-
 /* Botón de cambio de tema */
 .btn-theme {
   background: var(--btn-bg);
@@ -1387,15 +1192,294 @@ button.small.danger {
   box-shadow: 0 6px 18px rgba(20, 40, 20, 0.03);
 }
 
-/* Mini-cards también heredan los fondos definidos */
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* ==============================
+   MINIATURAS — DISEÑO MEJORADO
+   Pegar AL FINAL para sobreescribir reglas previas
+   ============================== */
+
+.task-grid.mini {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 12px;
+  justify-items: center;
+}
+
+/* Card */
 .task-grid.mini li {
-  background: var(--task-pending-bg);
-  border: 1px solid var(--task-pending-border);
+  position: relative;
+  width: 100%;
+  max-width: 260px;
+  min-height: 200px;
+  padding: 56px 14px 14px 14px; 
+  box-sizing: border-box;
+  border-radius: 12px;
+  overflow: hidden;
+  transition: transform 200ms cubic-bezier(.2,.9,.2,1), box-shadow 200ms ease, height 0.25s ease;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  gap: 8px;
 }
-.task-grid.mini li.completed {
-  background: var(--task-completed-bg);
-  border-color: var(--task-completed-border);
+
+
+/* Elevación hover */
+.task-grid.mini li:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 14px 38px rgba(10,10,20,0.10);
 }
+
+/* Compact header area: prioridad (izq), fecha (centro), checkbox (der) */
+/* prioridad badge */
+.task-grid.mini li .priority-label {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  z-index: 16;
+  padding: 6px 10px;
+  font-size: 12px;
+  font-weight: 700;
+  border-radius: 999px;
+  border: 1px solid rgba(0,0,0,0.05);
+  box-shadow: 0 2px 6px rgba(0,0,0,0.04);
+}
+
+/* colores de prioridad con background tenue */
+.task-grid.mini .priority-alta {
+  color: var(--tex-prioridades);
+  background: var(--prioridades-alta);
+  border-color: rgba(255,90,90,0.14);
+}
+.task-grid.mini .priority-media {
+  color: var(--tex-prioridades);
+  background: var(--prioridades-media);
+  border-color: rgba(255,190,75,0.12);
+}
+.task-grid.mini .priority-baja {
+  color: var(--tex-prioridades);
+  background: var(--prioridades-baja);
+  border-color: rgba(120,200,125,0.10);
+}
+
+/* fecha centrada */
+.task-grid.mini li .fecha-priority {
+  position: absolute;
+  top: 10px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 15;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--muted, #8f8f8f);
+  padding: 6px 10px;
+  border-radius: 999px;
+  background: rgba(0,0,0,0.03);
+  pointer-events: none;
+  white-space: nowrap;
+  border: 1px solid rgba(0,0,0,0.02);
+}
+
+/* checkbox a la derecha (más grande y accesible) */
+.task-grid.mini li .sel-checkbox {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  z-index: 16;
+  width: 20px;
+  height: 20px;
+  accent-color: var(--accent, #6b46c1); /* color moderno para checkbox */
+  outline: none;
+}
+
+/* descripción: clamp a 3 líneas para miniaturas */
+/* ===========================
+   Descripción con ver más
+=========================== */
+.task-grid.mini .descripcion {
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 1.3;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  margin-top: 8px;
+  color: var(--text);
+  cursor: pointer;
+  -webkit-line-clamp: 3;
+  transition: all 0.25s ease;
+}
+
+/* Estado expandido */
+.task-grid.mini .descripcion.expanded {
+  -webkit-line-clamp: unset;
+  max-height: none;
+  overflow: visible;
+}
+
+
+/* Indicador visual de "ver más" con pseudo-elemento */
+
+
+
+/* contenedor de acciones: pegado abajo, sin invadir el contenido */
+/* Contenedor de acciones: ahora en dos filas */
+.task-grid.mini .controls {
+  position: relative;
+  margin-top: auto; /* empuja hacia abajo si el texto crece */
+  display: grid;
+  grid-template-rows: repeat(2, auto); /* dos filas */
+  grid-template-columns: repeat(2, 1fr); /* dos columnas */
+  gap: 6px 8px; /* fila, columna */
+  justify-items: stretch;
+  z-index: 14;
+  padding-top: 6px;
+  box-sizing: border-box;
+  transition: all 0.25s ease;
+  opacity: 0.98;
+}
+
+/* Primera fila: Editar y Marcar Completada */
+.task-grid.mini .controls .small:nth-child(1),
+.task-grid.mini .controls .small:nth-child(2) {
+  grid-row: 1;
+}
+
+/* Segunda fila: Select y Eliminar */
+.task-grid.mini .controls .inline-select,
+.task-grid.mini .controls .small.delete {
+  grid-row: 2;
+}
+
+
+
+/* botones en mini: más pequeños y minimalistas */
+.task-grid.mini .controls .small {
+  padding: 6px 8px;
+  border-radius: 8px;
+  font-size: 13px;
+  min-width: 38px;
+  height: 34px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+}
+
+/* delete visible pero sutil */
+.task-grid.mini .controls .delete {
+  padding: 6px 8px;
+  background: rgba(220,60,60,0.09);
+  color: var(--danger);
+  border: 1px solid rgba(220,60,60,0.12);
+}
+
+/* inline-select: mostrar en mini como icono pequeño, si quieres ocultarlo, usar display:none */
+.task-grid.mini .inline-select {
+  display: inline-flex;
+  padding: 6px 8px;
+  border-radius: 8px;
+  min-width: 68px;
+  height: 34px;
+  font-size: 13px;
+}
+
+/* foco y accesibilidad */
+.task-grid.mini li:focus-within,
+.task-grid.mini li:focus {
+  box-shadow: 0 10px 30px rgba(10,10,20,0.08);
+  transform: translateY(-6px);
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 .pagination-wrapper {
   display: flex;
@@ -1678,35 +1762,6 @@ button.small.danger {
   }
 }
 
-/* ==============================
-   RESPONSIVIDAD MINIATURAS — PANTALLAS MEDIANAS
-   ============================== */
-@media screen and (max-width: 1024px) {
-  /* Miniaturas: columnas más estrechas y menor gap */
-  .task-grid.mini {
-    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-    gap: 8px;
-  }
-
-  /* Tarjetas miniaturas: ancho completo y padding ajustado */
-  .task-grid.mini li {
-    width: 100%;
-    min-height: auto;
-    padding: 40px 8px 16px 8px;
-  }
-
-  /* Controles: evitar que se desborden */
-  .task-grid.mini .controls {
-    justify-content: flex-start;
-    flex-wrap: wrap;
-    gap: 4px;
-  }
-
-  /* Descripción: limitar altura para mantener consistencia */
-  .task-grid.mini .descripcion {
-    max-height: 60px;
-  }
-}
 
 /* ==============================
    KEYFRAMES Y AJUSTES PARA VISTA LISTA (MEDIANAS)
@@ -1805,65 +1860,39 @@ button.small.danger {
    ============================== */
 @media (max-width: 600px) {
   /* Lista completa */
-  .task-grid.lista {
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: 12px;
-  }
+  /* Contenedor para fecha y prioridad en móviles */
+.task-grid.lista li .fecha-priority,
+.task-grid.lista li .priority-label {
+  position: relative !important;
+  top: 0 !important;
+  left: 0 !important;
+  transform: none !important;
+  margin: 0;
+}
 
-  /* Tarjeta individual: columna, sin animación */
-  .task-grid.lista li {
-    flex-direction: column;
-    align-items: flex-start;
-    justify-content: flex-start;
-    gap: 10px;
-    animation: none !important;
-  }
+/* Ubicarlos debajo de la descripción */
+.task-grid.lista li .left {
+  flex-wrap: wrap; /* deja que los badges bajen solos */
+}
 
-  /* Contenedor izquierdo: checkbox + descripción + badges */
-  .task-grid.lista li .left {
-    flex-direction: row;
-    align-items: center;
-    gap: 10px;
-    width: 100%;
-  }
+/* Mantenerlos juntos y ordenados */
+.task-grid.lista li .priority-label {
+  order: 3;
+}
+.task-grid.lista li .fecha-priority {
+  order: 4;
+}
 
-  /* Descripción ocupa todo el ancho disponible */
-  .task-grid.lista li .descripcion {
-    max-width: 100%;
-    min-width: 0;
-    padding-right: 0;
-    white-space: normal;
-    overflow-wrap: break-word;
-    font-size: 15px;
-    line-height: 1.35;
-  }
+/* Estilo visual más compacto en móviles */
+.task-grid.lista li .priority-label,
+.task-grid.lista li .fecha-priority {
+  font-size: 12px;
+  padding: 4px 8px;
+  border-radius: 6px;
+  background: rgba(0,0,0,0.06);
+  white-space: nowrap;
+}
 
-  /* Controles principales: editar, pendiente, select + ver más */
-  .task-grid.lista li .controls {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 6px;
-    width: 100%;
-  }
-
-  /* Agrupar ver-mas con los otros controles principales en la primera fila */
-  .task-grid.lista li .controls .ver-mas-btn {
-    order: 1;
-  }
-
-  /* Botón eliminar en segunda fila */
-  .task-grid.lista li .controls .delete {
-    width: 100%;
-    order: 2;
-  }
-
-  /* Ajuste de otros botones */
-  .task-grid.lista li .controls .small,
-  .task-grid.lista li .controls .inline-select {
-    flex: 1 1 auto;
-    order: 1;
-  }
 }
 
 @media (max-width: 600px) {
@@ -1909,29 +1938,67 @@ button.small.danger {
   }
 }
 
-/* ==============================
-   SIDEBAR: contenedor y animación de ancho
-   ============================== */
-.sidebar {
-  width: var(--sidebar-w);
-  min-width: 0;
-  box-sizing: border-box;
-  background: var(--panel-bg);
-  border-right: 1px solid var(--border);
-  overflow: hidden; /* importante para que el contenido no desborde durante el cambio de width */
-  transition: width var(--transition-medium) cubic-bezier(0.2, 0.9, 0.2, 1);
-  will-change: width;
-  overflow-y: auto;
+
+
+
+
+
+
+
+
+
+
+
+
+/* ---- priority-wrap: apila prioridad + fecha en columna (vista LISTA) ---- */
+.priority-wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end; /* fecha debajo, alineada a la derecha de la prioridad */
+  gap: 4px;
+  margin-left: auto; /* empuja el wrapper al borde derecho del contenedor .left */
 }
 
-/* estado colapsado: ancho pequeño */
-.sidebar.collapsed {
-  width: var(--sidebar-collapsed-w);
+/* estilo de la fecha (lista) */
+.task-grid.lista .fecha-priority {
+  font-size: 12px;
+  color: var(--muted, #9b9b9b);
+  line-height: 1;
+  white-space: nowrap;
 }
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 /* ==============================
-   CABECERA (titulo + botón)
-   ============================== */
+  FIX: Sidebar colapsado — mostrar SOLO iconos (CORREGIDO)
+  Pegar AL FINAL de tu CSS para que sobreescriba reglas previas.
+============================== */
+
 .sidebar-header {
   position: relative;
   display: flex;
@@ -1941,24 +2008,6 @@ button.small.danger {
   padding: 8px 12px;
   box-sizing: border-box;
 }
-
-/* texto del header se oculta cuando colapsa (fade out) */
-.sidebar-header p {
-  margin: 0;
-  z-index: 2;
-  transition: opacity var(--transition-fast) ease,
-    transform var(--transition-fast) ease;
-  opacity: 1;
-  transform: translateY(0);
-}
-
-/* cuando está colapsado, ocultamos inmediatamente el texto (no esperar la expansión) */
-.sidebar.collapsed .sidebar-header p {
-  opacity: 0;
-  transform: translateY(-4px);
-  pointer-events: none;
-}
-
 /* BOTÓN expand/collapse */
 .btn-expand-sidebar {
   position: absolute;
@@ -1971,32 +2020,115 @@ button.small.danger {
   padding: 6px 7px;
   cursor: pointer;
   z-index: 30;
-  display: none; /* aparece solo en pantallas grandes */
   transition: transform 180ms ease, opacity 180ms ease;
 }
-
-/* Mostrar solo en pantallas grandes */
-@media (min-width: 961px) {
-  .btn-expand-sidebar {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-  }
+.sidebar.collapsed .single-row #selectAll {
+  transform: translateY(-50%) translateX(-10px);
 }
-
 /* Mover 4px a la derecha cuando el sidebar está colapsado */
 .sidebar.collapsed .btn-expand-sidebar {
   transform: translateY(-50%) translateX(4px);
 }
 
-/* mostrar botón en pantallas >= 961 */
-@media (min-width: 961px) {
-  .btn-expand-sidebar {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-  }
+/* Asegurar que el contenedor gestión sigue visible y accionable */
+.sidebar.collapsed .gestion,
+.sidebar.collapsed #gestion-avanzada,
+.sidebar.collapsed .controls-area .gestion {
+  opacity: 1 !important;
+  pointer-events: auto !important;
+  transform: none !important;
+  display: block !important;
 }
+
+/* Ocultar controles que no deben verse en modo colapsado */
+.sidebar.collapsed .form,
+.sidebar.collapsed .p,
+.sidebar.collapsed .gestion .export-separator,
+.sidebar.collapsed .gestion .label-text,
+.sidebar.collapsed .gestion .export-separator {
+  display: none !important;
+  visibility: hidden !important;
+  height: 0 !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  overflow: hidden !important;
+}
+
+/* Restaurar visibilidad de botones (sobrescribe reglas anteriores que los ocultaban) */
+.sidebar.collapsed .gestion .btn,
+.sidebar.collapsed .gestion .btn-group .btn,
+.sidebar.collapsed .gestion .apply-delete .btn,
+.sidebar.collapsed .gestion .export-actions .btn {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  width: calc(var(--sidebar-collapsed-w) - 8px) !important; /* dejar 4px padding a cada lado */
+  min-width: 0 !important;
+  padding: 8px !important;
+  gap: 0 !important;
+  text-align: center !important;
+  overflow: visible !important;
+  opacity: 1 !important;
+  pointer-events: auto !important;
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+  margin: 4px 0 !important;
+}
+
+/* Ocultar solo la etiqueta textual del botón */
+.sidebar.collapsed .gestion .btn .btn-label,
+.sidebar.collapsed .gestion .btn > .label-text {
+  display: none !important;
+  visibility: hidden !important;
+  height: 0 !important;
+  line-height: 0 !important;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+/* Forzar que el SVG sea visible y legible */
+.sidebar.collapsed .gestion .btn .ico,
+.sidebar.collapsed .gestion .btn svg {
+  display: block !important;
+  width: 20px !important;
+  height: 20px !important;
+  flex: 0 0 auto !important;
+  stroke: currentColor !important;
+  fill: none !important;
+  color: var(--text) !important; /* icon color (ajusta a --accent si prefieres) */
+}
+
+/* Foco y accesibilidad */
+.sidebar.collapsed .gestion .btn:focus {
+  outline: none !important;
+}
+.sidebar.collapsed .gestion .btn:focus-visible {
+  outline: 2px solid rgba(0,0,0,0.12) !important;
+  outline-offset: 2px !important;
+  border-radius: calc(var(--radius) - 4px) !important;
+}
+
+/* Centrar el grupo de botones dentro del sidebar colapsado */
+.sidebar.collapsed .gestion .btn-group,
+.sidebar.collapsed .gestion .apply-delete,
+.sidebar.collapsed .gestion .export-actions {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 6px !important;
+  align-items: center !important;
+  justify-content: flex-start !important;
+  padding-top: 6px !important;
+  width: 100% !important;
+}
+
+/* Si tienes una regla previa que oculta .btn globalmente, esta la sobreescribe */
+.sidebar.collapsed .btn[disabled],
+.sidebar.collapsed .btn[aria-hidden="true"] {
+  opacity: 0.35 !important;
+  pointer-events: none !important;
+}
+
 
 /* ==============================
    HAMBURGER -> X (mejor animación)
@@ -2018,124 +2150,132 @@ button.small.danger {
   transform: translateY(-6px) rotate(-45deg);
 }
 
-/* ==============================
-   CONTENIDO: aparece solo cuando está expandido
-   ============================== */
-/* contenedor que se muestra/oculta suavemente */
-.controls-area {
-  opacity: 1;
-  transform: translateX(0);
-  transition: opacity var(--transition-fast) ease var(--transition-medium),
-    /* delay on expand */ transform var(--transition-fast) ease
-      var(--transition-medium);
-  /* al expandir: delay igual al tiempo de la animación width para que el contenido aparezca después */
-}
 
-/* cuando colapsa: quitar delay (ocultar inmediatamente) */
-.sidebar.collapsed .controls-area {
-  opacity: 0;
-  transform: translateX(-8px);
-  transition: opacity var(--transition-fast) ease 0ms,
-    transform var(--transition-fast) ease 0ms;
-  pointer-events: none; /* evitar interacción mientras está oculto */
-}
 
-/* accesibilidad: aria-hidden true/false será gestionado por JS,
-   pero la CSS anterior ya oculta visualmente el contenido */
-
-/* también podemos restringir la altura en colapsado para mayor seguridad */
-.controls-area > * {
-  will-change: opacity, transform;
-}
-/* Evitar desbordamiento del bloque de gestión */
-.gestion {
-  box-sizing: border-box; /* asegurar que padding no aumente ancho */
-  width: 100%; /* ocupar todo el ancho del contenedor */
-  max-width: 100%; /* no exceder el ancho del sidebar */
-  overflow: hidden; /* evitar desbordamiento visual */
-  transition: opacity var(--transition-fast) ease,
-    transform var(--transition-fast) ease;
-}
-
-/* animación al expandir/colapsar */
-.sidebar.collapsed .gestion {
-  opacity: 0;
-  transform: translateX(-8px); /* mover ligeramente al ocultar */
-  pointer-events: none; /* desactivar interacción mientras está oculto */
-}
-
-.sidebar:not(.collapsed) .gestion {
-  opacity: 1;
-  transform: translateX(0);
-  pointer-events: auto; /* permitir interacción cuando está visible */
-}
-
-/* ==============================
-   Pequeños estilos internos (botones/iconos)
-   ============================== */
-.btn {
-  /* sin negrita, consistente con lo que pediste */
-  display: inline-flex;
-  gap: 8px;
-  align-items: center;
-  padding: 8px 12px;
-  border-radius: 10px;
-  border: 1px solid var(--border);
-  background: var(--btn-bg);
-  color: var(--text);
-  font-weight: 400;
-  font-size: 14px;
+/* Icono oculto normalmente */
+.priority-icon-btn {
+  display: none;
+  background: transparent;
+  border: none;
+  padding: 6px;
   cursor: pointer;
-  box-shadow: 0 1px 0 rgba(0, 0, 0, 0.02);
-  line-height: 1;
+  border-radius: 8px;
+  color: var(--text);
 }
 
-.btn .ico {
-  width: 16px;
-  height: 16px;
-  flex-shrink: 0;
-  margin-right: 6px;
+/* Mostrar icono y ocultar select en modo colapsado */
+.sidebar.collapsed .priority-inline select {
+  display: none !important;
 }
 
-/* separador */
-.export-separator {
-  font-size: 12px;
-  font-weight: 400;
-  color: var(--text-muted);
-  margin: 12px 0 8px;
-  text-align: center;
-  border-bottom: 1px solid var(--border);
-  padding-bottom: 6px;
-  width: 100%;
-}
-
-/* grupos y filas (resumen, reutiliza tus clases anteriores) */
-.single-row,
-.btn-group,
-.bulk-toggle,
-.apply-delete,
-.export-actions {
-  display: flex;
-  gap: 8px;
+.sidebar.collapsed .priority-inline .priority-icon-btn {
+  display: inline-flex !important;
   align-items: center;
+  justify-content: center;
 }
 
-/* cuando el sidebar está colapsado, oculta con css visual */
-.sidebar.collapsed .btn,
-.sidebar.collapsed .select-all,
-.sidebar.collapsed .btn-theme {
-  opacity: 0;
-  pointer-events: none;
+
+/* ---------- PARCHE: mostrar icono/select correctamente ---------- */
+/* estado por defecto (sidebar expandido): mostrar select, ocultar icono */
+.priority-inline {
+  display: flex !important;
+  align-items: center !important;
+  gap: 8px !important;
+}
+.priority-inline select {
+  display: block !important;
+  visibility: visible !important;
+  height: auto !important;
+}
+.priority-inline .priority-icon-btn {
+  display: none !important;
 }
 
-/* opcional: transición para el grid principal (app-body) */
-.app-body {
-  display: grid;
-  grid-template-columns: var(--sidebar-w) 1fr;
-  gap: 16px;
-  transition: grid-template-columns var(--transition-medium)
-    cubic-bezier(0.2, 0.9, 0.2, 1);
+/* cuando el sidebar está colapsado: ocultar select y mostrar icono */
+/* usamos selectores más específicos para sobreescribir reglas previas */
+.sidebar.collapsed .gestion .priority-inline,
+.sidebar.collapsed .priority-inline {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 6px !important;
+  visibility: visible !important;
+  height: auto !important;
+  padding: 2px 0 !important;
 }
+
+/* esconder select (todo) en colapsado */
+.sidebar.collapsed .priority-inline select {
+  display: none !important;
+  visibility: hidden !important;
+  height: 0 !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  overflow: hidden !important;
+}
+
+/* mostrar el botón-ícono en colapsado */
+.sidebar.collapsed .priority-inline .priority-icon-btn
+ {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  width: 36px !important;
+  height: 36px !important;
+  padding: 6px !important;
+  border-radius: 8px !important;
+  background: transparent !important;
+  border: none !important;
+  color: var(--text) !important;
+  opacity: 1 !important;
+  pointer-events: auto !important;
+  z-index: 50 !important;
+}
+
+/* asegurar que no quede focusable/visible cuando no corresponde */
+.sidebar:not(.collapsed) .priority-inline .priority-icon-btn {
+  display: none !important;
+  pointer-events: none !important;
+}
+
+/* estilo seguro para el SVG (si lo ocultan reglas globales) */
+.priority-icon-btn svg {
+  display: block !important;
+  width: 20px !important;
+  height: 20px !important;
+  stroke: currentColor !important;
+  fill: none !important;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* Ocultar btnPrioridadIcon en small y medium */
+@media (max-width: 1024px) {
+  .priority-icon-btn {
+    display: none !important;
+  }
+}
+
+@media (max-width: 1024px) {
+  #btnExpandSidebar {
+    display: none !important;
+  }
+}
+
+
 
 /* Content card: ocupa todo el espacio disponible */
 .content-card {
@@ -2446,5 +2586,119 @@ body.offline-active {
   35%  { transform: scale(1.28); }
   100% { transform: scale(1); }
 }
+
+
+@media (min-width: 768px) and (max-width: 1024px) {
+
+  .bar {
+    display: grid;
+    grid-template-columns: auto 1fr auto auto;
+    align-items: center;
+    gap: 16px;
+    width: 100%;
+  }
+
+  .bar h2 {
+    margin: 0;
+    font-size: 18px !important;
+  }
+
+  /* El buscador ocupa espacio flexible */
+  .bar .search {
+    width: 100%;
+  }
+
+  .bar .search input {
+    width: 100%;
+  }
+
+  /* Ordenamiento: mantenerlo compacto */
+  .bar .ordering {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .bar .ordering label {
+    white-space: nowrap;
+  }
+
+  .bar .ordering select {
+    height: 34px;
+  }
+
+  /* Botones de vista */
+  .bar .view-switch {
+    display: flex;
+    gap: 8px;
+  }
+}
+/* ============================================
+   RESPONSIVE
+   ============================================ */
+
+/* Pequeñas y medianas: TODO EN UNA FILA */
+@media (max-width: 1024px) {
+  .sidebar-counters {
+    flex-direction: row;
+    justify-content: flex-start;
+    flex-wrap: nowrap;
+  }
+}
+
+/* Opcional: en móviles ajusta tamaños */
+@media (max-width: 600px) {
+  .sidebar-counters .counter {
+    font-size: 14px;
+    padding: 5px 8px;
+  }
+
+  .sidebar-counters .btn-theme {
+    width: 30px;
+    height: 30px;
+  }
+}
+
+
+.task-enter {
+  animation: enterSlideBottom 4s ease;
+}
+
+/* === Slide Bottom — Ultra Suave (4s) === */
+@keyframes enterSlideBottom {
+  0% {
+    opacity: 0;
+    transform: translateY(80px);
+    filter: blur(8px);
+  }
+
+  /* Entrada lenta, sin salto */
+  30% {
+    opacity: 0.35;
+    transform: translateY(40px);
+    filter: blur(4px);
+  }
+
+  /* Transición muy fluida */
+  60% {
+    opacity: 0.75;
+    transform: translateY(12px);
+    filter: blur(1.5px);
+  }
+
+  /* Sin rebote, sin brusquedad */
+  85% {
+    opacity: 1;
+    transform: translateY(4px);
+    filter: blur(0.5px);
+  }
+
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+    filter: blur(0);
+  }
+}
+
 
 
