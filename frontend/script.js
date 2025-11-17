@@ -1555,6 +1555,7 @@ function toggleTheme() {
 btnThemeHeader?.addEventListener("click", toggleTheme);
 btnThemeSidebar?.addEventListener("click", toggleTheme);
 
+
 /* ============================
    VISTA (lista / mini)
 ============================ */
@@ -1620,22 +1621,6 @@ if (ulLista) {
   aplicarVista(false);
 }
 
-/* ============================
-   SIDEBAR + OVERLAY
-============================ */
-const btnMenu = document.getElementById("btnMenu");
-const sidebar = document.querySelector(".sidebar");
-const overlay = document.getElementById("overlay");
-
-btnMenu?.addEventListener("click", () => {
-  sidebar.classList.toggle("active");
-  overlay.classList.toggle("active");
-});
-
-overlay?.addEventListener("click", () => {
-  sidebar.classList.remove("active");
-  overlay.classList.remove("active");
-});
 
 /* ============================
    AJUSTE DE CONTROLES EN LISTA
@@ -1673,18 +1658,61 @@ window.addEventListener("load", ajustarControles);
 window.ajustarControles = ajustarControles; // si listas tareas dinámicamente
 
 /* ============================
+   SIDEBAR + OVERLAY
+============================ */
+const btnMenu = document.getElementById("btnMenu");
+const sidebarOverlay = document.querySelector(".sidebar");
+const overlay = document.getElementById("overlay");
+
+btnMenu?.addEventListener("click", () => {
+  sidebarOverlay.classList.toggle("active");
+  overlay.classList.toggle("active");
+});
+
+overlay?.addEventListener("click", () => {
+  sidebarOverlay.classList.remove("active");
+  overlay.classList.remove("active");
+});
+
+/* ============================
    EXPANDIR / COLAPSAR SIDEBAR
 ============================ */
-/* ============================
-   JS: controlar expandir/colapsar
-   ============================ */
 (function () {
   const btnExpand = document.getElementById("btnExpandSidebar");
   const sidebar = document.getElementById("appSidebar");
   const controls = document.getElementById("sidebarContent");
-  const appBody = document.querySelector(".app-body") || document.documentElement; // fallback
+  const appBody =
+    document.querySelector(".app-body") || document.documentElement;
 
-  // Ajustes iniciales: asegura atributos ARIA correctos
+  /* -----------------------------
+     Restaurar preferencia SOLO en pantallas grandes
+  ----------------------------- */
+  function restoreState() {
+    if (window.innerWidth >= 961) {
+      const saved = localStorage.getItem("sidebarCollapsed");
+
+      if (saved === "true") {
+        sidebar.classList.add("collapsed");
+        btnExpand.classList.add("active");
+      } else {
+        sidebar.classList.remove("collapsed");
+        btnExpand.classList.remove("active");
+      }
+    }
+  }
+
+  restoreState();
+
+  /* Aplicar layout después de restaurar (esto faltaba) */
+  if (window.innerWidth >= 961) {
+    appBody.style.gridTemplateColumns = sidebar.classList.contains("collapsed")
+      ? "var(--sidebar-collapsed-w) 1fr"
+      : "var(--sidebar-w) 1fr";
+  }
+
+  /* --------------------------------
+     ARIA
+  -------------------------------- */
   function setAria(expanded) {
     btnExpand.setAttribute("aria-expanded", String(expanded));
     sidebar.setAttribute("aria-expanded", String(expanded));
@@ -1693,47 +1721,46 @@ window.ajustarControles = ajustarControles; // si listas tareas dinámicamente
 
   setAria(!sidebar.classList.contains("collapsed"));
 
-  // Toggle principal
+  /* --------------------------------
+     Toggle principal
+  -------------------------------- */
   btnExpand.addEventListener("click", () => {
-    // only on wide screens (como tenías)
     if (window.innerWidth >= 961) {
       const willCollapse = !sidebar.classList.contains("collapsed");
-      // Cambiar clases
+
       sidebar.classList.toggle("collapsed");
       btnExpand.classList.toggle("active");
-
-      // Actualizar aria
       setAria(!willCollapse);
 
-      // Ajustar grid columnas (suavemente)
-      if (appBody && appBody.style) {
-        appBody.style.gridTemplateColumns = sidebar.classList.contains("collapsed")
-          ? "var(--sidebar-collapsed-w) 1fr"
-          : "var(--sidebar-w) 1fr";
-      }
+      localStorage.setItem("sidebarCollapsed", String(willCollapse));
+
+      appBody.style.gridTemplateColumns = willCollapse
+        ? "var(--sidebar-collapsed-w) 1fr"
+        : "var(--sidebar-w) 1fr";
     } else {
-      // para pantallas pequeñas puedes querer abrir/ocultar distinto; aquí dejamos comportamiento por defecto
       sidebar.classList.remove("collapsed");
       btnExpand.classList.remove("active");
       setAria(true);
     }
   });
 
-  // Responsivo: restaurar estado correcto al redimensionar
+  /* --------------------------------
+     Responsivo
+  -------------------------------- */
   window.addEventListener("resize", () => {
     if (window.innerWidth < 961) {
-      // en móvil siempre expandido (o tu lógica)
       sidebar.classList.remove("collapsed");
       btnExpand.classList.remove("active");
       setAria(true);
-      if (appBody && appBody.style) appBody.style.gridTemplateColumns = "1fr";
+      appBody.style.gridTemplateColumns = "1fr";
     } else {
-      // restaurar grid acorde al estado actual
-      if (appBody && appBody.style) {
-        appBody.style.gridTemplateColumns = sidebar.classList.contains("collapsed")
-          ? "var(--sidebar-collapsed-w) 1fr"
-          : "var(--sidebar-w) 1fr";
-      }
+      restoreState();
+
+      appBody.style.gridTemplateColumns = sidebar.classList.contains(
+        "collapsed"
+      )
+        ? "var(--sidebar-collapsed-w) 1fr"
+        : "var(--sidebar-w) 1fr";
     }
   });
 })();
