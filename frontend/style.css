@@ -1333,23 +1333,36 @@ button.small.danger {
   font-size: 14px;
   font-weight: 600;
   line-height: 1.3;
-  display: -webkit-box;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  margin-top: 8px;
   color: var(--text);
   cursor: pointer;
-  -webkit-line-clamp: 3;
+  margin-top: 8px;
   transition: all 0.25s ease;
+
+  /* Modo multiline ellipsis */
+  display: -webkit-box;          /* Necesario para WebKit */
+  display: box;                  /* Fallback muy antiguo */
+  -webkit-box-orient: vertical;
+  box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+
+  /* Compatibilidad: estándar + vendor */
+  line-clamp: 3;                 /* Propiedad estándar */
+  -webkit-line-clamp: 3;         /* Prefijo necesario */
 }
 
-/* Estado expandido */
+/* EXPANDIDO */
 .task-grid.mini .descripcion.expanded {
+  line-clamp: unset;
   -webkit-line-clamp: unset;
+
   max-height: none;
   overflow: visible;
+
+  /* Mantener compatibilidad */
+  display: block;                /* Rompe el clamping correctamente */
 }
+
 
 
 /* Indicador visual de "ver más" con pseudo-elemento */

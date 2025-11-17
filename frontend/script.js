@@ -1334,6 +1334,46 @@ btnEdit.onclick = async () => {
         showNotification("Error al eliminar: " + err, "error");
       }
     };
+// Checkbox selección
+sel.type = "checkbox";
+sel.className = "sel-checkbox";
+sel.dataset.id = t.id;
+sel.checked = selectedIds.has(t.id);
+sel.title = "Seleccionar tarea";
+
+// Descripción
+desc.className = "descripcion";
+desc.textContent = t.descripcion;
+desc.title = t.descripcion;
+
+// Etiqueta prioridad
+label.className = "priority-label " + priorityClass(t.prioridad);
+label.textContent = t.prioridad || "Media";
+label.title = "Prioridad: " + t.prioridad;
+
+// Fecha
+fechaPriority.className = "fecha-priority";
+fechaPriority.textContent = formatFechaCreacion(t.fechaCreacion ?? t.fecha ?? null);
+fechaPriority.title = "Creada el " + fechaPriority.textContent;
+
+// Botón editar
+btnEdit.className = "small";
+btnEdit.textContent = "Editar";
+btnEdit.title = "Editar descripción";
+
+// Botón toggle completada
+btnToggle.className = "small toggle";
+btnToggle.textContent = t.completada ? "Marcar Pendiente" : "Marcar Completada";
+btnToggle.title = t.completada ? "Marcar como pendiente" : "Marcar como completada";
+
+// Select prioridad
+select.className = "inline-select";
+select.title = "Cambiar prioridad";
+
+// Botón eliminar
+btnDelete.className = "small delete";
+btnDelete.textContent = "Eliminar";
+btnDelete.title = "Eliminar tarea";
 
     controls.appendChild(btnEdit);
     controls.appendChild(btnToggle);
@@ -1353,6 +1393,7 @@ btnEdit.onclick = async () => {
   } else {
     document.getElementById("selectAll").checked = false;
   }
+  
   
 }
 
@@ -1860,3 +1901,60 @@ window.ajustarControles = ajustarControles; // si listas tareas dinámicamente
     });
   };
 })();
+
+
+const btnIcon = document.getElementById("btnPrioridadIcon");
+const sel = document.getElementById("selCambiarPrioridad");
+let popup = null;
+
+btnIcon.addEventListener("click", () => {
+  if (popup) return closePopup();
+
+  popup = document.createElement("div");
+  popup.style.position = "fixed";
+  popup.style.zIndex = "2000";
+  popup.style.background = "var(--panel-bg)";
+  popup.style.border = "1px solid rgba(0,0,0,0.12)";
+  popup.style.boxShadow = "0 6px 22px rgba(0,0,0,.25)";
+  popup.style.padding = "6px";
+  popup.style.borderRadius = "10px";
+
+  const clone = sel.cloneNode(true);
+  clone.id = "popupPrioritySel";
+
+  clone.addEventListener("change", () => {
+    sel.value = clone.value;
+    sel.dispatchEvent(new Event("change"));
+    closePopup();
+  });
+
+  popup.appendChild(clone);
+  document.body.appendChild(popup);
+
+  const r = btnIcon.getBoundingClientRect();
+  popup.style.top = r.top + "px";
+  popup.style.left = (r.right + 8) + "px";
+
+  clone.focus();
+
+  document.addEventListener("mousedown", outsideClose);
+  document.addEventListener("keydown", escClose);
+});
+
+function outsideClose(e) {
+  if (!popup) return;
+  if (popup.contains(e.target) || e.target === btnIcon) return;
+  closePopup();
+}
+
+function escClose(e) {
+  if (e.key === "Escape") closePopup();
+}
+
+function closePopup() {
+  if (!popup) return;
+  popup.remove();
+  popup = null;
+  document.removeEventListener("mousedown", outsideClose);
+  document.removeEventListener("keydown", escClose);
+}

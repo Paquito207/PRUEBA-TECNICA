@@ -28,7 +28,7 @@
         reconectar automáticamente.
       </div>
       <div class="offline-actions">
-        <button id="btnRetry" class="btn-offline btn-retry" type="button">
+        <button id="btnRetry" class="btn-offline btn-retry" type="button" title="intento inmediato de reconexión">
           Reintentar ahora
         </button>
       </div>
@@ -52,10 +52,10 @@
         <h3 id="confirmTitle">Confirmar</h3>
         <div id="confirmBody" class="modal-body">¿Estás seguro?</div>
         <div class="modal-actions">
-          <button id="confirmCancelBtn" class="btn-modal" type="button">
+          <button id="confirmCancelBtn" class="btn-modal" type="button"  title="Cancelar la acción">
             Cancelar
           </button>
-          <button id="confirmOkBtn" class="btn-modal primary" type="button">
+          <button id="confirmOkBtn" class="btn-modal primary" type="button"  title="Aceptar y ejecutar la acción">
             Confirmar
           </button>
         </div>
@@ -84,10 +84,10 @@
           aria-label="Descripción"
         ></textarea>
         <div class="modal-actions" style="margin-top: 8px">
-          <button id="editCancel" class="btn-modal" type="button">
+          <button id="editCancel" class="btn-modal" type="button" title="Descartar cambios">
             Cancelar
           </button>
-          <button id="editSave" class="btn-modal primary" type="button">
+          <button id="editSave" class="btn-modal primary" type="button" title="Guardar cambios">
             Guardar
           </button>
         </div>
@@ -102,13 +102,14 @@
             id="searchInputHeader"
             placeholder="Buscar por descripción..."
             aria-label="Buscar"
+            title="Buscar tareas por descripción"
           />
         </div>
         <div class="counters">
           <button
             id="btnTheme"
             class="btn-theme"
-            title="Cambiar tema"
+            title="Cambiar entre modo claro y oscuro"
             type="button"
           >
             <svg
@@ -132,14 +133,15 @@
             </svg>
           </button>
 
-          <div id="total" class="counter">Total: 0</div>
-          <div id="pendientes" class="counter">Pendientes: 0</div>
+          <div id="total" class="counter" title="Cantidad total de tareas">Total: 0</div>
+          <div id="pendientes" class="counter" title="Tareas sin completar">Pendientes: 0</div>
         </div>
 
         <button
           id="btnMenu"
           class="btn-menu"
           aria-label="Mostrar u ocultar menú"
+          title="Abrir o cerrar el menú"
           type="button"
         >
           ☰
@@ -150,15 +152,13 @@
         <!-- =========================
      HTML (sidebar)
      ========================= -->
-        <aside class="sidebar" id="appSidebar" aria-expanded="true">
+        <aside class="sidebar" id="appSidebar" aria-expanded="true" title="Menú lateral">
           <div>
             <div class="sidebar-header">
-              
-
               <button
                 id="btnExpandSidebar"
                 class="btn-expand-sidebar"
-                title="Expandir/Ocultar Sidebar"
+                title="Expandir u ocultar el menú"
                 aria-controls="sidebarContent"
                 aria-expanded="true"
                 type="button"
@@ -212,13 +212,14 @@
             id="sidebarContent"
             role="region"
             aria-hidden="false"
+            title="Opciones principales"
           >
             <!-- Sidebar counters -->
             <div class="sidebar-counters">
               <button
                 id="btnThemeSidebar"
                 class="btn-theme"
-                title="Cambiar tema"
+                title="Cambiar entre modo claro y oscuro"
                 type="button"
               >
                 <svg
@@ -243,11 +244,11 @@
                 </svg>
               </button>
 
-              <div id="totalSidebar" class="counter">Total: 0</div>
-              <div id="pendientesSidebar" class="counter">Pendientes: 0</div>
+              <div id="totalSidebar" class="counter" title="Total de tareas registradas">Total: 0</div>
+              <div id="pendientesSidebar" class="counter" title="Tareas que aún no están completadas">Pendientes: 0</div>
             </div>
 
-            <form id="formTarea" class="form">
+            <form id="formTarea" class="form" title="Crear una nueva tarea">
               <p>Crea una nueva tarea</p>
               <input
                 type="text"
@@ -255,103 +256,60 @@
                 placeholder="Nueva tarea"
                 aria-label="Nueva tarea"
                 required
+                title="Escribe la descripción de la tarea"
               />
               <p class="p">prioridad</p>
-              <select id="prioridad" aria-label="Prioridad">
+              <select id="prioridad" aria-label="Prioridad" title="Selecciona la prioridad de la tarea">
                 <option value="Media" selected>Media</option>
                 <option value="Alta">Alta</option>
                 <option value="Baja">Baja</option>
               </select>
-              <button type="submit" class="btn primary">Agregar</button>
+              <button type="submit" class="btn primary" title="Agregar tarea">Agregar</button>
             </form>
 
             <p class="p">Ajustes con selecciòn multiple</p>
 
-            <div class="gestion" id="gestion-avanzada">
+            <div class="gestion" id="gestion-avanzada" title="Acciones para tareas seleccionadas">
               <!-- FILA 1: checkbox -->
               <div class="single-row">
-                <label class="select-all">
+                <label class="select-all" title="Seleccionar o deseleccionar todas las tareas">
                   <input type="checkbox" id="selectAll" />
                   <span class="label-text">Seleccionar todo</span>
                 </label>
               </div>
 
               <!-- FILA 2: select prioridad -->
-<div class="single-row priority-inline" style="position:relative;">
+              <div
+                class="single-row priority-inline"
+                style="position: relative"
+              >
+                <!-- ICONO para modo colapsado -->
+                <button
+                  id="btnPrioridadIcon"
+                  class="priority-icon-btn"
+                  aria-label="Cambiar prioridad"
+                  title="Cambiar prioridad de las tareas seleccionadas"
+                >
+                  <svg
+                    width="20"
+                    height="20"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                    fill="none"
+                    stroke-width="2"
+                  >
+                    <path d="M4 6h12l-2 4 2 4H4z"></path>
+                    <path d="M4 6v16"></path>
+                  </svg>
+                </button>
 
-  <!-- ICONO para modo colapsado -->
-  <button id="btnPrioridadIcon" class="priority-icon-btn" aria-label="Cambiar prioridad">
-    <svg width="20" height="20" viewBox="0 0 24 24" stroke="currentColor" fill="none" stroke-width="2">
-      <path d="M4 6h12l-2 4 2 4H4z"></path>
-      <path d="M4 6v16"></path>
-    </svg>
-  </button>
-
-  <select id="selCambiarPrioridad" aria-label="Cambiar prioridad">
-    <option value="">-- Cambiar prioridad --</option>
-    <option value="Alta">Alta</option>
-    <option value="Media">Media</option>
-    <option value="Baja">Baja</option>
-  </select>
-</div>
-<script>
-const btnIcon = document.getElementById("btnPrioridadIcon");
-const sel = document.getElementById("selCambiarPrioridad");
-let popup = null;
-
-btnIcon.addEventListener("click", () => {
-  if (popup) return closePopup();
-
-  popup = document.createElement("div");
-  popup.style.position = "fixed";
-  popup.style.zIndex = "2000";
-  popup.style.background = "var(--panel-bg)";
-  popup.style.border = "1px solid rgba(0,0,0,0.12)";
-  popup.style.boxShadow = "0 6px 22px rgba(0,0,0,.25)";
-  popup.style.padding = "6px";
-  popup.style.borderRadius = "10px";
-
-  const clone = sel.cloneNode(true);
-  clone.id = "popupPrioritySel";
-
-  clone.addEventListener("change", () => {
-    sel.value = clone.value;
-    sel.dispatchEvent(new Event("change"));
-    closePopup();
-  });
-
-  popup.appendChild(clone);
-  document.body.appendChild(popup);
-
-  const r = btnIcon.getBoundingClientRect();
-  popup.style.top = r.top + "px";
-  popup.style.left = (r.right + 8) + "px";
-
-  clone.focus();
-
-  document.addEventListener("mousedown", outsideClose);
-  document.addEventListener("keydown", escClose);
-});
-
-function outsideClose(e) {
-  if (!popup) return;
-  if (popup.contains(e.target) || e.target === btnIcon) return;
-  closePopup();
-}
-
-function escClose(e) {
-  if (e.key === "Escape") closePopup();
-}
-
-function closePopup() {
-  if (!popup) return;
-  popup.remove();
-  popup = null;
-  document.removeEventListener("mousedown", outsideClose);
-  document.removeEventListener("keydown", escClose);
-}
-</script>
-
+                <select id="selCambiarPrioridad" aria-label="Cambiar prioridad" title="Asignar una nueva prioridad a las tareas seleccionadas">
+                  <option value="">-- Cambiar prioridad --</option>
+                  <option value="Alta">Alta</option>
+                  <option value="Media">Media</option>
+                  <option value="Baja">Baja</option>
+                </select>
+              </div>
 
               <!-- FILA 3: marcar completadas / pendientes -->
               <div class="bulk-toggle btn-group">
@@ -359,6 +317,7 @@ function closePopup() {
                   id="btnMarcarSeleccionadas"
                   class="btn btn-primary"
                   type="button"
+                  title="Marcar seleccionadas como completadas"
                 >
                   <svg class="ico" viewBox="0 0 24 24" aria-hidden="true">
                     <path
@@ -371,13 +330,13 @@ function closePopup() {
                     />
                   </svg>
                   <span class="btn-label">completadas</span>
-                  
                 </button>
 
                 <button
                   id="btnMarcarPendientes"
                   class="btn btn-secondary"
                   type="button"
+                  title="Marcar seleccionadas como pendientes"
                 >
                   <svg class="ico" viewBox="0 0 24 24" aria-hidden="true">
                     <circle
@@ -398,7 +357,6 @@ function closePopup() {
                     />
                   </svg>
                   <span class="btn-label">Pendientes</span>
-                  
                 </button>
               </div>
 
@@ -408,6 +366,7 @@ function closePopup() {
                   id="btnEliminarSeleccionadas"
                   class="btn btn-danger"
                   type="button"
+                  title="Eliminar tareas seleccionadas"
                 >
                   <svg class="ico" viewBox="0 0 24 24" aria-hidden="true">
                     <path
@@ -420,12 +379,12 @@ function closePopup() {
                     />
                   </svg>
                   <span class="btn-label">Eliminar</span>
-                  
                 </button>
                 <button
                   id="btnAplicarPrioridad"
                   class="btn btn-ghost"
                   type="button"
+                  title="Aplicar prioridad seleccionada"
                 >
                   <svg
                     class="ico"
@@ -443,8 +402,7 @@ function closePopup() {
                       stroke-linejoin="round"
                     />
                   </svg>
-                  <span class="btn-label">Aplicar</span>
-                  
+                  <span class="btn-label" title="Aplicar cambios a tareas seleccionadas">Aplicar</span>
                 </button>
               </div>
 
@@ -453,7 +411,7 @@ function closePopup() {
 
               <!-- FILA 5: export CSV / JSON -->
               <div class="export-actions btn-group">
-                <button id="btnExportCSV" class="btn btn-ghost" type="button">
+                <button id="btnExportCSV" class="btn btn-ghost" type="button" title="Exportar selección como archivo CSV">
                   <svg class="ico" viewBox="0 0 24 24" aria-hidden="true">
                     <path
                       d="M4 4h16v16H4z"
@@ -473,10 +431,9 @@ function closePopup() {
                     />
                   </svg>
                   <span class="btn-label">CSV</span>
-                  
                 </button>
 
-                <button id="btnExportJSON" class="btn btn-ghost" type="button">
+                <button id="btnExportJSON" class="btn btn-ghost" type="button" title="Exportar selección como archivo JSON">
                   <svg class="ico" viewBox="0 0 24 24" aria-hidden="true">
                     <path
                       d="M6 4h12v16H6z"
@@ -496,7 +453,6 @@ function closePopup() {
                     />
                   </svg>
                   <span class="btn-label">JSON</span>
-                  
                 </button>
               </div>
             </div>
@@ -517,12 +473,13 @@ function closePopup() {
                   id="searchInputMain"
                   placeholder="Buscar por descripción..."
                   aria-label="Buscar"
+                  title="Filtrar tareas por texto"
                 />
               </div>
 
-              <div class="ordering" aria-label="Ordenar tareas">
+              <div class="ordering" aria-label="Ordenar tareas" title="Opciones de ordenamiento">
                 <label for="sortSelect" class="small-label">Ordenar</label>
-                <select id="sortSelect">
+                <select id="sortSelect" title="Ordenar tareas por categoría">
                   <option value="fecha">Fecha</option>
                   <option value="prioridad">Prioridad</option>
                   <option value="estado">Estado</option>
@@ -530,10 +487,9 @@ function closePopup() {
                   <option value="hoy">Solo hoy</option>
                 </select>
 
-                <select id="orderSelect">
+                <select id="orderSelect" title="Orden ascendente o descendente">
                   <option value="desc">Desc</option>
                   <option value="asc">Asc</option>
-                  
                 </select>
 
                 <!-- comentado para hacer peticiones automáticas al cambiar los select 
@@ -541,7 +497,7 @@ function closePopup() {
                 -->
               </div>
 
-              <div class="view-switch" aria-label="Cambiar vista">
+              <div class="view-switch" aria-label="Cambiar vista" title="Cambiar entre modo lista o miniaturas">
                 <button
                   id="btnVistaLista"
                   class="btn"
@@ -613,10 +569,10 @@ function closePopup() {
             </div>
             <div class="pagination-wrapper">
               <div class="pagination-controls-wrapper">
-                <div id="paginationControls" class="pagination-controls"></div>
+                <div id="paginationControls" class="pagination-controls" title="Navegación de páginas"></div>
                 <div class="pagination-settings">
                   <label class="small-label">Por página</label>
-                  <select id="pageSizeSelect">
+                  <select id="pageSizeSelect" title="Cantidad de tareas por página">
                     <option value="5">5</option>
                     <option value="10" selected>10</option>
                     <option value="20">20</option>
