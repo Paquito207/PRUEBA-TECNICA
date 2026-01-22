@@ -95,5 +95,3 @@ Notas:
 6. HTML, CSS y JavaScript
 
 ---
-
-Si necesita ejemplos adicionales de requests, configuración de puerto o script de build, indicar qué formato prefieres (curl / PowerShell / Postman collection).
